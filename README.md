@@ -20,7 +20,7 @@ And constructed with the following guidelines:
 
 
 ## License
-MIT License: https://opensource.org/licenses/MIT.
+Apache 2 License: http://www.apache.org/licenses/LICENSE-2.0
 
 ## Important Links
 - Code: http://github.com/coldbox-elixir
