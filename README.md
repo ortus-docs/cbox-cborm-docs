@@ -31,7 +31,7 @@ Apache 2 License: http://www.apache.org/licenses/LICENSE-2.0
 
 ![Ortus Solutions, Corp](images/ortussolutions_button.png)
 
-ColdBox ORM Module is a professional open source software backed by [Ortus Solutions, Corp](http://www.ortussolutions.com/services) offering services like:
+The ColdBox ORM Module is a professional open source software backed by [Ortus Solutions, Corp](http://www.ortussolutions.com/services) offering services like:
 * Custom Development
 * Professional Support & Mentoring
 * Training
