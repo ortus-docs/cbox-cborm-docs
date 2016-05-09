@@ -3,5 +3,5 @@
 * [Introduction](README.md)
    * [Changelog](introduction/changelog.md)
    * [Overview](introduction/overview.md)
-* Installation
+* [Installation](installation.md)
 
