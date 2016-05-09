@@ -23,9 +23,9 @@ And constructed with the following guidelines:
 Apache 2 License: http://www.apache.org/licenses/LICENSE-2.0
 
 ## Important Links
-- Code: http://github.com/coldbox-elixir
-- Issues: http://github.com/coldbox-elixir/issues
-- Documentation: http://coldbox-elixir.ortusbooks.com
+- Code: https://github.com/coldbox-modules/cbox-cborm
+- Issues: https://github.com/coldbox-modules/cbox-cborm/issues
+- Documentation: http://coldbox-orm.ortusbooks.com
 
 ## Professional Open Source
 
