@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
-   * Changelog
+   * [Changelog](introduction/changelog.md)
    * Overview
 * [First Chapter](chapter1.md)
 
