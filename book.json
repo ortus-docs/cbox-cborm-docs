@@ -1,1 +1,22 @@
-{}
+{
+    "links": {
+        "sharing": {
+            "facebook": false,
+            "twitter": false
+        }
+    },
+    "plugins": [
+        "edit-link",
+        "github",
+        "advanced-emoji"
+    ],
+    "pluginsConfig": {
+        "edit-link": {
+            "base": "https://github.com/coldbox-modules/cbox-cborm-docs/tree/master",
+            "label": "Edit This Page"
+        },
+        "github": {
+            "url": "https://github.com/coldbox-modules/cbox-cborm"
+        }
+    }
+}
