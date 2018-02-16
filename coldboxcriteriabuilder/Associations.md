@@ -1,3 +1,4 @@
+#Associations
 You can also navigate associations by nesting the criterias using the createCriteria("association_name") method and then concatenating the properties of the association to query upon. You will basically be switching the pivot point of the query.
 
 ```javascript

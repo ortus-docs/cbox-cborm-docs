@@ -1,3 +1,4 @@
+#Configuration Modifiers
 The following methods alters the behavior of the executed query:
 
 | Method | Description | Example |
