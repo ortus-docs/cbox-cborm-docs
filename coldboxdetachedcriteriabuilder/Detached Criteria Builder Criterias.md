@@ -1,3 +1,4 @@
+#Criterias
 All of the same criterias defined in Criteria Builder can be utilized in a Detached Criteria Builder as well. Easy, huh?
 
 Here they go again...

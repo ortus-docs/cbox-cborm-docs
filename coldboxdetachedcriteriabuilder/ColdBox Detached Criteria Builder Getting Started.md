@@ -1,3 +1,4 @@
+#Getting Started
 Whether you want to create a criteria subquery, or a projection subquery, you'll first need to get a new instance of the Detached Criteria Builder class. Since all of the subqueries we're creating are being added to our main criteria query either as a criteria or a projection, we can get the Detached Criteria Builder like so: 
 
 ```javascript

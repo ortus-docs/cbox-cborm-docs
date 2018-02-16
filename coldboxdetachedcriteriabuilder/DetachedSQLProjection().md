@@ -1,3 +1,4 @@
+#DetachedSQLProjection()
 Besides using it for creating criteria subqueries, Detached Criteria Builder can also be used in conjunction with the new detachedSQLProjection() method to return a projected result based on a subquery. The detachedSQLProjection() method can be called just like any other Criteria Builder projection.
 
 | Transform | Description |
