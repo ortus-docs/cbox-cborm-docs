@@ -1,3 +1,4 @@
+#getSessionStatistics
 Information about the first-level (session) cache for the current session
 
 ###Returns

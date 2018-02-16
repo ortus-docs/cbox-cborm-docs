@@ -1,3 +1,4 @@
+#Method Expressions
 A method expression is made up of the prefixes: `findBy, findAllBy, countBy` followed by the expression that combines a query upon one or more properties:
 
 ```javascript

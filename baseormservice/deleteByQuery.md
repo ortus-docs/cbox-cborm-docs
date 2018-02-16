@@ -1,3 +1,4 @@
+#deleteByQuery
 Delete by using an HQL query and iterating via the results, it is not performing a delete query but it actually is a select query that should retrieve objects to remove
 
 ###Returns

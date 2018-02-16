@@ -1,3 +1,4 @@
+#sessionContains
 Checks if the current session contains the passed in entity
 
 ###Returns

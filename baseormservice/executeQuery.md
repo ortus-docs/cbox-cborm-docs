@@ -1,3 +1,4 @@
+#executeQuery
 Allows the execution of HQL queries using several nice arguments and returns either an array of entities or a query as specified by the asQuery argument. The params filtering can be using named or positional.
 
 ###Returns

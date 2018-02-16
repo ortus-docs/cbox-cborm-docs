@@ -1,3 +1,4 @@
+#Associations
 Yes, you can also create associations in Detached Criteria Builder, just like you would with Criteria Builder. Go on, make some uber-complicated queries!
 
 Here we go!...

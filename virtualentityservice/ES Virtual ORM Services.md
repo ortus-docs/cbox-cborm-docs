@@ -1,3 +1,4 @@
+#Virtual ORM Services
 The WireBox injection DSL has an injection namespace called entityService that can be used to wire in a Virtual Entity Service. You will use this DSL in conjunction with the name of the entity to manage.
 
 | Inject Content | Description |

@@ -1,3 +1,4 @@
+#populateFromJSON
 Populate an entity with a JSON structure packet. Make sure the names of the properties match the keys in the structure.
 
 ###Returns

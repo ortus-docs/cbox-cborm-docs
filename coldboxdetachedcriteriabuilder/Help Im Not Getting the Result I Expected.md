@@ -1,3 +1,4 @@
+#Help! I'm Not Getting the Result I expected!
 Since we’re not writing SQL, it can sometimes be frustrating to uncover why results from Criteria Builder and Detached Criteria Builder don’t match up with what you’re expecting.
 
 An easy way to debug in these scenarios is to enable SQL logging and actually look at the query which is ultimately executed after Hibernate does it magic.

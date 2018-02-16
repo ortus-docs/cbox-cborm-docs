@@ -1,3 +1,4 @@
+#newCriteria
 Get a brand new criteria builder object to do criteria queries with (See [ORM:CriteriaBuilder](http://wiki.coldbox.org/wiki/ORM:CriteriaBuilder.cfm))
 
 ###Returns

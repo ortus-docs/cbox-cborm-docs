@@ -1,3 +1,4 @@
+#getKey
 Returns the key (id field) of a given entity, either simple or composite keys. If the key is a simple pk then it will return a string, if it is a composite key then it returns an array
 
 

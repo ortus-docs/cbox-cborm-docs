@@ -1,3 +1,4 @@
+#merge
 Merge an entity or array of entities back into the session
 
 ### Returns

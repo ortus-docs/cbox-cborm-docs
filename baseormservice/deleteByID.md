@@ -1,3 +1,4 @@
+#deleteByID
 Delete using an entity name and an incoming id, you can also flush the session if needed. The ID can be a single ID or an array of ID's to batch delete using hibernate DLM style deletes. The function also returns the number of records deleted.
 
 ###Returns

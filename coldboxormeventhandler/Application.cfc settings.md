@@ -1,3 +1,4 @@
+#Application.cfc settings
 ```javascript
 this.ormSettings = {
     cfclocation="model",

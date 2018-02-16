@@ -1,4 +1,4 @@
-# CHANGELOG
+#Change Log
 
 ## 1.2.1
 * Fixed box.json version number

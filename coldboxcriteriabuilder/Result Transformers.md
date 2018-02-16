@@ -1,3 +1,4 @@
+#Result Transformers
 Our criteria builder also supports the notion of projections (http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html#querycriteria-projection). A projection is used to change the nature of the results, much how a result transformer does. However, there are several projection types you can use which are great for doing counts, distinct counts, max values, sums, averages and much more. This is great when you do paging as obviously you do not want to execute two queries: one for the pagination and another for the total reuslts count. Below are the available projections you can use:
 
 | Transform | Description | Example |

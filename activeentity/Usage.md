@@ -1,3 +1,4 @@
+#Usage
 You just use entityNew() like you would with any ORM entity and then just call our cool methods:
 
 ```javascript

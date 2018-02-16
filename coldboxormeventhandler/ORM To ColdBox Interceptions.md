@@ -1,3 +1,4 @@
+#ORM To ColdBox Interceptions
 ![](ORMEventHandlerBroadcast.jpg)
 
 We have also expanded the hibernate ORM events to bridge the gap to the ColdBox interceptors. So now all the hibernate interceptors will relay their events to ColdBox via interceptors. This means that each hibernate event, like *preLoad()* for example, will announce its ColdBox counterpart: *ORMPreLoad()*. Below are the new interception points the ORM Event Handler exposes with the appropriate interception data it announces: 

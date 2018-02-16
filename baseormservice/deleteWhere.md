@@ -1,3 +1,4 @@
+#deleteWhere
 Deletes entities by using name value pairs as arguments to this function. One mandatory argument is to pass the 'entityName'. The rest of the arguments are used in the where class using AND notation and parameterized. Ex: deleteWhere(entityName="User",age="4",isActive=true);
 
 ###Returns

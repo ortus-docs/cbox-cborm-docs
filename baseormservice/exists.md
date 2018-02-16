@@ -1,3 +1,4 @@
+#exists
 Checks if the given entityName and id exists in the database
 
 ###Returns

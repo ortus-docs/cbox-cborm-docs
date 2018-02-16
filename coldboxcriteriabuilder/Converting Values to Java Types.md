@@ -1,3 +1,4 @@
+#Converting Values to Java Types
 By default you will need to do some javaCasting() on the values in order for the criteria builder to work correctly on some values. Remember that ColdFusion is a typeless language and Java is not. However, we have added to convenience methods for you so you can just pass in values without caring about casting:
 
 * convertIDValueToJavaType(id)

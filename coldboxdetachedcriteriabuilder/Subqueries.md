@@ -1,3 +1,4 @@
+#Subqueries
 If you are using Detached Criteria Builder for a criteria subquery, you will also need to use one of the methods from the ColdBox subqueries class. This is what will ultimately bind the subquery result to the root entity.
 
 The most important thing to remember is that this subquery is what needs to be added as a criterion to your criteria query. So whether you are doing a simple subquery or building up a complex detached criteria, the result of one of the methods below should be what is added as a criterion to the criteria query (see example below).

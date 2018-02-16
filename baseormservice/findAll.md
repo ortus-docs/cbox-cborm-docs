@@ -1,4 +1,5 @@
 
+#findAll
 Find all the entities for the specified query, named or positional arguments or by an example entity
 
 ###Returns

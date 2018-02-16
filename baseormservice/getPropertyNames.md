@@ -1,3 +1,4 @@
+#getPropertyNames
 Returns the persisted Property Names of the entity in array format
 
 ###Returns

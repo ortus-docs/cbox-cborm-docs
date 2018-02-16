@@ -1,3 +1,4 @@
+#count
 Return the count of instances in the DB for the given entity name. You can also pass an optional where statement that can filter the count. Ex: count('User','age > 40 AND name="joe"'). You can even use named or positional parameters with this method: Ex: count('User','age > ? AND name = ?',[40,"joe"])
 
 ###Returns

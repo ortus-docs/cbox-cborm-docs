@@ -1,1 +1,2 @@
+#Methods Usages
 You can refer to the [ORM:BaseORMService](https://github.com/ColdBox/cbox-cborm/wiki/Base-ORM-Service) methods without the entityName usage or refer to our [API Docs.](http://apidocs.coldbox.org/cbQuickDocs/search/index)

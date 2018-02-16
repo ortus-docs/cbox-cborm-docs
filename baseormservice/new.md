@@ -1,3 +1,4 @@
+#new
 Get a new entity object by entity name. You can also pass in a structure called properties that will be used to populate the new entity with or you can use optional named parameters to call setters within the new entity to have shorthand population.
 
 ###Returns

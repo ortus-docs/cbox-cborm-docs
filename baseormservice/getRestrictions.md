@@ -1,3 +1,4 @@
+#getRestrictions
 Get our hibernate org.hibernate.criterion.Restrictions proxy object
 
 ###Returns

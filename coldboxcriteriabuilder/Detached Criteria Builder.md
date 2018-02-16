@@ -1,3 +1,4 @@
+#Detached Criteria Builder
 You can now use the [ORM:DetachedCriteriaBuilder](https://github.com/ColdBox/cbox-cborm/wiki/ORM-Detached-Criteria-Builder) to create programmatically create criteria and projection subqueries.
 
 To create an instance of Detached Criteria Builder, simply call the *createSubcriteria()* method on your existing criteria.

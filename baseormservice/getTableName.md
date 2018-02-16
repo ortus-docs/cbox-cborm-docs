@@ -1,3 +1,4 @@
+#getTableName
 Returns the table name of the passed in entity
 
 

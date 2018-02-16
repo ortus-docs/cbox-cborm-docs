@@ -1,3 +1,4 @@
+#isSessionDirty
 Checks if the session contains dirty objects that are awaiting persistence
 
 ###Returns

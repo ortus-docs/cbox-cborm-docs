@@ -1,3 +1,4 @@
+#save
 Save an entity using hibernate transactions or not. You can optionally flush the session also.
 
 ###Returns

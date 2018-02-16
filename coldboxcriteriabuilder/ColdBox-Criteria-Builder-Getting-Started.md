@@ -1,3 +1,4 @@
+#Getting Started
 A criteria builder can be requested from our Base ORM services or a virtual service, which will bind itself automatically to the binded entity, by calling on their newCriteria() method. The corresponding class is: cborm.models.CriteriaBuilder
 
 The arguments for the newCriteria() method are:
