@@ -1,5 +1,5 @@
 #populate
-cPopulate an entity with a structure of name-value pairs. Make sure the names of the properties match the keys in the structure.
+Populate an entity with a structure of name-value pairs. Make sure the names of the properties match the keys in the structure.
 
 ###Returns
 
