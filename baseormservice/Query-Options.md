@@ -1,3 +1,4 @@
+#Query Options
 If you pass a structure as the last argument to your dynamic finder/counter call, we will consider that by convention to be your query options.
 
 ```javascript

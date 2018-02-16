@@ -1,3 +1,4 @@
+#Method Signatures
 We have three types of dynamic finders and counters:
 
 * `findBy` : Find ONE entity according to method signature, if more than one record is found an exception is thrown

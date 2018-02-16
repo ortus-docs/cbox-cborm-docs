@@ -1,4 +1,3 @@
-
 #get
 Get an entity using a primary key, if the id is not found this method returns null. You can also pass an id = 0 and the service will return to you a new entity.
 
