@@ -1,3 +1,4 @@
+#evictEntity
 Evict entity objects from session. The argument can be one persistence entity or an array of entities
 
 ###Returns

@@ -1,3 +1,4 @@
+#evict
 Evict an entity from session, the id can be a string or structure for the primary key You can also pass in a collection name to evict from the collection
 
 ###Returns

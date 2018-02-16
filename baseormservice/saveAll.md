@@ -1,3 +1,4 @@
+#saveAll
 Saves an array of passed entities in specified order and transaction safe
 
 ###Returns

@@ -1,3 +1,4 @@
+#list
 List all of the instances of the passed in entity class name. You can pass in several optional arguments like a struct of filtering criteria, a sortOrder string, offset, max, ignorecase, and timeout. Caching for the list is based on the *useQueryCaching* class property and the *cachename* property is based on the queryCacheRegion class property.
 
 

@@ -1,3 +1,4 @@
+#Building
 Please remember that you can use ANY method found in the Base ORM Service except that you will not pass an argument of entityName anymore as you have now binded to an ORM entity. You can also visit our API for all the methods.
 
 ```cfc

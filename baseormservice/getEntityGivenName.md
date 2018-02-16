@@ -1,3 +1,4 @@
+#getEntityGivenName
 Returns the entity name from a given entity object via session lookup or if new object via metadata lookup
 
 

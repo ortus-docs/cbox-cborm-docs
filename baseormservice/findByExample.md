@@ -1,3 +1,4 @@
+#findByExample
 Find all/single entities by example
 
 

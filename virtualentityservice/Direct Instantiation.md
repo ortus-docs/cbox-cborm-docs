@@ -1,3 +1,4 @@
+#Direct Instantiation
 You can also use the virtual entity service by directly instantiating the coldbox.system.orm.hibernate.VirtualEntityService, configuring it and using it:
 
 ```javascript

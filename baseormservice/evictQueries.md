@@ -1,3 +1,4 @@
+#evictQueries
 Evict all queries in the default cache or the cache region that is passed in.
 
 ###Returns

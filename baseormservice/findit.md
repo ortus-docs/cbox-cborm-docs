@@ -1,3 +1,4 @@
+#findit
 Finds and returns the first result for the given query or null if no entity was found. You can either use the query and params combination or send in an example entity to find.
 
 

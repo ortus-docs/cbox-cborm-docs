@@ -1,3 +1,4 @@
+#Validation
 Our active entity object will also give you access to our validation engine by giving your ORM entities the following functions:
 
 ```javascript

@@ -1,3 +1,4 @@
+#findWhere
 Find one entity (or null if not found) according to a criteria structure ex: findWhere(entityName="Category", {category="Training"}), findWhere(entityName="Users",{age=40,retired=false});
 
 

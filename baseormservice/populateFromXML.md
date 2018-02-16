@@ -1,3 +1,4 @@
+#populateFromXML
 Populate an entity with an XML packet. Make sure the names of the elements match the keys in the structure.
 
 ###Returns

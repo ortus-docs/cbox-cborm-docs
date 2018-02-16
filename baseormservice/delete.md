@@ -1,3 +1,4 @@
+#delete
 Delete an entity using safe transactions. The entity argument can be a single entity or an array of entities. You can optionally flush the session also after committing.
 
 ###Returns

@@ -1,3 +1,4 @@
+#deleteAll
 Deletes all the entity records found in the database in a transaction safe matter and returns the number of records removed
 
 ###Returns

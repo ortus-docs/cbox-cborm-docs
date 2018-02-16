@@ -1,3 +1,4 @@
+#refresh
 Refresh the state of an entity or array of entities from the database
 
 ###Returns

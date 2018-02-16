@@ -1,3 +1,4 @@
+#findAllWhere
 Find all entities according to criteria structure. Ex: findAllWhere(entityName="Category", {category="Training"}), findAllWhere(entityName="Users", {age=40,retired=true});
 
 
