@@ -1,10 +1,10 @@
 # Summary
 
-* [Introduction](introduction/overview.md)
+* [Introduction](README.md)
   * [Overview](introduction/overview.md)
   * [Installation](installation.md)
   * [Change Log](introduction/changelog.md)
-* [Base ORM Service](README.md)
+* [Base ORM Service](Base-ORM-Service.md)
   * [Concrete Services](Concrete-Services.md)
   * [Service Properties](Service-Properties.md)
   * [Automatic Java Types](Automatic-Java-Types.md)
