@@ -11,7 +11,7 @@
   * [Dynamic Finders- Counters](Dynamic-Finders-Counters.md)
     * [Method Signatures](baseormservice/Method-Signatures.md)
     * [Method Expressions](baseormservice/method-expressions.md)
-    * [Query Options](baseormservice/Query-Options.md)
+    * [Query Options](baseormservice/query-options.md)
   * [clear](baseormservice/clear.md)
   * [count](baseormservice/count.md)
   * [countWhere](baseormservice/countWhere.md)
