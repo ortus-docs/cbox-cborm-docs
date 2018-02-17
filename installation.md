@@ -12,9 +12,10 @@ this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 ```
 
 ## SYSTEM REQUIREMENTS
-- Lucee 4.5+
+![](https://img.shields.io/badge/Lucee-v4.5+-red.svg?style=for-the-badge) ![](https://img.shields.io/badge/ColdFusion-v9.02+-green.svg?style=for-the-badge)
+- Lucee 4.5+ 
 - ColdFusion 9.02+
-- 
+
 
 # WireBox DSL
 The module also registers a new WireBox DSL called `entityservice` which can produce virtual or base orm entity services:
