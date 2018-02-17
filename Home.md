@@ -55,6 +55,3 @@ ORM module.  It is mapped into wirebox as `UniqueValidator@cborm` so you can use
 { "fieldName" : { validator: "UniqueValidator@cborm" } }
 ```
 
----
-
-Please explore this wiki to learn more about our ORM extensions.

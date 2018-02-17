@@ -5,5 +5,5 @@ By enabling the global event handler, [WireBox](http://wiki.coldbox.org/wiki/Wir
 
 The video below describes the entire process:
 
-[![](entityInjectionCapabilities.png)](https://vimeo.com/23619260)
+[![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/entityInjectionCapabilities.png)](https://vimeo.com/23619260)
 

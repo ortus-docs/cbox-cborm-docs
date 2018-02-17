@@ -1,5 +1,5 @@
 #Event Handler CFC
-![](ORMEventHandler.jpg)
+![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ORMEventHandler.jpg)
 
  The ColdFusion documentation says that in order to create a global event handler that it must implement the *CFIDE.orm.IEventHandler* interface. So all you need to do is create the CFC and make it extend the core class that will provide you with all these capabilities: *cborm.models.EventHandler*
 
