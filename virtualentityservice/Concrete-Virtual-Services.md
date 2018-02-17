@@ -1,5 +1,5 @@
 #Concrete Virtual Services
-![](ConcreteORMServices.jpg)
+![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ConcreteORMServices.jpg)
 
  Let's say you are using the virtual service but you find that they do not complete your requirements, or you need some custom methods or change functionality. Then you will be building concrete services that inherit from the virtual entity service. This is the very purpose of these support classes as most of the time you will have custom requirements and your own style of coding. Below is a sample templated service layer: 
 
