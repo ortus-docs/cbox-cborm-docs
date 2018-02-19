@@ -73,7 +73,7 @@ Once you have a reference to the base ORM service then you can use any of its me
 
 
 ## Virtual Services
-We also have a [virtual service layer](https://github.com/ColdBox/cbox-cborm/wiki/Virtual-Entity-Service) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
+We also have a [virtual service layer](/virtualentityservice/VirtualEntityService.md) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
 
 ## Concrete Services
-This is where you create your own CFC that inherits from our Base ORM Service model and either add or override methods.  You can read more about it in our [Concrete Services Section](https://github.com/ColdBox/cbox-cborm/wiki/Concrete-Services) 
+This is where you create your own CFC that inherits from our Base ORM Service model and either add or override methods.  You can read more about it in our [Concrete Services Section](/Concrete-Services.md) 
