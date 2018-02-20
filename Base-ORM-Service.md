@@ -1,4 +1,3 @@
-#Overview
 ![class BaseORMService](https://github.com/ColdBox/cbox-cborm/wiki/BaseORMService.jpg)
 
  The *BaseORMService* is a core model CFC of the module that will provide you with a tremendous gammut of API methods to interact with ColdFusion ORM Entities. 
@@ -74,8 +73,7 @@ Once you have a reference to the base ORM service then you can use any of its me
 
 
 ## Virtual Services
-
-We also have a [virtual service layer](/virtualentityservice/Virtual Entity Service.md) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
+We also have a [virtual service layer](/virtualentityservice/VirtualEntityService.md) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
 
 ## Concrete Services
 This is where you create your own CFC that inherits from our Base ORM Service model and either add or override methods.  You can read more about it in our [Concrete Services Section](/Concrete-Services.md) 
