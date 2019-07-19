@@ -1,9 +1,9 @@
 # Basic Crud
 
-Let's do a basic example of how to work the **cborm** when doing basic CRUD \(Create-Read-Update-Delete\).  We won't go into all fancy areas, just the basics of enhanced **cborm** functionality for CRUD.  We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.  
+Let's do a basic example of how to work with **cborm** when doing basic CRUD \(Create-Read-Update-Delete\).  We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.
 
 {% hint style="info" %}
-For extra credit, convert the app to NOT use **ActiveEntity** but just Virtual Entity Services.
+For extra credit, convert the app to NOT use **ActiveEntity** but Virtual Entity Services.
 {% endhint %}
 
 The source code for this full example can be found in Github: [https://github.com/coldbox-samples/cborm-crud-demo](https://github.com/coldbox-samples/cborm-crud-demo) or in ForgeBox: [https://forgebox.io/view/cborm-crud-demo](https://forgebox.io/view/cborm-crud-demo)
