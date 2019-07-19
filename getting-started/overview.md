@@ -5,11 +5,11 @@ The `cborm` module will enhance your ORM Entities and ColdBox application by pro
 * Active Record Pattern
   * You can extend your entities from our `ActiveEntity` class and take advantage of both [Active Record](https://en.wikipedia.org/wiki/Active_record_pattern) and Hibernate ORM
 * Entity Population
-  * Easily populate entities from json, structs, xml, queries and much more
-* Entity Marshalling to raw data types \(mementifier\)
+  * Easily populate entities from json, structs, xml, queries and build up even the entity relationships from flat data.
+* Entity Marshalling to raw data types \([mementifier](https://forgebox.io/view/mementifier)\)
   * Easily extract the data from entities and their relationships so you can marshall them to json, xml, etc.
 * ORM Events
-  * Easily listen to ORM events via ColdBox Interceptors
+  * Easily listen to multiple ORM events via ColdBox Interceptors
 * Service Layers
   * Enhance the ability to list, query, find entities, work with native hibernate constructs and more.
 * Validation

@@ -13,6 +13,7 @@
 
 * [Overview](getting-started/overview.md)
 * [Installation](getting-started/installation.md)
+* [Basic Crud](getting-started/basic-crud.md)
 
 ## Base ORM Service <a id="base-orm-service-1"></a>
 
