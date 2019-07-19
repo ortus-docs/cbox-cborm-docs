@@ -1,6 +1,6 @@
 # criteriaQuery
 
-Update: Please use our updated [Hibernate Criteria Builder](../coldbox-criteria-builder/) objects instead so you can have much more control, granularity and coolness!
+Update: Please use our updated [Hibernate Criteria Builder](../../criteria-queries/coldbox-criteria-builder/) objects instead so you can have much more control, granularity and coolness!
 
 Do a hibernate criteria based query with projections. You must pass an array of criterion objects by using the Hibernate Restrictions object that can be retrieved from this service using getRestrictions\(\). The Criteria interface allows to create and execute object-oriented queries. It is powerful alternative to the HQL but has own limitations. Criteria Query is used mostly in case of multi criteria search screens, where HQL is not very effective.
 

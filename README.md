@@ -1,8 +1,10 @@
 # Introduction
 
-This module will enhance your experience when working with the ColdFusion ORM powered by Hibernate. It will not only enhance it with dynamic goodness but give you a fluent and human approach to working with Hibernate.
+The `cborm` module is a module that will enhance your experience when working with the ColdFusion ORM powered by [Hibernate](https://hibernate.org/). It will not only enhance it with dynamic goodness but give you a fluent and human approach to working with Hibernate.
 
-### Features
+![](.gitbook/assets/hibernate-logo.svg)
+
+### Some Features
 
 * Service Layers with all the methods you could probably think off to help you get started in any project
 * Virtual service layers so you can create virtual services for any entity in your application
@@ -51,7 +53,7 @@ userService
 
 
 
-**In other words, it makes using an ORM not SUCK! :rocket:**
+**In other words, it makes using an ORM not SUCK!**
 
 ## Versioning
 

@@ -78,7 +78,7 @@ Once you have a reference to the base ORM service then you can use any of its me
 
 ## Virtual Services
 
-We also have a [virtual service layer](../virtual-entity-service/) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
+We also have a [virtual service layer](../../virtual-services/virtual-entity-service/) that can be mapped to specific entities and create entity driven service layers virtually. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time.
 
 ## Concrete Services
 

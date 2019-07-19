@@ -1,6 +1,6 @@
 # criteriaCount
 
-Update: Please use our updated [Hibernate Criteria Builder](../coldbox-criteria-builder/) objects instead so you can have much more control, granularity and coolness!
+Update: Please use our updated [Hibernate Criteria Builder](../../criteria-queries/coldbox-criteria-builder/) objects instead so you can have much more control, granularity and coolness!
 
 Get the record count using hibernate projections and criterion for specific queries
 

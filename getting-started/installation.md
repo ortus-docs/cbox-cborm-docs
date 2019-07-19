@@ -1,18 +1,23 @@
 # Installation
 
-Just drop into your **modules** folder or use CommandBox to install it:
+Leverage CommandBox to install into your ColdBox app:
 
 ```bash
 # Latest version
-box install cborm
+install cborm
 
 # Bleeding Edge
-box install cborm@be
+install cborm@be
 ```
+
+### System Requirements
+
+* Lucee 5.x+ 
+* ColdFusion 2016+
 
 ## Application.cfc Setup
 
-Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or ActiveEntity or any ColdBox Proxies that require ORM, you must create an Application Mapping in the `Application.cfc` like this:
+Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping in the `Application.cfc` like this:
 
 {% code-tabs %}
 {% code-tabs-item title="Application.cfc" %}
@@ -23,11 +28,6 @@ this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-### SYSTEM REQUIREMENTS
-
-* Lucee 5.x+ 
-* ColdFusion 2016+
-
 ## WireBox DSL
 
 The module registers a new WireBox DSL called `entityservice` which can produce virtual or base orm entity services. Below are the injections you can use:
@@ -35,7 +35,7 @@ The module registers a new WireBox DSL called `entityservice` which can produce 
 * `entityservice` -  Inject a global ORM service
 * `entityservice:{entityName}` - Inject a Virtual entity service according to `entityName`
 
-## Settings
+## Module Settings
 
 Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -&gt; `cborm` structure:
 
@@ -45,7 +45,12 @@ Here are the module settings you can place in your `ColdBox.cfc` under `moduleSe
 moduleSettings = {
     cborm = {
         injection = {
-            enabled = true, include = "", exclude = ""
+            // enable entity injection via WireBox
+            enabled = true, 
+            // Which entities to include in DI ONLY, if empty include all entities
+            include = "", 
+            // Which entities to exclude from DI, if empty, none are excluded
+            exclude = ""
         }
     }
 }
