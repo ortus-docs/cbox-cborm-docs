@@ -1,4 +1,4 @@
-# ColdBox Detached Criteria Builder
+# Detached Criteria Builder
 
 If you use ORM in your ColdBox apps, you are hopefully already taking full advantage of [Criteria Builder](../coldbox-criteria-builder/), ColdBox’s powerful, programmatic DSL builder for Hibernate Criteria queries \(and if you’re not using it, you should!\). With the new Detached Criteria Builder, you can expand the power and flexibility of your criteria queries with support for criteria and projection subqueries, all while using the same intuitive patterns of Criteria Builder. No fuss, just more flexibility and control for your criteria queries!
 

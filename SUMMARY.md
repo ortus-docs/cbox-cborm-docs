@@ -91,7 +91,7 @@
 
 ## Criteria Queries
 
-* [ColdBox Criteria Builder](criteria-queries/coldbox-criteria-builder/README.md)
+* [Criteria Builder](criteria-queries/coldbox-criteria-builder/README.md)
   * [Getting Started](criteria-queries/coldbox-criteria-builder/getting-started.md)
   * [Restrictions](criteria-queries/coldbox-criteria-builder/restrictions.md)
   * [Criterias](criteria-queries/coldbox-criteria-builder/criterias.md)
@@ -101,7 +101,7 @@
   * [Associations](criteria-queries/coldbox-criteria-builder/associations.md)
   * [Result Transformers](criteria-queries/coldbox-criteria-builder/result-transformers.md)
   * [Detached Criteria Builder](criteria-queries/coldbox-criteria-builder/detached-criteria-builder.md)
-* [ColdBox Detached Criteria Builder](criteria-queries/coldbox-detached-criteria-builder/README.md)
+* [Detached Criteria Builder](criteria-queries/coldbox-detached-criteria-builder/README.md)
   * [Getting Started](criteria-queries/coldbox-detached-criteria-builder/getting-started.md)
   * [Projections](criteria-queries/coldbox-detached-criteria-builder/projections.md)
   * [Subqueries](criteria-queries/coldbox-detached-criteria-builder/subqueries.md)

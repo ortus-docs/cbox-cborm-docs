@@ -1,4 +1,4 @@
-# ColdBox Criteria Builder
+# Criteria Builder
 
 The ColdBox Hibernate Criteria Builder is a powerful object that will help you build and execute [hibernate criteria queries](http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html). [HQL](http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/queryhql.html) is extremely powerful, but some developers prefer to build queries dynamically using an object-oriented API, rather than building query strings and concatenating them in strings or buffers. The ColdBox Criteria builder offers a powerful programmatic DSL builder for Hibernate Criteria queries. You can see below some of the Hibernate documentation on criteria queries.
 
