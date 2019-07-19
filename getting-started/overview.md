@@ -3,7 +3,7 @@
 The `cborm` module will enhance your ORM Entities and ColdBox application by providing you with features in the following areas:
 
 * Active Record Pattern
-  * You can extend your entities from our `ActiveEntity` class and take advantage of both Active Record and Hibernate ORM
+  * You can extend your entities from our `ActiveEntity` class and take advantage of both [Active Record](https://en.wikipedia.org/wiki/Active_record_pattern) and Hibernate ORM
 * Entity Population
   * Easily populate entities from json, structs, xml, queries and much more
 * Entity Marshalling to raw data types \(mementifier\)

@@ -78,16 +78,16 @@
   * [Methods Usages](virtual-services/virtual-entity-service/methods-usages.md)
   * [Related ORM Services](virtual-services/virtual-entity-service/related-orm-services.md)
 
-## Active Entity <a id="active-entity-1"></a>
+## Active Record
 
-* [Active Entity](active-entity-1/active-entity/README.md)
-  * [Enabling Active Entity](active-entity-1/active-entity/enabling-active-entity.md)
-  * [1.Application.cfc](active-entity-1/active-entity/1.application.cfc.md)
-  * [2.ORM Config Settings](active-entity-1/active-entity/2.orm-config-settings.md)
-  * [Building](active-entity-1/active-entity/building.md)
-  * [Constructor Properties](active-entity-1/active-entity/constructor-properties.md)
-  * [Usage](active-entity-1/active-entity/usage.md)
-  * [Validation](active-entity-1/active-entity/validation.md)
+* [Active Entity](active-record/active-entity/README.md)
+  * [Enabling Active Entity](active-record/active-entity/enabling-active-entity.md)
+  * [1.Application.cfc](active-record/active-entity/1.application.cfc.md)
+  * [2.ORM Config Settings](active-record/active-entity/2.orm-config-settings.md)
+  * [Building](active-record/active-entity/building.md)
+  * [Constructor Properties](active-record/active-entity/constructor-properties.md)
+  * [Usage](active-record/active-entity/usage.md)
+  * [Validation](active-record/active-entity/validation.md)
 
 ## Criteria Queries
 

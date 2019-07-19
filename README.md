@@ -6,13 +6,15 @@ The `cborm` module is a module that will enhance your experience when working wi
 
 ### Some Features
 
-* Service Layers with all the methods you could probably think off to help you get started in any project
-* Virtual service layers so you can create virtual services for any entity in your application
+* **Service Layers** with all the methods you could probably think off to help you get started in any project
+* **Virtual service layers** so you can create virtual services for any entity in your application
 * `ActiveEntity` our implementation of Active Record for ORM
 * Fluent queries via Hibernate's criteria and detached criteria queries with some Dynamic CFML goodness
-* Dynamic finders and counters
+* Automatic transaction demarcation for save and delete operations
+* Dynamic finders and counters for expressive and fluent shorthand SQL
+* Automatic Java casting
 * Entity population from json, structs, xml, and queryies including building up their relationships
-* Entity validation
+* Entity validation via [cbValidation](https://forgebox.io/view/cbvalidation)
 * Includes the [Mementifier project](https://www.forgebox.io/view/mementifier) to produce memento states from any entity, great for producing JSON
 * Ability for finders and queries to be returned as Java streams using our [cbStreams](https://www.forgebox.io/view/cbstreams) project.
 
@@ -21,11 +23,16 @@ The `cborm` module is a module that will enhance your experience when working wi
 
 var book = new Book().findByTitle( "My Awesome Book" );
 var book = new Book().getOrFail( 2 );
+new Book().getOrFail( 4 ).delete();
+new Book().deleteWhere( isActive:false, isPublished:false );
 
 property name="userService" inject="entityService:User";
 
 return userService.list();
 return userService.list( asStream=true );
+
+var count = userService.countWhere( age:20, isActive:true );
+var users = userService.findAllByLastLoginBetween( "01/01/2019", "05/01/2019" );
 
 userService
     .newCriteria()
