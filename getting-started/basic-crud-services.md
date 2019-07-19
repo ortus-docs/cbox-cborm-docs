@@ -1,6 +1,6 @@
-# Basic Crud - ActiveEntity
+# Basic Crud - Services
 
-Let's do a basic example of how to work with **cborm** when doing basic CRUD \(Create-Read-Update-Delete\).  We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.
+Let's do a basic example of how to work with **cborm** when doing basic CRUD \(Create-Read-Update-Delete\).  We will generate a ColdBox App, connect it to a database and leverage **a** virtual service layer for a nice quick CRUD App.
 
 The source code for this full example can be found in Github: [https://github.com/coldbox-samples/cborm-crud-demo](https://github.com/coldbox-samples/cborm-crud-demo) or in ForgeBox: [https://forgebox.io/view/cborm-crud-demo](https://forgebox.io/view/cborm-crud-demo)
 
@@ -109,7 +109,6 @@ Let's start by creating a **Person** object with a few properties, let's use Com
 ```bash
 coldbox create orm-entity 
     entityName="Person"
-    activeEntity=true
     properties=name,age:integer,lastVisit:timestamp
 ```
 
@@ -121,7 +120,7 @@ This will generate the `models/Person.cfc` as an `ActiveEntity` object and even 
 /**
  * A cool Person entity
  */
-component persistent="true" table="Person" extends="cborm.models.ActiveEntity"{
+component persistent="true" table="Person"{
 
 	// Primary Key
 	property name="id" fieldtype="id" column="id" generator="native" setter="false";
@@ -136,11 +135,6 @@ component persistent="true" table="Person" extends="cborm.models.ActiveEntity"{
 		// Example: age = { required=true, min="18", type="numeric" }
 	};
 	
-	// Constructor
-	function init(){
-		super.init( useQueryCaching="false" );
-		return this;
-	}
 }
 ```
 {% endcode-tabs-item %}
@@ -215,6 +209,28 @@ This creates the `handlers/persons.cfc` with the CRUD actions and a nice `index`
 Please note that this also generates the integrations tests as well under `/tests/specs/integration/personsTest.cfc`
 {% endhint %}
 
+### Inject Service
+
+Open the `handlers/persons.cfc` and in the pseudo-constructor let's inject a virtual ORM service layer based on the `Person` entity:
+
+{% code-tabs %}
+{% code-tabs-item title="/handlers/persons.cfc" %}
+```javascript
+/**
+ * I manage Persons
+ */
+component{
+ 
+ // Inject our service layer
+ property name="personService" inject="entityService:Person";
+ 
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+The `cborm` module gives you the `entityService:{entityName}` DSL which allows you to inject virtual service layers according to `entityName`.  With our code above we will have a `personService` in our `variables` scope injected for us.
+
 ### Create
 
 We will get an instance of a Person, populate it with data and save it. We will then return it as a json memento. The `new()` method will allow you to pass a struct of properties and/or relationships to populate the new Person instance with.  Then just call the `save()` operation on the returned object.
@@ -224,14 +240,16 @@ We will get an instance of a Person, populate it with data and save it. We will 
  * create a person
  */
 function create( event, rc, prc ){
-	prc.person = getInstance( "Person" )
+	prc.person = personService
 		.new( {
 			name 	: "Luis",
 			age 	: 40,
 			lastVisit : now()
-		} )
-		.save();
-	return prc.person.getMemento( includes="id" );
+		} );
+	;
+	return personService
+		.save( prc.person )
+		.getMemento( includes="id" );
 }
 ```
 
@@ -246,7 +264,7 @@ We will get an instance according to ID and show it's memento in json. There are
  * show a person
  */
 function show( event, rc, prc ){
-	return getInstance( "Person" )
+	return personService
 		.get( rc.id ?: 0 )
 		.getMemento( includes="id" );
 }
@@ -259,7 +277,7 @@ In this example, we use the `get()` method which retrieves a single entity by id
  * show a person
  */
 function show( event, rc, prc ){
-	return getInstance( "Person" )
+	return personService
 		.getOrFail( rc.id ?: -1 )
 		.getMemento( includes="id" );
 }
@@ -274,11 +292,12 @@ Now let's retrieve an entity by Id, update it and save it again!
  * Update a person
  */
 function update( event, rc, prc ){
-	prc.person = getInstance( "Person" )
+	prc.person = personService
 		.getOrFail( rc.id ?: -1 )
 		.setName( "Bob" )
-		.save();
-	return prc.person.getMemento( includes="id" );
+	return personService
+		.save( prc.person )
+		.getMemento( includes="id" );
 }
 ```
 
@@ -292,7 +311,7 @@ Now let's delete an incoming entity identifier
  */
 function delete( event, rc, prc ){
 	try{
-		getInstance( "Person" )
+		personService
 			.getOrFail( rc.id ?: '' )
 			.delete();
 		// Or use the shorthnd notation which is faster
@@ -321,7 +340,7 @@ For extra credit, we will get all instances of `Person` and render their memento
  * List all Persons
  */
 function index( event, rc, prc ){
-	return getInstance( "Person" )
+	return personService
 		// List all as array of objects
 		.list( asQuery=false )
 		// Map the entities to mementos
