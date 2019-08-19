@@ -31,14 +31,15 @@ inject name="ORMService" inject="BaseORMService@cborm";
 
 // Retrieve
 wireBox.getInstance( "BaseORMService@cborm" );
-getModel( "BaseORMService@cborm" );
 ```
 
 ### Implementation
 
 Once you have access to the injected base ORM service, you can use it in all of its glory.
 
-> **Important** Please check out the latest API Docs for the latest methods and functionality.
+{% hint style="danger" %}
+**Important:** Please check out the latest [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/) for the latest methods and functionality.
+{% endhint %}
 
 ```javascript
 component{
@@ -82,5 +83,5 @@ We also have a [virtual service layer](../../virtual-services/virtual-entity-ser
 
 ## Concrete Services
 
-This is where you create your own CFC that inherits from our Base ORM Service model and either add or override methods. You can read more about it in our [Concrete Services Section](concrete-services.md)
+This is where you can create your own CFC that inherits from our Virtual or Base ORM Service model and either add or override methods. You can read more about it in our [Concrete Services Section](concrete-services.md)
 

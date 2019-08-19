@@ -2,8 +2,12 @@
 
 ![](https://github.com/ColdBox/cbox-cborm/wiki/ConcreteORMServices.jpg)
 
-Let's say you are using the virtual services and base ORM service but you find that they do not complete your requirements, or you need some custom methods or change functionality. Then you will be building concrete services that inherit from the base or virtual entity services. This is the very purpose of these support classes as most of the time you will have custom requirements and your own style of coding. Here is a custom `AuthorService` we created:
+Let's say you are using the virtual services and base ORM service but you find that they do not complete your requirements, or you need some custom methods or change functionality. Then you will be building concrete services that inherit from the base or virtual entity services. This is the very purpose of these support classes as most of the time you will have custom requirements and your own style of coding. 
 
+Here is a custom `AuthorService` we created:
+
+{% code-tabs %}
+{% code-tabs-item title="AuthorService.cfc" %}
 ```javascript
 /**
 * Service to handle author operations.
@@ -15,7 +19,7 @@ component extends="cborm.models.VirtualEntityService" accessors="true" singleton
 
     AuthorService function init(){
         // init it via virtual service layer
-        super.init(entityName="bbAuthor", useQueryCaching=true);
+        super.init( entityName="bbAuthor", useQueryCaching=true );
         setHashType( "SHA-256" );
 
         return this;
@@ -43,6 +47,8 @@ component extends="cborm.models.VirtualEntityService" accessors="true" singleton
 
 }
 ```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
 Then you can just inject your concrete service in your handlers, or other models like any other normal model object.
 
