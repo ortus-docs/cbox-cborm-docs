@@ -17,6 +17,8 @@ The `cborm` module will enhance your ORM Entities and ColdBox application by pro
 
 Just write your entities and their relationships and we will take care of the rest!
 
+![](../.gitbook/assets/orm.png)
+
 ## Base ORM Service
 
 Let's begin our adventure with the `BaseORMService` model. This model can be injected or requested via WireBox and will be used to interact with any entity in our system or with Hibernate directly:
