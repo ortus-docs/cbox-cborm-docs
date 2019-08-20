@@ -97,10 +97,7 @@
 
 ## Active Record
 
-* [Active Entity](active-record/active-entity/README.md)
-  * [Enabling Active Entity](active-record/active-entity/enabling-active-entity.md)
-  * [1.Application.cfc](active-record/active-entity/1.application.cfc.md)
-  * [2.ORM Config Settings](active-record/active-entity/2.orm-config-settings.md)
+* [Active Entity Overview](active-record/active-entity/README.md)
   * [Building](active-record/active-entity/building.md)
   * [Constructor Properties](active-record/active-entity/constructor-properties.md)
   * [Usage](active-record/active-entity/usage.md)
