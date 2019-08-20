@@ -1,36 +1,43 @@
 # Validation
 
-Our active entity object will also give you access to our validation engine by giving your ORM entities the following functions:
+Our active entity object will also give you access to our validation engine \([cbValidation](https://coldbox-validation.ortusbooks.com/)\) by giving your ORM entities the following functions:
 
 ```javascript
 /**
-* Validate the ActiveEntity with the coded constraints -> this.constraints, or passed in shared or implicit constraints
-* The entity must have been populated with data before the validation
-* @fields.hint One or more fields to validate on, by default it validates all fields in the constraints. This can be a simple list or an array.
-* @constraints.hint An optional shared constraints name or an actual structure of constraints to validate on.
-* @locale.hint An optional locale to use for i18n messages
-* @excludeFields.hint An optional list of fields to exclude from the validation.
-*/
-boolean function isValid(string fields="*", any constraints="", string locale="", string excludeFields="");
+ * Validate the ActiveEntity with the coded constraints -> this.constraints, or passed in shared or implicit constraints
+ * The entity must have been populated with data before the validation
+ *
+ * @fields One or more fields to validate on, by default it validates all fields in the constraints. This can be a simple list or an array.
+ * @constraints An optional shared constraints name or an actual structure of constraints to validate on.
+ * @locale An optional locale to use for i18n messages
+ * @excludeFields An optional list of fields to exclude from the validation.
+ */
+boolean function isValid(
+	string fields="*",
+	any constraints="",
+	string locale="",
+	string excludeFields=""
+){
 
 /**
 * Get the validation results object.  This will be an empty validation object if isValid() has not being called yet.
 */
-coldbox.system.validation.result.IValidationResult function getValidationResults();
+cbvalidation.models.result.IValidationResult function getValidationResults(){
 ```
 
-> **Important** In order for validation to work, WireBox ORM entity injection must be enabled first!
->
-> * ColdBox ORM Entity Injection
-> * WireBox Standalone ORM Entity Injection
+This makes it really easy for you to validate your ORM entities in two easy steps:
 
-This makes it really easy for you to validate your ORM entities.
+1\) Add your validation constraints to the entity
 
-Sample:
+2\) Call the validation methods
 
+Let's see the entity code:
+
+{% code-tabs %}
+{% code-tabs-item title="models/User.cfc" %}
 ```javascript
-import coldbox.system.orm.hibernate.*;
-component persistent="true" extends="ActiveEntity"{
+component persistent="true" extends="cborm.models.ActiveEntity"{
+    
     // Properties
     property name="firstName";
     property name="lastName";
@@ -41,56 +48,66 @@ component persistent="true" extends="ActiveEntity"{
     // Validation Constraints
     this.constraints = {
         "firstName" = {required=true}, 
-        "lastName" = {required=true},
-        "email" = {required=true,type="email"},
-        "username" = {required=true, size="5..10"},
-        "password" = {required=true, size="5..10"}
+        "lastName"  = {required=true},
+        "email"     = {required=true,type="email"},
+        "username"  = {required=true, size="5..10"},
+        "password"  = {required=true, size="5..10"}
     };
 }
 ```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
-Handlers Sample:
+Now let's check out the handlers:
 
+{% code-tabs %}
+{% code-tabs-item title="handlers/users.cfc" %}
 ```javascript
 component{
 
-        property name="Messagebox" inject="id:messagebox@cbmessagebox";
+    property name="messagebox" inject="messagebox@cbmessagebox";
 
     function index(event,rc,prc){
-        prc.users = entityNew("User").list(sortOrder="lastName asc");
-        event.setView("users/list");
+        prc.users = getInstance( "User" ).list( sortOrder="lastName asc" );
+        event.setView( "users/list" );
     }
 
     function save(event,rc,prc){
-        event.paramValue("id","");
-        var user = populateModel( entityNew("User").get( rc.id ) );
+        event.paramValue( "id", -1 );
+        
+        var oUser = getInstance( "User" )
+            .getOrFail( rc.id )
+            .populate( rc )
 
-        if( user.isValid() {
-            user.save();
-            flash.put("notice","User Saved!");
-            setNextEvent("users.index");
+        if( oUser.isValid() {
+            oUser.save();
+            flash.put( "notice", "User Saved!" );
+            relocate( "users.index" );
         }
         else{
-            Messagebox.error(messageArray=user.getValidationResults().getAllErrors());
-            editor(event,rc,prc);
+            messagebox.error( messageArray=oUser.getValidationResults().getAllErrors() );
+            editor( event, rc, prc );
         }
 
     }
 
     function editor(event,rc,prc){
-        event.paramValue("id","");
-        prc.user = entityNew("User").get( rc.id );
-        event.setView("users/editor");
+        event.paramValue( "id", -1 );
+        prc.user = getInstance( "User" ).getOrFail( rc.id );
+        event.setView( "users/editor" );
     }
 
     function delete(event,rc,prc){
-        event.paramValue("id","");
-        entityNew("User").deleteById( rc.id );
-        flash.put("notice","User Removed!");
-        setNextEvent("users.index");
+        event.paramValue( "id", -1 );
+        getInstance( "User" )
+            .deleteById( rc.id );
+        flash.put( "notice", "User Removed!" );
+        relocate( "users.index" );
     }
 }
 ```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
-Please refer to the ORM:BaseORMService for all the cool methods and functionality you can use with Active Entity. Like always, refer to the latest CFC Docs for methods and arguments.
+
 
