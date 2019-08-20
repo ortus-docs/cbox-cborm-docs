@@ -1,6 +1,6 @@
 # Active Entity Overview
 
-![](../../.gitbook/assets/active-record.jpg)
+![](../.gitbook/assets/active-record.jpg)
 
 This class allows you to implement the [Active Record](https://en.wikipedia.org/wiki/Active_record_pattern) pattern in your ORM entities by inheriting from our Active Entity class. This will make your ORM entities get all the functionality of our Virtual and Base ORM services so you can do finds, searches, listings, counts, execute queries, transaction safe deletes, saves, updates, criteria building, and even [validation](validation.md) right from within your ORM Entity. 
 
@@ -80,5 +80,40 @@ moduleSettings = {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-This enables WireBox dependency injection, which we need for `ActiveEntity` to work with validation and other features.  Check out our [installation](../../getting-started/installation.md#module-settings) section if you need a refresher.
+This enables WireBox dependency injection, which we need for `ActiveEntity` to work with validation and other features.  Check out our [installation](../getting-started/installation.md#module-settings) section if you need a refresher.
+
+## Building Entities
+
+Once your configuration is done we can now focus on building out your Active Entities.  You will do so by creating your entities like normal ORM objects but with two additions:  
+
+
+1. They will inherit from our base class: `cborm.models.ActiveEntity`
+2. If you have a constructor then it must delegate to the super class via `super.init()`
+
+
+
+{% code-tabs %}
+{% code-tabs-item title="models/User.cfc" %}
+```javascript
+component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
+    
+    property name="id" column="user_id" fieldType="id" generator="uuid";
+	property name="firstName";
+	property name="lastName";
+	property name="userName";
+	property name="password";
+	property name="lastLogin" ormtype="date";
+	
+	function init(){
+	   return super.init();
+	}
+
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+{% hint style="info" %}
+Please remember that your entities inherit all the functionality of the base and virtual services.  Except no entity names or datasources are passed around.
+{% endhint %}
 

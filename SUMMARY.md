@@ -97,11 +97,10 @@
 
 ## Active Record
 
-* [Active Entity Overview](active-record/active-entity/README.md)
-  * [Building](active-record/active-entity/building.md)
-  * [Constructor Properties](active-record/active-entity/constructor-properties.md)
-  * [Usage](active-record/active-entity/usage.md)
-  * [Validation](active-record/active-entity/validation.md)
+* [Active Entity Overview](active-record/active-entity.md)
+* [Constructor Properties](active-record/constructor-properties.md)
+* [Usage](active-record/usage.md)
+* [Validation](active-record/validation.md)
 
 ## Criteria Queries
 
