@@ -129,6 +129,7 @@
 
 ## Advanced Features <a id="orm-events"></a>
 
+* [Mementifier](orm-events/mementifier.md)
 * [ORM Events](orm-events/coldbox-orm-event-handler/README.md)
   * [Application.cfc settings](orm-events/coldbox-orm-event-handler/application.cfc-settings.md)
   * [Event Handler CFC](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
