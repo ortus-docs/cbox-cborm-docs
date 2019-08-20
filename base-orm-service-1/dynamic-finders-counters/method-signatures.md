@@ -22,19 +22,19 @@ component persistent="true" name="User" extends="cborm.models.ActiveEntity"{
 Then we could do the following:
 
 ```javascript
-user = entityNew( "User" ).findByLastName( "Majano" );
+user = getInstance( "User" ).findByLastName( "Majano" );
 
-users = entityNew( "User" ).findAllByLastNameLike( "Ma%" );
+users = getInstance( "User" ).findAllByLastNameLike( "Ma%" );
 
-users = entityNew( "User" ).findAllByLastLoginBetween( "01/01/2010", "01/01/2012" );
+users = getInstance( "User" ).findAllByLastLoginBetween( "01/01/2010", "01/01/2012" );
 
-users = entityNew( "User" ).findAllByLastLoginBetweeninGreaterThan( "01/01/2010" );
+users = getInstance( "User" ).findAllByLastLoginBetweeninGreaterThan( "01/01/2010" );
 
-users = entityNew( "User" ).findAllByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
+users = getInstance( "User" ).findAllByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
 
-count = entityNew( "User" ).countByLastLoginGreaterThan( "01/01/2010" );
+count = getInstance( "User" ).countByLastLoginGreaterThan( "01/01/2010" );
 
-count = entityNew( "User" ).countByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
+count = getInstance( "User" ).countByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
 ```
 
 You can also use the virtual entity service instead of active entity.

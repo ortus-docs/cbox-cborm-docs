@@ -2,7 +2,7 @@
 
 A method expression is made up of the prefixes: `findBy, findAllBy, countBy` followed by the expression that combines a query upon one or more properties:
 
-```javascript
+```java
 User.findBy{property}[Conditional=equal][Operator]?{property}[Conditional][Operator]
 User.findAllBy{property}[Conditional=equal][Operator]?{property}[Conditional][Operator]
 User.countBy{property}[Conditional=equal][Operator]?{property}[Conditional][Operator]
@@ -10,7 +10,9 @@ User.countBy{property}[Conditional=equal][Operator]?{property}[Conditional][Oper
 
 If a conditional keyword is not passed, we assume you want equality. Remember that!
 
-> **IMPORTANT** The ? means that you can concatenate the same pattern over and over again.
+{% hint style="danger" %}
+**IMPORTANT:** The **?** means that you can concatenate the same pattern over and over again.
+{% endhint %}
 
 ## Conditionals
 
