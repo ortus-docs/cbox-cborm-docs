@@ -127,9 +127,6 @@
 
 * [Mementifier](orm-events/mementifier.md)
 * [ORM Events](orm-events/coldbox-orm-event-handler/README.md)
-  * [Application.cfc settings](orm-events/coldbox-orm-event-handler/application.cfc-settings.md)
-  * [Event Handler CFC](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
-  * [Entity Injection Capabilities](orm-events/coldbox-orm-event-handler/entity-injection-capabilities.md)
-  * [ORM To ColdBox Interceptions](orm-events/coldbox-orm-event-handler/orm-to-coldbox-interceptions.md)
+  * [Custom Event Handler](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
 * [Unique Property Validation](orm-events/untitled.md)
 

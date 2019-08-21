@@ -1,4 +1,4 @@
-# Event Handler CFC
+# Custom Event Handler
 
 ![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ORMEventHandler.jpg)
 
