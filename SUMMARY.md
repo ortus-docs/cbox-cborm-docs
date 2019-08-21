@@ -131,5 +131,5 @@
   * [Event Handler CFC](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
   * [Entity Injection Capabilities](orm-events/coldbox-orm-event-handler/entity-injection-capabilities.md)
   * [ORM To ColdBox Interceptions](orm-events/coldbox-orm-event-handler/orm-to-coldbox-interceptions.md)
-* [Validation and Constraints](orm-events/untitled.md)
+* [Unique Property Validation](orm-events/untitled.md)
 
