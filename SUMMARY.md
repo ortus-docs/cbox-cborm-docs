@@ -108,7 +108,7 @@
   * [Getting Started](criteria-queries/coldbox-criteria-builder/getting-started.md)
   * [Restrictions](criteria-queries/coldbox-criteria-builder/restrictions.md)
   * [Criterias](criteria-queries/coldbox-criteria-builder/criterias.md)
-  * [Converting Values to Java Types](criteria-queries/coldbox-criteria-builder/converting-values-to-java-types.md)
+  * [Value Casting](criteria-queries/coldbox-criteria-builder/converting-values-to-java-types.md)
   * [Configuration Modifiers](criteria-queries/coldbox-criteria-builder/configuration-modifiers.md)
   * [Results](criteria-queries/coldbox-criteria-builder/results.md)
   * [Associations](criteria-queries/coldbox-criteria-builder/associations.md)

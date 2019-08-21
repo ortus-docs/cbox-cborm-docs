@@ -1,16 +1,19 @@
 # Getting Started
 
-A criteria builder can be requested from our Base ORM services or a virtual service, which will bind itself automatically to the binded entity, by calling on their newCriteria\(\) method. The corresponding class is: cborm.models.CriteriaBuilder
+A criteria builder can be requested from our Base ORM services or a virtual service or an ActiveEntity, which will bind itself automatically to the binded entity, by calling on the `newCriteria()` method. The corresponding class is: `cborm.models.CriteriaBuilder`
 
-The arguments for the newCriteria\(\) method are:
+The arguments for the `newCriteria()` method are:
 
 | Argument | Type | Required | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| entityName | string | true | --- | The name of the entity to bind this criteria builder with, the initial pivot. |
-| useQueryCaching | useQueryCaching | false | false | To allow for query caching of _list\(\)_ operations |
-| queryCacheRegion | string | false | criteria.{entityName} | The name of the cache region to use |
+| `entityName` | string | true | --- | The name of the entity to bind this criteria builder with, the initial pivot. |
+| `useQueryCaching` | boolean | false | false | To allow for query caching of _list\(\)_ operations |
+| `queryCacheRegion` | string | false | `criteria.{entityName}` | The name of the cache region to use |
+| `datasource` | string | false | System Default | The datasource to bind the criteria query on, defaults to the one in this ORM service |
 
-If you call newCriteria\(\) from a virtual service layer, then you don't pass the entityName argument as it roots itself automatically.
+{% hint style="warning" %}
+If you call `newCriteria()` from a virtual service layer or Active Entity, then you don't pass the `entityName` argument as it roots itself automatically.
+{% endhint %}
 
 Examples
 
@@ -19,6 +22,8 @@ Examples
 c = newCriteria( 'entityName' );
 // Virtual
 c = newCriteria();
+// Active Entity
+c = getInstance( "User" ).newCriteria();
 
 // Examples
 var results = c.like("firstName","Lui%")
@@ -45,5 +50,7 @@ var results = c.in("name","luis,fred,joe")
      .list();
 ```
 
-Once you have an instance of the Criteria Builder class you can start adding restrictions, projections and configuration data for your query. All by concatenating methods in a nice programmatic DSL. Once all the restrictions, projections and/or configuration data are in place, you will execute the query/projections using our result methods. Please note that you can request as many new criteria builders as you like and each of them will execute different queries. So let's start with the restrictions.
+Once you have an instance of the Criteria Builder class you can start adding restrictions, projections, result formats and configuration data for your query. All by concatenating methods in a nice programmatic and fluent DSL. 
+
+Once all the restrictions, projections and/or configuration data are in place, you will execute the query/projections using our result methods \(count, get, list, etc\). Please note that you can request as many new criteria builders as you like and each of them will execute different queries. So let's start with the restrictions.
 
