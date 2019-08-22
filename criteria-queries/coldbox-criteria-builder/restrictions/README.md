@@ -1,8 +1,32 @@
-# Criterias
+# Restrictions
+
+The ColdBox restrictions class allows you to create criterions upon certain properties, associations and even SQL for your ORM entities. This is the meat and potatoes of criteria queries, where you build a set of criterion to match against or in SQL terms, your `WHERE` statements.
+
+The ColdBox criteria class offers almost all of the criterion methods found in the native hibernate Restrictions class:
+
+* [http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html)
+* [https://docs.jboss.org/hibernate/core/4.3/javadocs/org/hibernate/criterion/Restrictions.html](https://docs.jboss.org/hibernate/core/4.3/javadocs/org/hibernate/criterion/Restrictions.html)
+* [https://docs.jboss.org/hibernate/orm/5.0/javadocs/org/hibernate/criterion/Restrictions.html](https://docs.jboss.org/hibernate/orm/5.0/javadocs/org/hibernate/criterion/Restrictions.html)
+
+If there isn't one defined in the CFML equivalent then don't worry, just call it like is appears in the Javadocs and we will proxy the call to the native Hibernate class for you.
+
+## Direct Reference
+
+You can get a direct reference to the Restrictions class via the Base/Virtual ORM services \(`getRestrictions())`, or the Criteria object itself has a public property called `restrictions` which you can use rather easily. We prefer the latter approach. Now, please understand that the ColdBox Criteria Builder masks all this complexity and in very rare cases will you be going to our restrictions class directly. Most of the time you will just be happily concatenating methods on the Criteria Builder.
+
+```javascript
+// From base ORM service
+var restrictions = service.getRestrictions()
+
+// From Criteria Builder
+newCriteria().restrictions
+```
+
+Ok, now that the formalities have been explained let's build some criterias.
+
+## Building Restrictions
 
 To build our criteria queries we will mostly use the methods in the criteria object or go directly to the restrictions object for very explicit criterions as explained above. We will also go to the restrictions object when we do conjunctions and disjunctions, which are fancy words for AND's, OR's and NOT's. So to build criterias we will be calling these criterion methods and concatenate them in order to form a nice DSL language that describes what we will retrieve. Once we have added all the criteria then we can use several other concatenated methods to set executions options and then finally retrieve our results or do projections on our results.
-
-So let's start with all the different supported criterion methods in the Criteria object, which are the most commonly used. If you need to use methods that are not in the Criteria object you will request them via the Restrictions object, which can proxy calls to the underlying Hibernate native Restrictions class \([http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html)\).
 
 | Method | Description | Example |
 | :--- | :--- | :--- |
@@ -36,14 +60,14 @@ So let's start with all the different supported criterion methods in the Criteri
 | `sizeLT(required string property, required any propertyValue)` | Where a collection property's size is less than a particular value | _c.sizeLT\("childPages", 25 \);_ |
 | `sizeLE(required string property, required any propertyValue)` | Where a collection property's size is less than or equal a particular value | _c.sizeLE\("childPages", 25 \);;_ |
 | `sizeNE(required string property, required any propertyValue)` | Where a collection property's size is not equal to a particular value | _c.sizeNE\("childPages",0\);_ |
-| `sqlRestriction(required string sql)` | Use arbitrary SQL to modify the resultset | _c.sqlRestriction\("char\_length\( lastName \) = 10"\);_ |
+| `sql(required sql, params)` | Use arbitrary SQL to modify the resultset | _c.sql\("char\_length\( lastName \) = 10"\);_ |
 | `and(Criterion, Criterion, ...)` | Return the conjuction of N expressions as arguments | _c.and\( c.restrictions.eq\("name","luis"\), c.restrictions.gt\("age",30\) \);_ |
 | `or(Criterion, Criterion, ….)` | Return the disjunction of N expressions as arguments | c.or\( c.restrictions.eq\("name","luis"\), c.restrictions.eq\("name", "joe"\) \) |
 | `not(required any criterion) or isNot()` | Return the negation of an expression | _c.isNot\( c.restrictions.eg\("age", 30\) \);_ |
 | `isTrue(required string property)` | Returns if the property is true | _c.isTrue\("isPublished"\);_ |
 
 {% hint style="info" %}
-In some cases \(isEq\(\), isIn\(\), etc\), you may receive data type mismatch errors. These can be resolved by using JavaCast on your criteria value or use our auto caster methods: `idCast(), autoCast()`
+In some cases \(`isEq(), isIn(),` etc\), you may receive data type mismatch errors. These can be resolved by using JavaCast on your criteria value or use our auto caster methods: `idCast(), autoCast()`
 {% endhint %}
 
 ```javascript
@@ -57,4 +81,16 @@ c.add( c.restrictions.eq("name","luis") )
 ```
 
 But as you can see from the code, the facade methods are much nicer.
+
+## Dynamic Negation
+
+Every restriction method you see above or in the docs can also be negated very easily by just prefixing the method with a `not` .
+
+```javascript
+c
+    .notEq("userID", idCast( 3 ) )
+    .notBetween()
+    .notIsTrue()
+    .notIsFalse();
+```
 

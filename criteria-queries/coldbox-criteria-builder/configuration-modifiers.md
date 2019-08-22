@@ -1,17 +1,21 @@
-# Configuration Modifiers
+# Modifiers
+
+## Query Modifiers
 
 The following methods alters the behavior of the executed query, some can be a life saver, so check them all out.
 
-| Method | Description | Example |
-| :--- | :--- | :--- |
-| `timeout(numeric timeout)` | Set a timeout for the underlying JDBC query in milliseconds. | _timeout\( 5000 \)_ |
-| `readOnly(boolean readOnly)` | Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true | _readOnly\(true\)_ |
-| `firstResult()` | Specifies the offset for the results. A value of 0 will return all records up to the maximum specified. | _firstResult\(11\)_ |
-| `maxResults(numeric maxResults)` | Set a limit upon the number of objects to be retrieved. | _maxResults\(25\)_ |
-| `fetchSize(numeric fetchSize)` | Set's the fetch size of the underlying JDBC query | _fetchSize\(50\)_ |
-| `cache(cache, cacheRegion= )` | Tells Hibernate whether to cache the query or not \(if the query cache is enabled\), and optionally choose a cache region | _cache\(true\), cache\(true,'my.cache'\)_ |
-| `cacheRegion(cacheRegion)` | Tells Hibernate the cache region to store the query under | cacheRegion\('my.cool.cache'\) |
-| `order(property,sortDir='asc',ignoreCase=false)` | Specifies both the sort property \(the first argument, the sort order \(either 'asc' or 'desc'\), and if it should ignore cases or not | _order\('lastName','asc',false\)_ |
+| Method | Description |
+| :--- | :--- |
+| `cache(boolean cache=true, cacheRegion)` | Tells Hibernate whether to cache the query or not \(if the query cache is enabled\), and optionally choose a cache region |
+| `cacheRegion(cacheRegion)` | Tells Hibernate the cache region to store the query under |
+| `comment(comment)` | Add a comment to the generated SQL. |
+| `fetchSize(numeric fetchSize)` | Set's the fetch size of the underlying JDBC query |
+| `firstResult(numeric firstResult)` | Specifies the offset for the results. A value of 0 will return all records up to the maximum specified. |
+| `maxResults(numeric maxResults)` | Set a limit upon the number of objects to be retrieved. |
+| `order(property,sortDir='asc',ignoreCase=false)` | Specifies both the sort property \(the first argument, the sort order \(either 'asc' or 'desc'\), and if it should ignore cases or not |
+| `queryHint(hint)` | Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement. |
+| `readOnly(boolean readOnly)` | Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true |
+| `timeout(numeric timeout)` | Set a timeout for the underlying JDBC query in milliseconds. |
 
 ```javascript
 c.timeout( 5000 )
@@ -20,4 +24,12 @@ c.firstResult(20).maxResults(50).fetchSize(10).cacheRegsion('my.awesome.region')
 c.cache(true,'my.region')
 c.order('lastName','desc',true);
 ```
+
+## Result Modifiers
+
+You can also tell Hibernate to transform the results to other formats for you once you retrieve them.
+
+* `asDistinct()` - Applies a result transformer of DISTINCT\_ROOT\_ENTITY
+* `asStruct()` - Applies a result transformer of ALIAS\_TO\_ENTITY\_MAP so you get an array of structs instead of array of objects
+* `asStream()` - Get the results as a CBstream
 
