@@ -165,5 +165,18 @@ var sql = userService
         { value : incomingDate, type : "timestamp" }
     ] )
     .getSqlLog();
+    
+// You can also use peek()
+var results = userService
+    .newCriteria()
+    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
+    	{ value : "joe", type : "string" },
+    	{ value : "%joe%", type : "string" }
+        { value : incomingDate, type : "timestamp" }
+    ] )
+    .peek( function( c ){
+        log.debug( "sql log: #c.getSqlLog()#" );
+    });
+    .list();
 ```
 

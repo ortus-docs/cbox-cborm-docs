@@ -13,8 +13,9 @@ The following methods alters the behavior of the executed query, some can be a l
 | `firstResult(numeric firstResult)` | Specifies the offset for the results. A value of 0 will return all records up to the maximum specified. |
 | `maxResults(numeric maxResults)` | Set a limit upon the number of objects to be retrieved. |
 | `order(property,sortDir='asc',ignoreCase=false)` | Specifies both the sort property \(the first argument, the sort order \(either 'asc' or 'desc'\), and if it should ignore cases or not |
+| `peek( target )` | Peek into the criteria build process with your own closure that accepts the criteria itself. |
 | `queryHint(hint)` | Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement. |
-| `readOnly(boolean readOnly)` | Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true |
+| `readOnly(boolean readOnly)` | Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to `readOnly=true` |
 | `timeout(numeric timeout)` | Set a timeout for the underlying JDBC query in milliseconds. |
 
 ```javascript
@@ -23,6 +24,13 @@ c.readOnly(true)
 c.firstResult(20).maxResults(50).fetchSize(10).cacheRegsion('my.awesome.region')
 c.cache(true,'my.region')
 c.order('lastName','desc',true);
+
+newCriteria()
+	 .eq( "this", value )
+	 .peek( function(criteria){
+	 	systemOutput( "CurrentSQL: #criteria.getSQLLog()#" )
+	 })
+	 .list();
 ```
 
 ## Result Modifiers
