@@ -1,6 +1,8 @@
 # Getting Started
 
-A criteria builder can be requested from our Base ORM services or a virtual service or an ActiveEntity, which will bind itself automatically to the binded entity, by calling on the `newCriteria()` method. The corresponding class is: `cborm.models.CriteriaBuilder`
+A criteria builder object can be requested from our Base ORM services or a virtual service or an ActiveEntity, which will bind itself automatically to the requested entity, by calling on the `newCriteria()` method. The corresponding class is: `cborm.models.CriteriaBuilder`
+
+## Criteria Object - `newCriteria()`
 
 The arguments for the `newCriteria()` method are:
 
@@ -15,42 +17,147 @@ The arguments for the `newCriteria()` method are:
 If you call `newCriteria()` from a virtual service layer or Active Entity, then you don't pass the `entityName` argument as it roots itself automatically.
 {% endhint %}
 
-Examples
+```javascript
+// orm service
+ormService.newCriteria( "User" );
+
+// virtual service
+productService.newCriteria();
+
+// active entity
+getInstance( "User" ).newCriteria();
+```
+
+## Restrictions
+
+This criteria object will then be used to add **restrictions** to build up the exact query you want. Restrictions are basically your where statements in SQL and they build on each other via ANDs by default.  For example, only retrieve products with a price over $30 or give me only active users.  We provide you with tons of available [restrictions](restrictions.md) and if none of those match what you need, you can even use a-la-carte SQL restrictions, in which you can just use SQL.  You can also do OR statements or embedded ANDs, etc.
 
 ```javascript
-// Base ORM Service
-c = newCriteria( 'entityName' );
-// Virtual
-c = newCriteria();
-// Active Entity
-c = getInstance( "User" ).newCriteria();
+productService
+    .newCriteria()
+    .ge( "price", 30 )
+    .count();
+    
+userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .notIsNull( "lastLogin" )
+    .orderBy( "lastLogin desc" )
+    .firstResult()
+    .get();
 
-// Examples
-var results = c.like("firstName","Lui%")
-     .maxResults( 50 )
-     .order("balance","desc")
+
+// A-la-carte SQL restrictions 
+var userStream = userService
+    .newCriteria()
+    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
+    	{ value : "joe", type : "string" },
+    	{ value : "%joe%", type : "string" }
+        { value : incomingDate, type : "timestamp" }
+    ] )
+    .list( asStream = true );
+    
+
+var c = newCriteria();
+var results = c.like("firstName","Lui%") // restriction
+     .maxResults( 50 ) // modifier
+     .order("balance","desc") // modifier
+     // AND restrictions
      .and( 
           c.restrictions.between( "balance", 200, 300),
           c.restrictions.eq("department", "development")
      )
-     .list();
-
-// with pagination
-var results = c.like("firstName","Lui%")
-     .order("balance","desc")
-     .and( 
-          c.restrictions.between( "balance", 200, 300),
-          c.restrictions.eq("department", "development")
-     )
-     .list(max=50,offset=20);
-
-// more complex
-var results = c.in("name","luis,fred,joe")
-     .OR( c.restrictions.isNull("age"), c.restrictions.eq("age",20) )
+     // Retrieve a list
      .list();
 ```
 
-Once you have an instance of the Criteria Builder class you can start adding restrictions, projections, result formats and configuration data for your query. All by concatenating methods in a nice programmatic and fluent DSL. 
+{% hint style="success" %}
+**Tip**: Every restriction can also be negated by using the `not` prefix before each method: `notEq(), notIn(), notIsNull()`
+{% endhint %}
 
-Once all the restrictions, projections and/or configuration data are in place, you will execute the query/projections using our result methods \(count, get, list, etc\). Please note that you can request as many new criteria builders as you like and each of them will execute different queries. So let's start with the restrictions.
+## Query Modifiers
+
+You can also add [modifiers](configuration-modifiers.md) for the execution of the query.  This can be sorting, timeouts, join types and so much more.
+
+* `cache()` - Enable caching of this query result, provided query caching is enabled for the underlying session factory.
+* `cacheRegion()` - Set the name of the cache region to use for query result caching.
+* `comment()` - Add a comment to the generated SQL.
+* `fetchSize()` - Set a fetch size for the underlying JDBC query.
+* `firstResult()` - Set the first result to be retrieved or the offset integer
+* `maxResults()` - Set a limit upon the number of objects to be retrieved.
+* `order()` - Add an ordering to the result set, you can add as many as you like
+* `queryHint()` - Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement.
+* `readOnly()` - Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true
+* `timeout()` - Set a timeout for the underlying JDBC query.
+
+```javascript
+var results = c.like("firstName","Lui%") // restriction
+     .firstResult( 25 ) // modifier
+     .maxResults( 50 ) // modifier
+     .order( "balance", "desc" ) // modifier
+     .timeout( 
+     // AND restrictions
+     .and( 
+          c.restrictions.between( "balance", 200, 300),
+          c.restrictions.eq("department", "development")
+     )
+     // Retrieve a list
+     .list();
+```
+
+### Result Modifiers
+
+You can also tell Hibernate to transform the results to other formats for you once you retrieve them.
+
+* `asDistinct()` - Applies a result transformer of DISTINCT\_ROOT\_ENTITY
+* `asStruct()` - Applies a result transformer of ALIAS\_TO\_ENTITY\_MAP so you get an array of structs instead of array of objects
+* `asStream()` - Get the results as a CBstream
+
+## Results
+
+Now that the criteria builder object has all the restrictions and modifiers attached when can execute the SQL.  Please note that you can store a criteria builder object if you wanted to. It is lazy evaluated, it just represents your SQL.  It will only execute when you need it to execute via the following finalizer methods:
+
+* `list()` - Execute the criteria queries you have defined and return the results
+* `get()` - Convenience method to return a single instance that matches the built up criterias query, or null if the query returns no results.
+* `getOrFail()` - Convenience method to return a single instance that matches the built up criterias query, or throws an exception if the query returns no results
+* `count()` - Get the record count using hibernate projections for the given criterias
+
+```javascript
+productService
+    .newCriteria()
+    .ge( "price", 30 )
+    .count();
+    
+userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .notIsNull( "lastLogin" )
+    .orderBy( "lastLogin desc" )
+    .firstResult()
+    .get();
+```
+
+## Logging
+
+There are several methods available to you in the criteria objects to give you the actual SQL or HQL to execute, even with bindings.  These are a true life-saver.
+
+* `logSQL( label )` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
+* `getSQL()` - Returns the SQL string that will be prepared for the criteria object at the time of request
+* `getPositionalSQLParameters()` - Returns a formatted array of parameter value and types
+* `GetSqlLog()` - Retrieves the SQL Log
+* `startSqlLog()` - Triggers CriteriaBuilder to start internally logging the state of SQL at each iterative build
+* `stopSqlLog()` - Stop the internal logging.
+* `logSql()` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
+* `canLogSql()` - Returns whether or not CriteriaBuilder is currently configured to log SQL
+
+```javascript
+var sql = userService
+    .newCriteria()
+    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
+    	{ value : "joe", type : "string" },
+    	{ value : "%joe%", type : "string" }
+        { value : incomingDate, type : "timestamp" }
+    ] )
+    .getSqlLog();
+```
 
