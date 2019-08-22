@@ -120,7 +120,7 @@
   * [DetachedSQLProjection\(\)](criteria-queries/coldbox-detached-criteria-builder/detachedsqlprojection.md)
   * [Criterias](criteria-queries/coldbox-detached-criteria-builder/criterias.md)
   * [Associations](criteria-queries/coldbox-detached-criteria-builder/associations.md)
-  * [Help! I'm Not Getting the Result I expected!](criteria-queries/coldbox-detached-criteria-builder/help-im-not-getting-the-result-i-expected.md)
+* [Help! I'm Not Getting the Result I expected!](criteria-queries/help-im-not-getting-the-result-i-expected.md)
 
 ## Advanced Features <a id="orm-events"></a>
 

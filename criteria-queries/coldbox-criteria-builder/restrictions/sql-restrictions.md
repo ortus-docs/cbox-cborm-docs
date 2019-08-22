@@ -33,14 +33,14 @@ The parameters you bind the SQL with can be of two types
 If you use plain values, then we will INFER the type from it, which is not as accurate as using a typed value. A typed value is a struct with the value and a valid type.
 
 ```javascript
-c.sql( "select * from users order by lastName" );
+c.sql( "isActive = true" );
 
 // simple values
-c.sql( "select id from users where id = ?", [ 123 ] );
+c.sql( "id = ?", [ 123 ] );
 c.sql( "userName = ? and firstName like ?", [ "joe", "%joe%"] );
 
 // strong typed values
-c.sql( "select id from users where id = ?", [ { value:123, type=c.TYPES.integer } ] );
+c.sql( "id = ?", [ { value:123, type=c.TYPES.integer } ] );
 c.sql( "isActive = ?", [ { value:true, type=c.TYPES.boolean } ] );
 c.sql( "userName = ? and firstName like ?", [
     { value : "joe", type : "string" },
