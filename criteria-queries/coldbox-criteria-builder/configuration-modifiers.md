@@ -17,6 +17,7 @@ The following methods alters the behavior of the executed query, some can be a l
 | `queryHint(hint)` | Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement. |
 | `readOnly(boolean readOnly)` | Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to `readOnly=true` |
 | `timeout(numeric timeout)` | Set a timeout for the underlying JDBC query in milliseconds. |
+| `when( test, target )` | A nice functional method to allow you to pass a boolean evaulation and if true, the target closure will be executed for you, which will pass in the criteria object to it. |
 
 ```javascript
 c.timeout( 5000 )
@@ -29,6 +30,9 @@ newCriteria()
 	 .eq( "this", value )
 	 .peek( function(criteria){
 	 	systemOutput( "CurrentSQL: #criteria.getSQLLog()#" )
+	 })
+	 .when( !isNull( arguments.published ), function( c ){
+		c.eq( "isPublished", published )
 	 })
 	 .list();
 ```
