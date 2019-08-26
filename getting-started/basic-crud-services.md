@@ -253,7 +253,7 @@ function create( event, rc, prc ){
 }
 ```
 
-You might be asking yourself: Where does this magic `getMemento()` method come from? Well, it comes from the [mementifier](https://forgebox.io/view/mementifier) module wich inspects ORM entities and injects them with this function to allow you to produce raw state from entities. \(Please see: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)\)
+You might be asking yourself: Where does this magic `getMemento()` method come from? Well, it comes from the [mementifier](https://forgebox.io/view/mementifier) module which inspects ORM entities and injects them with this function to allow you to produce raw state from entities. \(Please see: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)\)
 
 ### Read
 
