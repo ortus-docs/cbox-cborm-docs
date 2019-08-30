@@ -11,7 +11,7 @@ Save an entity using hibernate transactions or not. You can optionally flush the
 | Key | Type | Required | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | entity | any | Yes | --- | The entity to save |
-| forceInsert | boolean | No | false | Insert as new record whether it already exists or not | 
+| forceInsert | boolean | No | false | Insert as new record whether it already exists or not |
 | flush | boolean | No | false | Do a flush after saving the entity, false by default since we use transactions |
 | transactional | boolean | No | true | Wrap the save in a ColdFusion transaction |
 
