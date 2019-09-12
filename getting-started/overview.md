@@ -38,7 +38,7 @@ getInstance( dsl="entityService" );
 
 This service object acts as an abstraction layer to the ColdFusion ORM \(Hibernate\) and can work with any entity in your system as all methods most likely receive the `entityName` argument.  You will be able to do the following category of actions from this service class:
 
-* Session utility methods
+* Hibernate Session utility methods
 * Entity metadata methods
 * Querying methods
 * Criteria Queries or fluent SQL
@@ -114,6 +114,14 @@ component{
     
 }
 ```
+
+{% hint style="info" %}
+What is this `asStream()` call? What are Streams?
+
+A stream is an abstraction, it’s not a data structure. It’s not a collection where you can store elements. The most important difference between a stream and a structure is that a stream doesn’t hold the data. For example you cannot point to a location in the stream where a certain element exists. You can only specify the functions that operate on that data. A stream is an abstraction of a non-mutable collection of functions applied in some order to the data.
+
+More information can be found here: [https://forgebox.io/view/cbstreams](https://forgebox.io/view/cbstreams)
+{% endhint %}
 
 ## Virtual Services
 
