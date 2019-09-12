@@ -212,7 +212,7 @@ This is where you create your own CFC that inherits from our `VirtualEntityServi
 
 All you need to do is inherit from the `cborm.models.VirtualEntityService` and call the parent class constructor with the available arguments:
 
-* `entityname` - The name of the entity to root this service with
+* `entityname` - The name of the entity to root this service with \(**REQUIRED**\)
 * `queryCacheRegion` - The name of the query cache region if using caching, defaults to `#arguments.entityName#.defaultVSCache`
 * `useQueryCaching` - Activate query caching, defaults to false
 * `eventHandling` - Activate event handling, defaults to true
