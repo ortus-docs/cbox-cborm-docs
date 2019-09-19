@@ -60,8 +60,8 @@ var results = c
      .like("name", "lui%")
      .list();
 
-// Count via projections of all users that start with the letter 'L'
-var count = c.like("name","L%").count();
+// Count via projections of all users that start with the letter 'L' or 'l' using case-insensitive-like
+var count = c.ilike("name","L%").count();
 
 ```
 
