@@ -8,7 +8,15 @@ Delete by using an HQL query and iterating via the results, it is not performing
 
 ## Arguments
 
-\| Key \| Type \| Required \| Default \| description \| \| query \| string \| Yes \| --- \| \| \| params \| any \| No \| --- \| \| \| max \| numeric \| No \| 0 \| \| \| offfset \| numeric \| No \| 0 \| \| \| flush \| boolean \| No \| false \| \| \| transactional \| boolean \| No \| From Property \| Use transactions or not \| \| datasource \| string \| false \| \| The datasource to use or use the default datasource \|
+| Key | Type | Required | Default | description |
+| :--- | :--- | :--- | :--- | :--- |
+| query | string | Yes | --- | | 
+| params | any | No | --- | | 
+| max | numeric | No | 0 | | 
+| offfset | numeric | No | 0 | | 
+| flush | boolean | No | false | | 
+| transactional | boolean | No | From Property | Use transactions or not | 
+| datasource | string | false | | The datasource to use or use the default datasource |
 
 ## Examples
 
