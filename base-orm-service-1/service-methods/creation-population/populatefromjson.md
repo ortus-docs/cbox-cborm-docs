@@ -16,6 +16,9 @@ Populate an entity with a JSON structure packet. Make sure the names of the prop
 | trustedSetter | Boolean | No | false | Do not check if the setter exists, just call it, great for usage with onMissingMethod\(\) and virtual properties |
 | include | string | No |  | A list of keys to ONLY include in the population |
 | exclude | string | No |  | A list of keys to exclude from the population |
+| nullEmptyInclude | string | No |  | A list of keys to NULL when empty, specifically for ORM population. You can also specify "\*" for all fields |
+| nullEmptyExclude | string | No |  | A list of keys to NOT NULL when empty, specifically for ORM population. You can also specify "\*" for all fields |
+| composeRelationships | boolean | No | true | When true, will automatically attempt to compose relationships from memento |
 
 ## Examples
 
