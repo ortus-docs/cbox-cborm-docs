@@ -18,7 +18,7 @@ Populate an entity with a structure of name-value pairs. Make sure the names of 
 | exclude | string | No |  | A list of keys to exclude from the population |
 | nullEmptyInclude | string | No |  | A list of keys to NULL when empty, specifically for ORM population. You can also specify "\*" for all fields |
 | nullEmptyExclude | string | No |  | A list of keys to NOT NULL when empty, specifically for ORM population. You can also specify "\*" for all fields |
-| composeRelationships | boolean | No | true | When true, will automtically attempt to compose relationships from memento |
+| composeRelationships | boolean | No | true | When true, will automatically attempt to compose relationships from memento |
 
 > **INFO** With composeRelationships=true, you can populate one-to-many, many-to-one, many-to-many, and one-to-one relationships from property values in the memento. For 'many-to-one' and 'one-to-one' relationships, the value of the property in the memento should be a single value of the primary key of the target entity to be loaded. For 'one-to-many' and 'many-to-many' relationships, the value of the property in the memento should a comma-delimited list or array of the primary keys of the target entities to be loaded.
 
