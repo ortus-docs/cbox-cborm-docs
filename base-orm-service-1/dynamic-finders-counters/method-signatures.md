@@ -28,7 +28,7 @@ users = getInstance( "User" ).findAllByLastNameLike( "Ma%" );
 
 users = getInstance( "User" ).findAllByLastLoginBetween( "01/01/2010", "01/01/2012" );
 
-users = getInstance( "User" ).findAllByLastLoginBetweeninGreaterThan( "01/01/2010" );
+users = getInstance( "User" ).findAllByLastLoginGreaterThan( "01/01/2010" );
 
 users = getInstance( "User" ).findAllByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
 
