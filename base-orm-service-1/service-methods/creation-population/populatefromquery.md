@@ -24,6 +24,6 @@ Populate an entity with a query object. Make sure the names of the columns match
 ## Examples
 
 ```javascript
-var user = ormService.populateFromQuery( ormService.new("User"), list("User",{id=4}) );
+var user = ormService.populateFromQuery( ormService.new( "User" ), ormService.list( "User", { id=4 } ) );
 ```
 

@@ -4,7 +4,7 @@ Get a brand new criteria builder object to do criteria queries with \(See [ORM:C
 
 ## Returns
 
-* This function returns _This function returns coldbox.system.orm.hibernate.CriteriaBuilder_
+* This function returns _coldbox.system.orm.hibernate.CriteriaBuilder_
 
 ## Arguments
 
