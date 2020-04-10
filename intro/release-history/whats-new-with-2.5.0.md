@@ -7,3 +7,5 @@
 * `Bug` : Fix on `getOrFail()` where if the id was 0, it would still return an empty object.
 * `Task` : Added formatting via cfformat
 
+You can read more about the [RESTFul Resources here](../../orm-events/automatic-rest-crud.md):
+
