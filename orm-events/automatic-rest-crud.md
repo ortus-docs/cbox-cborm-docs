@@ -2,7 +2,7 @@
 
 In cborm 2.5 we introduced the Base Resource Handler for ORM entities.  This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
 
-This means that we will create all the boilerplate code to list, show, create, update and delete your entities.  Including relationships, validation and different ways to render your data thanks to Mementifier.
+This means that we will create all the boilerplate code to list, show, create, update and delete your entities.  Including relationships, validation, population, pagination and different ways to render \(include/exclude\) your data thanks to Mementifier.  Get ready to start creating RESTFul services in no time!
 
 ## Settings
 
@@ -345,4 +345,57 @@ function index( event, rc, prc ){
 	super.index( argumentCollection=arguments );
 }
 ```
+
+### index\(\) Arguments
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:left">Parameter</th>
+      <th style="text-align:left">Type</th>
+      <th style="text-align:left">Default</th>
+      <th style="text-align:left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left"><code>criteria</code>
+      </td>
+      <td style="text-align:left"><code>Criteria</code>
+      </td>
+      <td style="text-align:left"><code>null</code>
+      </td>
+      <td style="text-align:left">You can pass your own criteria object that we will use to execute to retrieve
+        the records</td>
+    </tr>
+    <tr>
+      <td style="text-align:left"><code>results</code>
+      </td>
+      <td style="text-align:left"><code>struct</code>
+      </td>
+      <td style="text-align:left"><code>{ count:0, records:[] }</code>
+      </td>
+      <td style="text-align:left">
+        <p>If you pass in a results struct, then you did the search and we will just
+          marshall the results using pagination. The struct must contain the following:</p>
+        <ul>
+          <li><code>count :</code> The records found</li>
+          <li><code>records</code> : The array of entities</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>### create\(\) Arguments
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `populate` | `struct` | `{}` | The arguments you want to send into the `populateModel()` method alongside the entity that's being created. |
+| `validate` | `struct` | `{}` | The arguments you want to send into the `validateOrFail()` method alongside the entity that's being validated. |
+
+### update\(\) Arguments
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `populate` | `struct` | `{}` | The arguments you want to send into the `populateModel()` method alongside the entity that's being updated. |
+| `validate` | `struct` | `{}` | The arguments you want to send into the `validateOrFail()` method alongside the entity that's being updated. |
 
