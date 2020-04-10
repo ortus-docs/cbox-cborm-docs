@@ -4,11 +4,15 @@ In cborm 2.5 we introduced the Base Resource Handler for ORM entities.  This bas
 
 This means that we will create all the boilerplate code to list, show, create, update and delete your entities.  Including relationships, validation, population, pagination and different ways to render \(include/exclude\) your data thanks to Mementifier.  Get ready to start creating RESTFul services in no time!
 
+{% hint style="danger" %}
+You must be using ColdBox 6 for this feature to work
+{% endhint %}
+
 ## Settings
 
 To start off with our resources support, you can start by adding the following settings to your config/Coldbox.cfc in the `moduleSettings.cborm` struct:
 
-```text
+```javascript
 cborm = {
 	 // Resource Settings
 		resources : {
@@ -398,4 +402,6 @@ function index( event, rc, prc ){
 | :--- | :--- | :--- | :--- |
 | `populate` | `struct` | `{}` | The arguments you want to send into the `populateModel()` method alongside the entity that's being updated. |
 | `validate` | `struct` | `{}` | The arguments you want to send into the `validateOrFail()` method alongside the entity that's being updated. |
+
+Happy Coding!
 
