@@ -45,6 +45,10 @@ Below are the new interception points the ORM Event Handler exposes with the app
 | `ORMPostUpdate` | `{entity}` | Called via the `postUpdate()` event |
 | `ORMPreInsert` | `{entity}` | Called via the `preInsert()` event |
 | `ORMPostInsert` | `{entity}` | Called via the `postInsert()` event |
+| `ORMPreSave` | `{entity}` | Called via the `preSave()` event |
+| `ORMPostSave` | `{entity}` | Called via the `postSave()` event |
+| `ORMPreFlush` | `{entity}` | Called before the Hibernate session is flushed. Triggered via the `preFlush()` event |
+| `ORMPostFlush` | `{entity}` | Called after the Hibernate session is flushed. Triggered via the `postFlush()` event |
 
 With the exposure of these interception points to your ColdBox application, you can easily create decoupled executable chains of events that respond to ORM events. This really expands the ORM interceptor capabilities to a more decoupled way of listening to ORM events. You can even create different interceptors for different ORM entity classes that respond to the same events, extend the entities with AOP, change entities at runtime, and more; how cool is that.
 
