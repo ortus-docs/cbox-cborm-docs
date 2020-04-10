@@ -26,8 +26,7 @@ To work with Active Entity you must do a few things to tell ColdBox and Hibernat
 
 The following are vanilla configurations for enabling the ORM in ColdFusion:
 
-{% code-tabs %}
-{% code-tabs-item title="Application.cfc" %}
+{% code title="Application.cfc" %}
 ```javascript
 component{
 
@@ -54,15 +53,13 @@ component{
     };
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### Module Settings
 
 Open your `config/ColdBox.cfc` and either un-comment or add the following settings:
 
-{% code-tabs %}
-{% code-tabs-item title="config/Coldbox.cfc" %}
+{% code title="config/Coldbox.cfc" %}
 ```javascript
 moduleSettings = {
     cborm = {
@@ -77,8 +74,7 @@ moduleSettings = {
     }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 This enables WireBox dependency injection, which we need for `ActiveEntity` to work with validation and other features.  Check out our [installation](../getting-started/installation.md#module-settings) section if you need a refresher.
 
@@ -92,8 +88,7 @@ Once your configuration is done we can now focus on building out your Active Ent
 
 
 
-{% code-tabs %}
-{% code-tabs-item title="models/User.cfc" %}
+{% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
     
@@ -110,8 +105,7 @@ component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 Please remember that your entities inherit all the functionality of the base and virtual services.  Except no entity names or datasources are passed around.

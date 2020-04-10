@@ -4,8 +4,7 @@
 
 * You will need to move the `orm` configuration structure in your `config/ColdBox.cfc` to the `moduleSettings` struct and rename it to `cborm` to standardize it to module settings.
 
-{% code-tabs %}
-{% code-tabs-item title="config/ColdBox.cfc" %}
+{% code title="config/ColdBox.cfc" %}
 ```javascript
 moduleSettings = {
 
@@ -19,8 +18,7 @@ moduleSettings = {
 
 };
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 * `deleteByQuery()` reworked entirely to do native bulk delete queries.  It now also returns the number of records removed
 * The `evict()` method was renamed to `evictCollection()` to better satisfy the same contract in hibernate

@@ -12,8 +12,7 @@ There are a few properties you can instantiate the **ActiveEntity** with or set 
 
 Here is a nice example of calling the `super.init()` class with some of these constructor properties.
 
-{% code-tabs %}
-{% code-tabs-item title="User.cfc" %}
+{% code title="User.cfc" %}
 ```javascript
 component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
@@ -28,6 +27,5 @@ component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

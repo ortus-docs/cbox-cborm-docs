@@ -19,14 +19,12 @@ install cborm@be
 
 Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping in the `Application.cfc` like this:
 
-{% code-tabs %}
-{% code-tabs-item title="Application.cfc" %}
+{% code title="Application.cfc" %}
 ```javascript
 # In the pseudo constructor
 this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## WireBox DSL
 
@@ -39,11 +37,20 @@ The module registers a new WireBox DSL called `entityservice` which can produce 
 
 Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -&gt; `cborm` structure:
 
-{% code-tabs %}
-{% code-tabs-item title="config/ColdBox.cfc" %}
+{% code title="config/ColdBox.cfc" %}
 ```javascript
 moduleSettings = {
     cborm = {
+        // Resource Settings
+    		resources : {
+    			// Enable the ORM Resource Event Loader
+    			eventLoader 	: false,
+    			// Pagination max rows
+    			maxRows 		: 25,
+    			// Pagination max row limit: 0 = no limit
+    			maxRowsLimit 	: 500
+    		},
+        // WireBox Injection bridge
         injection = {
             // enable entity injection via WireBox
             enabled = true, 
@@ -55,8 +62,7 @@ moduleSettings = {
     }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Validation
 

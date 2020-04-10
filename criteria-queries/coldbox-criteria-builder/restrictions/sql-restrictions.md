@@ -1,10 +1,10 @@
 # SQL Restrictions
 
-SQL restrictions will allow you to add ad-hoc SQL to the criteria you are building.  Simple enough, but we have made great strides to make this look easy for a developer but behind the scenes we take each sql you pass and compile it so we can abstract all the native Java types for you.  This means that you can use it in a similar manner to `executeQuery()` in CFML.
+SQL restrictions will allow you to add ad-hoc SQL to the criteria you are building. Simple enough, but we have made great strides to make this look easy for a developer but behind the scenes we take each sql you pass and compile it so we can abstract all the native Java types for you. This means that you can use it in a similar manner to `executeQuery()` in CFML.
 
 ## Method Signature
 
-The method you will use for this restriction is `sql()` 
+The method you will use for this restriction is `sql()`
 
 ```javascript
 /**
@@ -99,6 +99,4 @@ The inferred types we infer are the following and in the following order.
 8. url
 9. string
 10. text
-
-
 

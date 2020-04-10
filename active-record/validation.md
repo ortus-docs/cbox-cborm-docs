@@ -37,8 +37,7 @@ This makes it really easy for you to validate your ORM entities in two easy step
 
 Let's see the entity code so you can see the [constraints](https://coldbox-validation.ortusbooks.com/overview/coldbox-validation/declaring-constraints):
 
-{% code-tabs %}
-{% code-tabs-item title="models/User.cfc" %}
+{% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" extends="cborm.models.ActiveEntity"{
     
@@ -59,15 +58,13 @@ component persistent="true" extends="cborm.models.ActiveEntity"{
     };
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Validating Constraints
 
 Now let's check out the handlers to see how to validate the entity via the `isValid()` function:
 
-{% code-tabs %}
-{% code-tabs-item title="handlers/users.cfc" %}
+{% code title="handlers/users.cfc" %}
 ```javascript
 component{
 
@@ -112,8 +109,7 @@ component{
     }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 Please remember that the `isValid()` function has several arguments you can use to fine tune the validation:

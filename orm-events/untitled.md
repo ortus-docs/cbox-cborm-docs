@@ -8,8 +8,7 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 
 That's it! Once you define a property with this validator, then `cbValidation` will delegate to the cborm `UniqueValidator` so it can identify if the value is unique in the database. Below you can see an example entity that marks the `userName` property as unique for validation purposes.
 
-{% code-tabs %}
-{% code-tabs-item title="models/User.cfc" %}
+{% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" table="users"{
 
@@ -35,13 +34,11 @@ component persistent="true" table="users"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 Now here is a sample validation:
 
-{% code-tabs %}
-{% code-tabs-item title="handlers/users.cfc" %}
+{% code title="handlers/users.cfc" %}
 ```javascript
 component{
     
@@ -65,8 +62,7 @@ component{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 

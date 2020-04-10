@@ -13,8 +13,7 @@ You can enable the cborm event handler by opening the `Application.cfc` and addi
 * `eventHandling`
 * `eventHandler`
 
-{% code-tabs %}
-{% code-tabs-item title="Application.cfc" %}
+{% code title="Application.cfc" %}
 ```javascript
 this.ormSettings = {
     cfclocation="model",
@@ -27,8 +26,7 @@ this.ormSettings = {
     eventhandler = "cbmorm.models.EventHandler"
 };
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 That's it, now the cborm event handler will listen to the ORM events, re-broadcast them and you can create [ColdBox Interceptors](https://coldbox.ortusbooks.com/digging-deeper/interceptors) to listen to them.
 

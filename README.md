@@ -8,6 +8,7 @@ The `cborm` module is a module that will enhance your experience when working wi
 
 * **Service Layers** with all the methods you could probably think off to help you get started in any project
 * **Virtual service layers** so you can create virtual services for any entity in your application
+* Automatic RESTFul resources handler, focus on your domain objects and business logic, not the boilerplate of REST
 * `ActiveEntity` our implementation of Active Record for ORM
 * Fluent queries via Hibernate's criteria and detached criteria queries with some Dynamic CFML goodness
 * Automatic transaction demarcation for save and delete operations

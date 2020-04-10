@@ -49,8 +49,7 @@ var users = userService.newCriteria()
 
 You can also leverage the WireBox Binder to map your virtual services so you can abstract a little bit more the construction or even add constructor arguments to their definition and have full control:
 
-{% code-tabs %}
-{% code-tabs-item title="config/WireBox.cfc" %}
+{% code title="config/WireBox.cfc" %}
 ```java
 function configure(){
     
@@ -61,13 +60,11 @@ function configure(){
         .initArg( name="defaultAsQuery", value="false" );
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 Now you can just use it via the `UserService` alias:
 
-{% code-tabs %}
-{% code-tabs-item title="handlers/user.cfc" %}
+{% code title="handlers/user.cfc" %}
 ```java
 component{
     
@@ -89,6 +86,5 @@ component{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

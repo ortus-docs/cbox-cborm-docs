@@ -6,8 +6,7 @@ Let's say you are using the virtual services and base ORM service but you find t
 
 Here is a custom `AuthorService` we created:
 
-{% code-tabs %}
-{% code-tabs-item title="AuthorService.cfc" %}
+{% code title="AuthorService.cfc" %}
 ```javascript
 /**
 * Service to handle author operations.
@@ -47,8 +46,7 @@ component extends="cborm.models.VirtualEntityService" accessors="true" singleton
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 Then you can just inject your concrete service in your handlers, or other models like any other normal model object.
 

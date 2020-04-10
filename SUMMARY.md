@@ -5,6 +5,9 @@
 ## Intro
 
 * [Release History](intro/release-history/README.md)
+  * [What's New With 2.5.0](intro/release-history/whats-new-with-2.5.0.md)
+  * [What's New With 2.4.0](intro/release-history/whats-new-with-2.4.0.md)
+  * [What's New With 2.3.0](intro/release-history/whats-new-with-2.3.0.md)
   * [What's New With 2.2.1](intro/release-history/whats-new-with-2.2.1.md)
   * [What's New With 2.2.0](intro/release-history/whats-new-with-2.2.0.md)
   * [What's New With 2.1.0](intro/release-history/whats-new-with-2.1.0-1.md)
@@ -127,6 +130,7 @@
 ## Advanced Features <a id="orm-events"></a>
 
 * [Mementifier](orm-events/mementifier.md)
+* [Automatic REST Crud](orm-events/automatic-rest-crud.md)
 * [ORM Events](orm-events/coldbox-orm-event-handler/README.md)
   * [Custom Event Handler](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
 * [Unique Property Validation](orm-events/untitled.md)

@@ -8,6 +8,8 @@ The `cborm` module will enhance your ORM Entities and ColdBox application by pro
   * Easily populate entities from json, structs, xml, queries and build up even the entity relationships from flat data.
 * Entity Marshalling to raw data types \([mementifier](https://forgebox.io/view/mementifier)\)
   * Easily extract the data from entities and their relationships so you can marshall them to json, xml, etc.
+* Automatic CRUD Resource Handler
+  * If you extend our `cborm.models.resources.BaseHandler` it will generate the full CRUD for a specific entity based on ColdBox Resources
 * ORM Events
   * Easily listen to multiple ORM events via ColdBox Interceptors
 * Service Layers
@@ -220,8 +222,7 @@ All you need to do is inherit from the `cborm.models.VirtualEntityService` and c
 * `defaultAsQuery` - Return query or array of objects on `list(), executeQuery(), criteriaQuery(),` defaults to true
 * `datasource` - The datasource name to be used for the rooted entity, if not we use the default datasource
 
-{% code-tabs %}
-{% code-tabs-item title="models/ContentService.cfc" %}
+{% code title="models/ContentService.cfc" %}
 ```javascript
 component extends="cborm.models.VirtualEntityService" singleton{
 
@@ -238,8 +239,7 @@ component extends="cborm.models.VirtualEntityService" singleton{
 	
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Active Entity
 
@@ -249,8 +249,7 @@ ActiveEntity inherits from the VirtualEntityService class which inhertis from th
 
 ### Example Entity
 
-{% code-tabs %}
-{% code-tabs-item title="models/User.cfc" %}
+{% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
@@ -289,8 +288,7 @@ component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### Example Usage
 
@@ -317,7 +315,38 @@ prc.users = entityNew( "User" )
     );
 ```
 
+## Automatic ORM Resource Handler
 
+If you are creating RESTful services, you can leverage our new Base ORM Handler that will give you a full CRUD service for your entities.  All you have to do is the following:
 
+1. Create your entities
+   1. Add mementifier data \([https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)\)
+   2. Add validation data \([https://forgebox.io/view/cbvalidation](https://forgebox.io/view/cbvalidation)\)
+2. Register the resource in your application router or module router
+   1. `resources( "users" )`
+3. Create the handler that will manage that resource and extend our base handler, spice up as needed and you are done:
 
+{% code title="handlers/users.cfc" %}
+```javascript
+/**
+* My awesome cb6 resources handler
+*/
+component extends="cborm.models.resources.BaseHandler"{
+
+	// Inject the correct service as the `ormService` for the resource Handler
+	property name="ormService" inject="entityService:Role";
+
+	// The default sorting order string: permission, name, data desc, etc.
+	variables.sortOrder = "name";
+	// The name of the entity this resource handler controls. Singular name please.
+	variables.entity    = "Role";
+
+}
+
+```
+{% endcode %}
+
+That's it!  This handler will now manage ALL the CRUD operations in REST format for your entity including relationships, validations, pagination and data marshalling.
+
+![ColdBox Resources](../.gitbook/assets/resources.PNG)
 

@@ -49,8 +49,7 @@ S3_DOMAIN=amazonaws.com
 
 Now open the `Application.cfc` and let's configure the ORM by adding the following in the pseudo constructor and adding two lines of code to the request start so when we reinit the APP we can also reinit the ORM.
 
-{% code-tabs %}
-{% code-tabs-item title="Application.cfc" %}
+{% code title="Application.cfc" %}
 ```javascript
 // Locate the cborm module for events
 this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
@@ -82,8 +81,7 @@ public boolean function onRequestStart( string targetPage ){
     return true;
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="warning" %}
 To change the datasource name to something you like then update it here and in the `.cfconfig.json` file. Once done, issue a `server restart` and enjoy your new datasource name.
@@ -114,8 +112,7 @@ coldbox create orm-entity
 
 This will generate the `models/Person.cfc` as an `ActiveEntity` object and even create the unit test for it.
 
-{% code-tabs %}
-{% code-tabs-item title="Person.cfc" %}
+{% code title="Person.cfc" %}
 ```javascript
 /**
  * A cool Person entity
@@ -137,15 +134,13 @@ component persistent="true" table="Person"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Setup for BDD
 
 Since we love to promote tests at Ortus, let's configure our test harness for ORM testing. Open the `/tests/Application.cfc` and add the following code to setup the ORM and some functions for helping us test.
 
-{% code-tabs %}
-{% code-tabs-item title="/tests/Application.cfc" %}
+{% code title="/tests/Application.cfc" %}
 ```javascript
     // Locate the cborm module for events
     this.mappings[ "/cborm" ] = rootPath & "modules/cborm";
@@ -169,13 +164,11 @@ Since we love to promote tests at Ortus, let's configure our test harness for OR
         return true;
     }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 Now that we have prepared the test harness for ORM testing, let's test out our Person with a simple unit test. We don't over test here because our integration test will be more pragmatic and cover our use cases:
 
-{% code-tabs %}
-{% code-tabs-item title="/tests/specs/unit/PersonTest.cfc" %}
+{% code title="/tests/specs/unit/PersonTest.cfc" %}
 ```javascript
 component extends="coldbox.system.testing.BaseTestCase"{
 
@@ -189,8 +182,7 @@ component extends="coldbox.system.testing.BaseTestCase"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Basic CRUD
 
@@ -213,8 +205,7 @@ Please note that this also generates the integrations tests as well under `/test
 
 Open the `handlers/persons.cfc` and in the pseudo-constructor let's inject a virtual ORM service layer based on the `Person` entity:
 
-{% code-tabs %}
-{% code-tabs-item title="/handlers/persons.cfc" %}
+{% code title="/handlers/persons.cfc" %}
 ```javascript
 /**
  * I manage Persons
@@ -226,8 +217,7 @@ component{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 The `cborm` module gives you the `entityService:{entityName}` DSL which allows you to inject virtual service layers according to `entityName`. With our code above we will have a `personService` in our `variables` scope injected for us.
 
@@ -356,8 +346,7 @@ That's it! We are now rolling with basic CRUD `cborm` style!
 
 Here are the full completed BDD tests as well
 
-{% code-tabs %}
-{% code-tabs-item title="/tests/specs/integration/personsTest.cfc" %}
+{% code title="/tests/specs/integration/personsTest.cfc" %}
 ```javascript
 component extends="coldbox.system.testing.BaseTestCase" appMapping="/"{
 
@@ -448,6 +437,5 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/"{
 
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
