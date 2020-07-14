@@ -127,7 +127,7 @@ More information can be found here: [https://forgebox.io/view/cbstreams](https:/
 
 ## Virtual Services
 
-We also have a virtual service layer that can be mapped to specific entities and create entity driven service layers **virtually**. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time. This is achived via the `VirtualEntityService` model which inherits from the `BaseORMService` class.
+We also have a virtual service layer that can be mapped to specific entities and create entity driven service layers **virtually**. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time. This is achieved via the `VirtualEntityService` model which inherits from the `BaseORMService` class.
 
 You can achieve this in several manners:
 
@@ -245,7 +245,7 @@ component extends="cborm.models.VirtualEntityService" singleton{
 
 If you want to apply an Active Record and fluent feel to your entities then `ActiveEntity` is just for you.  Just inherit from `cborm.models.ActiveEntity` and you are on your way to Active Record bliss.
 
-ActiveEntity inherits from the VirtualEntityService class which inhertis from the BaseORMService class. So you have the full gamut of usage plus the ability for the active entity to validate itself. It has the `isValid()` and `getValidationResults()` methods to help you with the validation of a populated entity.
+ActiveEntity inherits from the VirtualEntityService class which inherits from the BaseORMService class. So you have the full gamut of usage plus the ability for the active entity to validate itself. It has the `isValid()` and `getValidationResults()` methods to help you with the validation of a populated entity.
 
 ### Example Entity
 
