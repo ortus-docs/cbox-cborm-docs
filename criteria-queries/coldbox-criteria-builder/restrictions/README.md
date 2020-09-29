@@ -67,6 +67,10 @@ To build our criteria queries we will mostly use the methods in the criteria obj
 | `isTrue(required string property)` | Returns if the property is true | _c.isTrue\("isPublished"\);_ |
 
 {% hint style="info" %}
+Adobe ColdFusion may throw an "Invalid CFML construct" error for certain CBORM methods that match [reserved operator names](https://helpx.adobe.com/coldfusion/developing-applications/the-cfml-programming-language/elements-of-cfml/reserved-words-in-coldfusion.html), such as `.and()`, `.or()`, and `.eq()`. You can use `.$and()`, `.$or()`, and `.isEq()` to avoid these errors and build cross-engine compatible code.
+{% endhint %}
+
+{% hint style="info" %}
 In some cases \(`isEq(), isIn(),` etc\), you may receive data type mismatch errors. These can be resolved by using JavaCast on your criteria value or use our auto caster methods: `idCast(), autoCast()`
 {% endhint %}
 
