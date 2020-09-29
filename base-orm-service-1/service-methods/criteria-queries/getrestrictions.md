@@ -19,3 +19,6 @@ var users = ormService.newCriteria("User")
     .list();
 ```
 
+{% hint style="warning" %}
+Adobe ColdFusion will throw an "Invalid CFML construct" for certain CBORM methods that match [reserved operator names](https://helpx.adobe.com/coldfusion/developing-applications/the-cfml-programming-language/elements-of-cfml/reserved-words-in-coldfusion.html), such as `.and()`, `.or()`, and `.eq()`. To avoid these errors and build cross-engine compatible code, use `.$and()`, `.$or()`, and `.isEq()`.
+{% endhint %}
