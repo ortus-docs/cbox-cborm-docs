@@ -93,7 +93,7 @@ Apache 2 License: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache
 
 ## Discussion & Help
 
-![](.gitbook/assets/image%20%281%29.png)
+![](.gitbook/assets/image%20%282%29.png)
 
 The Ortus Community is the way to get any type of help for our entire platform and modules: [https://community.ortussolutions.com](https://community.ortussolutions.com)
 

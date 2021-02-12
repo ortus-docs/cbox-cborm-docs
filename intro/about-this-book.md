@@ -9,6 +9,8 @@ The source code for this book is hosted in GitHub: [https://github.com/ortus-doc
 
 Flash, Flex, ColdFusion, and Adobe are registered trademarks and copyrights of Adobe Systems, Inc.
 
+ColdBox, CommandBox, FORGEBOX, TestBox, ContentBox, Ortus Solutions are all trademarks and copyrights of Ortus Solutions, Corp.
+
 ## Notice of Liability
 
 The information in this book is distributed “as is”, without warranty. The author and Ortus Solutions, Corp shall not have any liability to any person or entity with respect to loss or damage caused or alleged to be caused directly or indirectly by the content of this training book, software and resources described in it.
@@ -23,7 +25,7 @@ We highly encourage contribution to this book and our open source software. The 
 
 ### Shalom Children's Home
 
-![Shalom Children&apos;s Home](https://raw.githubusercontent.com/ortus-docs/logbox-docs/master/images/shalom.jpg)
+![](../.gitbook/assets/image%20%283%29.png)
 
 **Shalom Children’s Home** is one of the ministries that is dear to our hearts located in El Salvador. During the 12 year civil war that ended in 1990, many children were left orphaned or abandoned by parents who fled El Salvador. The Benners saw the need to help these children and received 13 children in 1982. Little by little, more children came on their own, churches and the government brought children to them for care, and the Shalom Children’s Home was founded.
 
