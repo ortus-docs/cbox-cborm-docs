@@ -1,10 +1,10 @@
 # ORM Events
 
-Hibernate can announce events to listener objects so they can tap in to the life-cycle of the entities.  You can either listen to the events globally or within the entity itself by just declaring a few listener methods.  The cborm module taps in to the global Hibernate events and re-transmits them as[ ColdBox interception points](https://coldbox.ortusbooks.com/digging-deeper/interceptors).  This allows you to intercept ORM events via multiple CFC listeners instead of the rigid approach of a single listener CFC which the ColdFusion engines give you.
+Hibernate can announce events to listener objects so they can tap in to the life-cycle of the entities. You can either listen to the events globally or within the entity itself by just declaring a few listener methods. The cborm module taps in to the global Hibernate events and re-transmits them as[ ColdBox interception points](https://coldbox.ortusbooks.com/digging-deeper/interceptors). This allows you to intercept ORM events via multiple CFC listeners instead of the rigid approach of a single listener CFC which the ColdFusion engines give you.
 
 ![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ORMEventHandlerBroadcast.jpg)
 
-This is achieved by the `cborm.models.EventHandler` class and by telling the application about it.  The event handler also \(if configured\) will talk to WireBox and auto wire entities with dependencies.  Just add your dependency injection properties and off you go with entity injection.
+This is achieved by the `cborm.models.EventHandler` class and by telling the application about it. The event handler also \(if configured\) will talk to WireBox and auto wire entities with dependencies. Just add your dependency injection properties and off you go with entity injection.
 
 ## **Enabling The Event Handler**
 
@@ -32,7 +32,7 @@ That's it, now the cborm event handler will listen to the ORM events, re-broadca
 
 ## Listening to Events
 
-Below are the new interception points the ORM Event Handler exposes with the appropriate interception data it announces.  Just create an Interceptor CFC, add the method with the name of the interception point and off you go!
+Below are the new interception points the ORM Event Handler exposes with the appropriate interception data it announces. Just create an Interceptor CFC, add the method with the name of the interception point and off you go!
 
 | Interception Point | Intercept Structure | Description |
 | :--- | :--- | :--- |
@@ -54,7 +54,7 @@ With the exposure of these interception points to your ColdBox application, you 
 
 ```javascript
 component extends="coldbox.system.Interceptor"{
-    
+
     function ORMPostLoad( event, interceptData, rc, prc ){
         // audit the data.
         var state = interceptData.entity.getMemento();

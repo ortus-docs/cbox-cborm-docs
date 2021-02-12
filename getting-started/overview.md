@@ -35,10 +35,9 @@ property name="ormService" inject="baseORMService@cborm";
 getInstance( "BaseORMService@cborm" );
 // use via dsl
 getInstance( dsl="entityService" );
-
 ```
 
-This service object acts as an abstraction layer to the ColdFusion ORM \(Hibernate\) and can work with any entity in your system as all methods most likely receive the `entityName` argument.  You will be able to do the following category of actions from this service class:
+This service object acts as an abstraction layer to the ColdFusion ORM \(Hibernate\) and can work with any entity in your system as all methods most likely receive the `entityName` argument. You will be able to do the following category of actions from this service class:
 
 * Hibernate Session utility methods
 * Entity metadata methods
@@ -53,7 +52,7 @@ This service object acts as an abstraction layer to the ColdFusion ORM \(Hiberna
 * Eviction Methods
 * Population Methods
 
-This means that you don't need to create a service layer CFC in order to work with ORM entities, you can leverage this abstraction to work with your ORM needs.  You can also specifically bind \(root\) the service to a specific entity, which we lovingly call a `VirtualEntityService`. This way you don't have to be passing the entity names left and right, the virtual entity service will be constructed with the name and all operations will be done upon that entity.
+This means that you don't need to create a service layer CFC in order to work with ORM entities, you can leverage this abstraction to work with your ORM needs. You can also specifically bind \(root\) the service to a specific entity, which we lovingly call a `VirtualEntityService`. This way you don't have to be passing the entity names left and right, the virtual entity service will be constructed with the name and all operations will be done upon that entity.
 
 ### Example
 
@@ -110,10 +109,10 @@ component{
                     .like( "title", "%#rc.searchTerm#%" )
             .asStream()
             .list( offset=rc.offset, max=50 );
-        
+
         event.setView( "content/search")
     }
-    
+
 }
 ```
 
@@ -149,7 +148,7 @@ contentService = getInstance( dsl = "entityService:Content" );
 ormService.createService( entityName="Content", useQueryCaching=true );
 ```
 
-That's it!  You can use it just like the BaseORMService except no more passing the entity name.
+That's it! You can use it just like the BaseORMService except no more passing the entity name.
 
 ### Example
 
@@ -201,16 +200,16 @@ component{
                     .like( "title", "%#rc.searchTerm#%" )
             .asStream()
             .list( offset=rc.offset, max=50 );
-        
+
         event.setView( "content/search")
     }
-    
+
 }
 ```
 
 ## Concrete Services
 
-This is where you create your own CFC that inherits from our `VirtualEntityService` and either adds or overrides methods.  The virtual and base services takes you about 90% of the way.  With you concrete services, you can complete the functionality to your liking.
+This is where you create your own CFC that inherits from our `VirtualEntityService` and either adds or overrides methods. The virtual and base services takes you about 90% of the way. With you concrete services, you can complete the functionality to your liking.
 
 All you need to do is inherit from the `cborm.models.VirtualEntityService` and call the parent class constructor with the available arguments:
 
@@ -226,24 +225,24 @@ All you need to do is inherit from the `cborm.models.VirtualEntityService` and c
 ```javascript
 component extends="cborm.models.VirtualEntityService" singleton{
 
-	/**
-	 * Constructor
-	 * @entityName The content entity name to bind this service to.
-	 */
-	ContentService function init( entityName="cbContent" ){
-		// init it
-		super.init( entityName=arguments.entityName, useQueryCaching=true );
+    /**
+     * Constructor
+     * @entityName The content entity name to bind this service to.
+     */
+    ContentService function init( entityName="cbContent" ){
+        // init it
+        super.init( entityName=arguments.entityName, useQueryCaching=true );
 
-		return this;
-	}
-	
+        return this;
+    }
+
 }
 ```
 {% endcode %}
 
 ## Active Entity
 
-If you want to apply an Active Record and fluent feel to your entities then `ActiveEntity` is just for you.  Just inherit from `cborm.models.ActiveEntity` and you are on your way to Active Record bliss.
+If you want to apply an Active Record and fluent feel to your entities then `ActiveEntity` is just for you. Just inherit from `cborm.models.ActiveEntity` and you are on your way to Active Record bliss.
 
 ActiveEntity inherits from the VirtualEntityService class which inherits from the BaseORMService class. So you have the full gamut of usage plus the ability for the active entity to validate itself. It has the `isValid()` and `getValidationResults()` methods to help you with the validation of a populated entity.
 
@@ -253,38 +252,38 @@ ActiveEntity inherits from the VirtualEntityService class which inherits from th
 ```javascript
 component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
-	property name="id" column="user_id" fieldType="id" generator="uuid";
-	
-	/**
-	 * @display First Name
-	 * @message Please provide firstname
-	 * @NotEmpty
-	 */
-	property name="firstName";
-	
-	/**
-	 * @display Last Name
-	 * @message Please provide lastname
-	 * @NotEmpty
-	 */
-	property name="lastName";
-	property name="userName";
-	property name="password";
-	property name="lastLogin" ormtype="date";
+    property name="id" column="user_id" fieldType="id" generator="uuid";
 
-	// M20 -> Role
-	property name="role" cfc="Role" fieldtype="many-to-one" fkcolumn="FKRoleID" lazy="true" notnull="false";
+    /**
+     * @display First Name
+     * @message Please provide firstname
+     * @NotEmpty
+     */
+    property name="firstName";
 
-	// DI Test
-	property name="wirebox" inject="wirebox" persistent="false";
+    /**
+     * @display Last Name
+     * @message Please provide lastname
+     * @NotEmpty
+     */
+    property name="lastName";
+    property name="userName";
+    property name="password";
+    property name="lastLogin" ormtype="date";
 
-	// Constraints
-	this.constraints = {
-		firstName = { required=true }, 
-		lastName  = { required=true }, 
-		username  = { required=true, min=5, validator="UniqueValidator@cborm" }, 
-		password  = { required=true, min=6 }
-	};
+    // M20 -> Role
+    property name="role" cfc="Role" fieldtype="many-to-one" fkcolumn="FKRoleID" lazy="true" notnull="false";
+
+    // DI Test
+    property name="wirebox" inject="wirebox" persistent="false";
+
+    // Constraints
+    this.constraints = {
+        firstName = { required=true }, 
+        lastName  = { required=true }, 
+        username  = { required=true, min=5, validator="UniqueValidator@cborm" }, 
+        password  = { required=true, min=6 }
+    };
 
 }
 ```
@@ -297,17 +296,17 @@ user = entityNew( "User" ).get( 2 );
 var isValid = entityNew( "User" )
     .populate( memento=rc, composeRelationships=true )
     .isValid();
-    
+
 user = entityNew( "User" ).findAllByIsActive( true );
 user = entityNew( "User" )
     .get( 4 )
     .setName( "Awesome" )
     .save();
-    
+
 entityNew( "User" )
     .getOrFail( 4 )
     .delete();
-    
+
 prc.users = entityNew( "User" )
     .findAllWhere( 
        criteria = { isActive:true, role:entityNew( "Role" ).findByName( "Admin" ) },
@@ -317,7 +316,7 @@ prc.users = entityNew( "User" )
 
 ## Automatic ORM Resource Handler
 
-If you are creating RESTful services, you can leverage our new Base ORM Handler that will give you a full CRUD service for your entities.  All you have to do is the following:
+If you are creating RESTful services, you can leverage our new Base ORM Handler that will give you a full CRUD service for your entities. All you have to do is the following:
 
 1. Create your entities
    1. Add mementifier data \([https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)\)
@@ -333,20 +332,19 @@ If you are creating RESTful services, you can leverage our new Base ORM Handler 
 */
 component extends="cborm.models.resources.BaseHandler"{
 
-	// Inject the correct service as the `ormService` for the resource Handler
-	property name="ormService" inject="entityService:Role";
+    // Inject the correct service as the `ormService` for the resource Handler
+    property name="ormService" inject="entityService:Role";
 
-	// The default sorting order string: permission, name, data desc, etc.
-	variables.sortOrder = "name";
-	// The name of the entity this resource handler controls. Singular name please.
-	variables.entity    = "Role";
+    // The default sorting order string: permission, name, data desc, etc.
+    variables.sortOrder = "name";
+    // The name of the entity this resource handler controls. Singular name please.
+    variables.entity    = "Role";
 
 }
-
 ```
 {% endcode %}
 
-That's it!  This handler will now manage ALL the CRUD operations in REST format for your entity including relationships, validations, pagination and data marshalling.
+That's it! This handler will now manage ALL the CRUD operations in REST format for your entity including relationships, validations, pagination and data marshalling.
 
 ![ColdBox Resources](../.gitbook/assets/resources.PNG)
 

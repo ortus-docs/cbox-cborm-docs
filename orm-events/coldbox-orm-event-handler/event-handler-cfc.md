@@ -13,7 +13,7 @@ That's it! Just by doing this the CF ORM will call your CFC's event methods in t
 
 | Listener Method | Description |
 | :--- | :--- |
-| `postNew(entity)` | This method is called by the ColdBox Base ORM Service Layers after a new entity has been created via its new() method. |
+| `postNew(entity)` | This method is called by the ColdBox Base ORM Service Layers after a new entity has been created via its new\(\) method. |
 | `preLoad(entity)` | This method is called before the load operation or before the data is loaded from the database. |
 | `postLoad(entity)` | This method is called after the load operation is complete. |
 | `preInsert(entity)` | This method is called just before the object is inserted. |
@@ -28,3 +28,4 @@ That's it! Just by doing this the CF ORM will call your CFC's event methods in t
 | `postFlush(entity)` | This method is called after the Hibernate session is flushed. |
 
 The base event handler CFC you inherit from has all the ColdBox interaction capabilities you will ever need. You can find out all its methods by referring to the API and looking at that class or by inspecting the ColdBox Proxy class, which is used for enabling ColdBox interactions: _coldbox.system.remote.ColdboxProxy_
+

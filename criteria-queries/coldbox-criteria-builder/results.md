@@ -49,7 +49,9 @@ Once you have concatenated criterias together, you can execute the query via the
       <td style="text-align:left">Execute the criterias and give you the results.</td>
     </tr>
   </tbody>
-</table>```javascript
+</table>
+
+```javascript
 // Get
 var results = c.idEq( 4 ).get();
 

@@ -100,32 +100,30 @@ c
 
 ## Fluent If Statements - `when()`
 
-There comes times where you need some if statements in order to add criterias based on incoming input.  That's ok, but we can do better by adding a `when( test, target )` function that will evaluate the `test` argument or expression.  If it evaluates to true then the target closure is called for you with the criteria object so you can do your criterias:
+There comes times where you need some if statements in order to add criterias based on incoming input. That's ok, but we can do better by adding a `when( test, target )` function that will evaluate the `test` argument or expression. If it evaluates to true then the target closure is called for you with the criteria object so you can do your criterias:
 
 ```javascript
 newCriteria()
-	.when( isBoolean( arguments.isPublished ), function( c ){
-		// Published process
-		c
-			.isEq( "isPublished", isPublished )
-			.when( isPublished, function( c ){
-				c.isLt( "publishedDate", now() )
-				.$or( 
-					c.restrictions.isNull( "expireDate" ), 
-					c.restrictions.isGT( "expireDate", now() ) 
-				)
-				.isEq( "passwordProtection","" );
-			})
-		}
-	} )
+    .when( isBoolean( arguments.isPublished ), function( c ){
+        // Published process
+        c
+            .isEq( "isPublished", isPublished )
+            .when( isPublished, function( c ){
+                c.isLt( "publishedDate", now() )
+                .$or( 
+                    c.restrictions.isNull( "expireDate" ), 
+                    c.restrictions.isGT( "expireDate", now() ) 
+                )
+                .isEq( "passwordProtection","" );
+            })
+        }
+    } )
   .when( !isNull( arguments.showInSearch ), function( c ){
-  		c.isEq( "showInSearch", showInSearch );
+          c.isEq( "showInSearch", showInSearch );
    } )
    .when( arguments.isActive, function( c ){
-   	 	c.isTrue( "isActive" );
+            c.isTrue( "isActive" );
    })
   .list()
 ```
-
-
 

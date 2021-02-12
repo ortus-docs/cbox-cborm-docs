@@ -389,7 +389,9 @@ function index( event, rc, prc ){
       </td>
     </tr>
   </tbody>
-</table>### create\(\) Arguments
+</table>
+
+### create\(\) Arguments
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
