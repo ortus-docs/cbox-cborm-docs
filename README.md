@@ -6,6 +6,8 @@ description: ColdBox ORM Module
 
 The `cborm` module is a module that will **enhance** your experience when working with the ColdFusion ORM powered by [Hibernate](https://hibernate.org/). It will not only enhance it with dynamic goodness but give you a fluent and human approach to working with Hibernate. Basically making working with Hibernate not SUCK!
 
+![](.gitbook/assets/cborm300.png)
+
 ![](.gitbook/assets/hibernate-logo.svg)
 
 ### Some Features
