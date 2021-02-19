@@ -110,9 +110,7 @@ Now that you have finished your entities, you can now register the resources you
 
 {% code title="config/Router.cfc" %}
 ```java
-resources( "settings" )
-    .resources( "users" )
-    .resources( "roles" );
+resources( "photos" );
 ```
 {% endcode %}
 
