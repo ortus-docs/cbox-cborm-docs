@@ -1,8 +1,8 @@
 # Automatic REST Crud
 
-In cborm 2.5 we introduced the Base Resource Handler for ORM entities.  This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
+In cborm 2.5 we introduced the Base Resource Handler for ORM entities. This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
 
-This means that we will create all the boilerplate code to list, show, create, update and delete your entities.  Including relationships, validation, population, pagination and different ways to render \(include/exclude\) your data thanks to Mementifier.  Get ready to start creating RESTFul services in no time!
+This means that we will create all the boilerplate code to list, show, create, update and delete your entities. Including relationships, validation, population, pagination and different ways to render \(include/exclude\) your data thanks to Mementifier. Get ready to start creating RESTFul services in no time!
 
 {% hint style="danger" %}
 You must be using ColdBox 6 for this feature to work
@@ -14,15 +14,15 @@ To start off with our resources support, you can start by adding the following s
 
 ```javascript
 cborm = {
-	 // Resource Settings
-		resources : {
-			// Enable the ORM Resource Event Loader
-			eventLoader 	: false,
-			// Pagination max rows
-			maxRows 		: 25,
-			// Pagination max row limit: 0 = no limit
-			maxRowsLimit 	: 500
-		}
+     // Resource Settings
+        resources : {
+            // Enable the ORM Resource Event Loader
+            eventLoader     : false,
+            // Pagination max rows
+            maxRows         : 25,
+            // Pagination max row limit: 0 = no limit
+            maxRowsLimit     : 500
+        }
 }
 ```
 
@@ -58,45 +58,45 @@ It's time to focus on your entities now. Build out the properties, relationships
 * A setting object
 */
 component
-	persistent="true"
-	table="setting"{
+    persistent="true"
+    table="setting"{
 
-	/* *********************************************************************
-	**							PROPERTIES
-	********************************************************************* */
+    /* *********************************************************************
+    **                            PROPERTIES
+    ********************************************************************* */
 
-	property
-		name="settingId"
-		fieldtype="id"
-		generator="uuid"
-		ormtype="string"
-		setter="false";
+    property
+        name="settingId"
+        fieldtype="id"
+        generator="uuid"
+        ormtype="string"
+        setter="false";
 
-	property
-		name="name"
-		notnull="true"
-		unique="true"
-		length="255";
+    property
+        name="name"
+        notnull="true"
+        unique="true"
+        length="255";
 
-	property
-		name="value"
-		notnull="true"
-		ormtype="text";
+    property
+        name="value"
+        notnull="true"
+        ormtype="text";
 
-	/* *********************************************************************
-	**							PK + CONSTRAINTS
-	********************************************************************* */
+    /* *********************************************************************
+    **                            PK + CONSTRAINTS
+    ********************************************************************* */
 
-	// Validation
-	this.constraints ={
-		"name" 		= { required=true, size="1..255", validator="UniqueValidator@cborm" },
-		"value" 	= { required=true }
-	};
+    // Validation
+    this.constraints ={
+        "name"         = { required=true, size="1..255", validator="UniqueValidator@cborm" },
+        "value"     = { required=true }
+    };
 
-	// Mementofication
-	this.memento = {
-		defaultIncludes = [ "name", "value" ]
-	};
+    // Mementofication
+    this.memento = {
+        defaultIncludes = [ "name", "value" ]
+    };
 
 }
 ```
@@ -120,7 +120,7 @@ This will generate all the resourceful routes as per the ColdBox Resources Routi
 
 ## Create the Handler
 
-Now that your resources are created, create the handler that matches the resource.  You can use CommandBox: `coldbox create handler settings` or just create the file manually.  Make sure it extends our cborm resource handler: `cborm.models.resources.BaseHandler`
+Now that your resources are created, create the handler that matches the resource. You can use CommandBox: `coldbox create handler settings` or just create the file manually. Make sure it extends our cborm resource handler: `cborm.models.resources.BaseHandler`
 
 ```javascript
 /**
@@ -128,13 +128,13 @@ Now that your resources are created, create the handler that matches the resourc
  */
 component extends="cborm.models.resources.BaseHandler"{
 
-	// DI
-	property name="ormService" inject="SettingService";
+    // DI
+    property name="ormService" inject="SettingService";
 
-	// The default sorting order string: permission, name, data desc, etc.
-	variables.sortOrder 	= "name";
-	// The name of the entity this resource handler controls. Singular name please.
-	variables.entity 		= "Setting";
+    // The default sorting order string: permission, name, data desc, etc.
+    variables.sortOrder     = "name";
+    // The name of the entity this resource handler controls. Singular name please.
+    variables.entity         = "Setting";
 
 }
 ```
@@ -173,7 +173,7 @@ The base resource handler will generate the following methods for you that will 
 
 ### Consistent Output
 
-REST is all about uniformity and consistency.  The output packet produced by any of the actions you create or use, will adhere to the following schema:
+REST is all about uniformity and consistency. The output packet produced by any of the actions you create or use, will adhere to the following schema:
 
 ```javascript
 {
@@ -228,9 +228,9 @@ private function autoCast( required propertyName, required value )
  * @return cborm.models.criterion.CriteriaBuilder
  */
 private function newCriteria(
-	boolean useQueryCaching = false,
-	string queryCacheRegion = "",
-	datasource
+    boolean useQueryCaching = false,
+    string queryCacheRegion = "",
+    datasource
 )
 ```
 
@@ -282,7 +282,7 @@ Each action can take in not only the incoming parameters that your entities requ
 
 ## Overriding Actions
 
-You can also override the actions we give you so you can spice them up as you see fit.  A part from calling the super class to finalize your REST call, we have allso added some extra arguments to your base actions so you can have fine-grained control of populations, validations, querying and much more.
+You can also override the actions we give you so you can spice them up as you see fit. A part from calling the super class to finalize your REST call, we have allso added some extra arguments to your base actions so you can have fine-grained control of populations, validations, querying and much more.
 
 ```javascript
 /**
@@ -292,24 +292,24 @@ You can also override the actions we give you so you can spice them up as you se
  * @override
  */
 function index( event, rc, prc ){
-	// Criterias and Filters
-	param rc.sortOrder 			= "createdDate desc";
-	param rc.page 				= 1;
-	param rc.isActive 			= true;
-	param rc.clientId 			= "";
-	param rc.creatorId 			= "";
+    // Criterias and Filters
+    param rc.sortOrder             = "createdDate desc";
+    param rc.page                 = 1;
+    param rc.isActive             = true;
+    param rc.clientId             = "";
+    param rc.creatorId             = "";
 
-	// Build up a search criteria and let the base execute it
-	arguments.criteria = newCriteria()
-		.eq( "isActive", autoCast( "isActive", rc.isActive )  )
-		.when( len( rc.clientId ), (c) => {
-			c.eq( "client.clientId", rc.clientId );
-		} )
-		.when( len( rc.creatorId ), (c) => {
-			c.eq( "creator.userId", rc.creatorId );
-		} );
+    // Build up a search criteria and let the base execute it
+    arguments.criteria = newCriteria()
+        .eq( "isActive", autoCast( "isActive", rc.isActive )  )
+        .when( len( rc.clientId ), (c) => {
+            c.eq( "client.clientId", rc.clientId );
+        } )
+        .when( len( rc.creatorId ), (c) => {
+            c.eq( "creator.userId", rc.creatorId );
+        } );
 
-	super.index( argumentCollection=arguments );
+    super.index( argumentCollection=arguments );
 }
 
 /**
@@ -322,29 +322,29 @@ function index( event, rc, prc ){
  * @override
  */
 function index( event, rc, prc ){
-	// Criterias and Filters
-	param rc.search 			= "";
-	param rc.sortOrder 			= "lname";
-	param rc.page 				= 1;
-	param rc.isActive 			= true;
-	param rc.hasPayroll 		= false;
-	param rc.managerId 			= "";
-	param rc.roleId				= "";
+    // Criterias and Filters
+    param rc.search             = "";
+    param rc.sortOrder             = "lname";
+    param rc.page                 = 1;
+    param rc.isActive             = true;
+    param rc.hasPayroll         = false;
+    param rc.managerId             = "";
+    param rc.roleId                = "";
 
-	// search
-	arguments.results = variables.ormService.search(
-		"searchTerm"	= rc.search,
-		"sortOrder" 	= rc.sortOrder,
-		"isActive"		= rc.isActive,
-		"hasPayroll"	= rc.hasPayroll,
-		"roleId"		= rc.roleId,
-		"managerId"		= rc.managerId,
-		"offset" 		= getPageOffset( rc.page ),
-		"max" 			= getMaxRows()
-	);
+    // search
+    arguments.results = variables.ormService.search(
+        "searchTerm"    = rc.search,
+        "sortOrder"     = rc.sortOrder,
+        "isActive"        = rc.isActive,
+        "hasPayroll"    = rc.hasPayroll,
+        "roleId"        = rc.roleId,
+        "managerId"        = rc.managerId,
+        "offset"         = getPageOffset( rc.page ),
+        "max"             = getMaxRows()
+    );
 
-	// response
-	super.index( argumentCollection=arguments );
+    // response
+    super.index( argumentCollection=arguments );
 }
 ```
 
