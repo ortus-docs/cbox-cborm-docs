@@ -4,8 +4,6 @@ Hibernate also supports the concept of [detached criterias](https://docs.jboss.o
 
 {% embed url="https://docs.jboss.org/hibernate/stable/orm/javadocs/org/hibernate/criterion/DetachedCriteria.html" %}
 
-
-
 > Some applications need to create criteria queries in "detached mode", where the Hibernate session is not available. Then you can execute the search in an arbitrary session.
 
 To create an instance of Detached Criteria Builder, simply call the _`createSubcriteria()`_ method on your existing criteria object and incorporate it via the `add()` method.
@@ -17,6 +15,34 @@ c.add(
     c.createSubCriteria()
 );
 ```
+
+Once you have an instance of the sub criteria, then just add in your restrictions:
+
+```javascript
+prc.pageTitle = "Criteria Builder - Subquery";
+var c = carService.newCriteria();
+
+// add subquery
+prc.results = c.add(
+		c.createSubcriteria( "Car", "carstaff" )
+			// the property in the subquery to use or retrieve
+			.withProjections( property : "CarID" )
+			.joinTo( "carstaff.SalesPeople", "staff" )
+				.joinTo( "staff.Position", "position" )
+					.isEq( "position.LongName", "Finance Officer" )
+		// then we use propertyIn() to get all the Cars from the sub query
+		.propertyIn( "CarID" )
+)
+.list()
+// Map it to the memento, so we can see it nicely.
+.map( function( item ){
+	return item.getMemento();
+} );
+```
+
+{% hint style="success" %}
+**Hint**: Remember you can use the `getSQL()` method to get the actual SQL that will be produced.  You can even add the argument: `returnExecutableSql` and get the actual executable SQL.
+{% endhint %}
 
 With the  Detached Criteria Builder, you can expand the power and flexibility of your criteria queries with support for criteria and projection subqueries, all while using the same intuitive patterns of Criteria Builder. No fuss, just more flexibility and control for your criteria queries!
 
