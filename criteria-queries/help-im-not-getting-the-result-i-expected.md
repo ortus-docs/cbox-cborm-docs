@@ -2,7 +2,7 @@
 
 Since we’re not writing SQL, it can sometimes be frustrating to uncover why results from Criteria Builder and Detached Criteria Builder don’t match up with what you’re expecting.
 
-An easy way to debug in these scenarios is to enable SQL logging and actually look at the query which is ultimately executed after Hibernate does it magic.
+An easy way to debug in these scenarios is to enable SQL logging and actually look at the query which is ultimately executed after Hibernate does it magic. You can also use the `getSQL( true )` to get the actual SQL that will be executed with the actual executable sql.
 
 For a good guide on setting up SQL logging for ColdFusion ORM, check out [https://helpx.adobe.com/coldfusion/developing-applications/coldfusion-orm/configure-orm/logging.html](https://helpx.adobe.com/coldfusion/developing-applications/coldfusion-orm/configure-orm/logging.html)
 

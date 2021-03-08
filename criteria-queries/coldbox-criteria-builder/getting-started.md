@@ -148,9 +148,9 @@ userService
 There are several methods available to you in the criteria objects to give you the actual SQL or HQL to execute, even with bindings.  These are a true life-saver.
 
 * `logSQL( label )` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
-* `getSQL()` - Returns the SQL string that will be prepared for the criteria object at the time of request
+* `getSQL( returnExecutableSql, formatSql )` - Returns the SQL string that will be prepared for the criteria object at the time of request
 * `getPositionalSQLParameters()` - Returns a formatted array of parameter value and types
-* `GetSqlLog()` - Retrieves the SQL Log
+* `getSqlLog()` - Retrieves the SQL Log
 * `startSqlLog()` - Triggers CriteriaBuilder to start internally logging the state of SQL at each iterative build
 * `stopSqlLog()` - Stop the internal logging.
 * `logSql()` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
