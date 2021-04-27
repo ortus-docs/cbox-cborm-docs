@@ -111,7 +111,7 @@ component
 
 The mementifier is a critical piece as it will allow you to pass in to the rest service `includes` and `excludes` so you can decide what will be marshalled out of the service.
 
-## Register The Resource
+## Register The Resource Routes
 
 Now that you have finished your entities, you can now register the resources you will be managing. Open your `config/ColdBox.cfc` or your Module's router:
 
@@ -142,11 +142,13 @@ component extends="cborm.models.resources.BaseHandler"{
     variables.sortOrder     = "name";
     // The name of the entity this resource handler controls. Singular name please.
     variables.entity         = "Setting";
+    // The name of the method to use for save persistence on the ORM service
+  	variables.saveMethod   = "save";
+	  // The name of the method to use for deleting entites on the ORM service
+	  variables.deleteMethod = "delete";
 
 }
 ```
-
-The Base Handler requires 1 injection and at most two settings for it to work properly:
 
 ### ORM Service Injection
 
@@ -161,10 +163,12 @@ property name="ormservice" inject="entityService:Setting";
 
 ### Private Properties
 
-You have two private properties you can set:
+You have several private properties you can set and override behavior:
 
 * `sortOrder` : The default sorting order string: `permission, name, data desc, etc`
-* `entity` :  The name of the entity this resource handler controls. Singular name please.
+* `entity` :  The name of the entity this resource handler controls. Singular name please. Used for announcing events.
+* `saveMethod` : The name of the method to use for save persistence on the ORM service. Defaults to `save()`
+* `deleteMethod` : The name of the method to use for deleting entites on the ORM service. Defaults to `delete()`
 
 ### Generated Actions
 
@@ -174,9 +178,9 @@ The base resource handler will generate the following methods for you that will 
 | :--- | :--- | :--- | :--- | :--- |
 | `index()` | GET | List resources | `/{resource}` | none |
 | `create()` | POST | Create a resource | `/{resource}` | Validation |
-| `show()` | GET | Get one resource | `/{resource}/:id` | EntityNotFound |
-| `update()` | PUT/PATCH | Update a resource | `/{resource}/:id` | EntityNotFound, Validation |
-| `delete()` | DELETE | Delete a resource | `/{resource}/:id` | EntityNotFound |
+| `show()` | GET | Get one resource | `/{resource}/:id` | `EntityNotFound` |
+| `update()` | PUT/PATCH | Update a resource | `/{resource}/:id` | `EntityNotFound`, Validation |
+| `delete()` | DELETE | Delete a resource | `/{resource}/:id` | `EntityNotFound` |
 
 ### Consistent Output
 
