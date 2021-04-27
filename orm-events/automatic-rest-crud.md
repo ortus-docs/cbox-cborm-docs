@@ -1,6 +1,6 @@
 # Automatic REST Crud
 
-In cborm 2.5 we introduced the Base Resource Handler for ORM entities. This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
+In cborm 2.5 we introduced the Base Resource Handler for ORM entities. This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox 6 Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
 
 This means that we will create all the boilerplate code to list, show, create, update and delete your entities. Including relationships, validation, population, pagination and different ways to render \(include/exclude\) your data thanks to Mementifier. Get ready to start creating RESTFul services in no time!
 
@@ -10,23 +10,26 @@ You must be using ColdBox 6 for this feature to work
 
 ## Settings
 
-To start off with our resources support, you can start by adding the following settings to your config/Coldbox.cfc in the `moduleSettings.cborm` struct:
+To start off with our resources support, you can start by adding the following settings to your `config/Coldbox.cfc` in the `moduleSettings.cborm` struct:
 
 ```javascript
 cborm = {
      // Resource Settings
-        resources : {
-            // Enable the ORM Resource Event Loader
-            eventLoader     : false,
-            // Pagination max rows
-            maxRows         : 25,
-            // Pagination max row limit: 0 = no limit
-            maxRowsLimit     : 500
-        }
+    resources : {
+        // Enable the ORM Resource Event Loader
+        eventLoader     : false,
+        // Prefix to use on all the registered pre/post{Entity}{Action} events
+        eventPrefix : "",
+        // Pagination max rows
+        maxRows         : 25,
+        // Pagination max row limit: 0 = no limit
+        maxRowsLimit     : 500
+    }
 }
 ```
 
 * `eventLoader` : If enabled, upon application startup it will register all the following events for EVERY entity managed by Hibernate
+* `eventPrefix` : By default if you enable the `eventLoader` then we will register interception points for all crud events for every entity using the pattern `pre|post{Entity}{Action}`.  You can use this setting to prefix the events like so: `{eventPrefix}pre|post{Entity}{Action}`
 * `maxRows` : By default the cborm resource handler will paginate results, you can choose your pagination window here.
 * `maxRowsLimit` : By default it will not allow more than 500 records to be returned from the listing method. However, you can make this 0 or anything you like.
 
@@ -44,6 +47,10 @@ Once the resource event loader is activated, it will ask Hibernate for all the m
 * `post{entityName}Update`
 * `pre{entityName}Delete`
 * `post{entityName}Delete`
+
+{% hint style="info" %}
+You can use the `eventPrefix` setting to add a prefix to all these events.
+{% endhint %}
 
 ## Define Your Entities
 
