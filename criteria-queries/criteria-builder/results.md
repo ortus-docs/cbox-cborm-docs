@@ -2,6 +2,12 @@
 
 Once you have concatenated criterias together, you can execute the query via the execution methods. Please remember that these methods return the results, so they must be executed last.
 
+### count\(\)
+
+### get\(\)
+
+### getOrFail\(\)
+
 <table>
   <thead>
     <tr>

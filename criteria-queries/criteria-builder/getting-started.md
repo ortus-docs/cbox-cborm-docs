@@ -83,7 +83,7 @@ You can also use your restrictions on the associated entity data. This is achiev
 
 ## Query Modifiers
 
-You can also add [modifiers](configuration-modifiers.md) for the execution of the query.  This can be sorting, timeouts, join types and so much more.
+You can also add [modifiers](modifiers.md) for the execution of the query.  This can be sorting, timeouts, join types and so much more.
 
 * `cache()` - Enable caching of this query result, provided query caching is enabled for the underlying session factory.
 * `cacheRegion()` - Set the name of the cache region to use for query result caching.

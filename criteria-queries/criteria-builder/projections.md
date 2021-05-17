@@ -123,3 +123,17 @@ var results = c
      .list();
 ```
 
+## Projections
+
+Here is a detail overview of each projection type.
+
+### avg\(\)
+
+The name of the property to average or a list or array of property names
+
+```javascript
+withProjections( avg = "salary" )
+```
+
+
+

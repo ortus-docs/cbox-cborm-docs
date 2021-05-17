@@ -8,5 +8,5 @@ For a good guide on setting up SQL logging for ColdFusion ORM, check out [https:
 
 Once SQL logging is setup, you’ll be able to instantly see the SQL which is executed to deliver the result you’re getting from your criteria queries. You can then run these queries independently \(such as in SQL Server Management Studio\), identify where the issues are, and tweak your criteria query until it’s perfect.
 
-You can also refer to the [Logging Section](coldbox-criteria-builder/getting-started.md#logging)
+You can also refer to the [Logging Section](criteria-builder/getting-started.md#logging)
 

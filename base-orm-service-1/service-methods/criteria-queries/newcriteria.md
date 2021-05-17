@@ -1,6 +1,6 @@
 # newCriteria
 
-Get a brand new criteria builder object to do criteria queries with \(See [ORM:CriteriaBuilder](../../../criteria-queries/coldbox-criteria-builder/getting-started.md)\)
+Get a brand new criteria builder object to do criteria queries with \(See [ORM:CriteriaBuilder](../../../criteria-queries/criteria-builder/getting-started.md)\)
 
 ## Returns
 
