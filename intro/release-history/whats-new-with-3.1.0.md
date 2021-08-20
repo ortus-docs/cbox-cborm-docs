@@ -1,3 +1,7 @@
+---
+description: 'March 30, 2021'
+---
+
 # What's New With 3.1.0
 
 ### Added
@@ -9,4 +13,6 @@
 
 * Fixed http to https for downloads
 * Fixed watcher pathing
+
+
 

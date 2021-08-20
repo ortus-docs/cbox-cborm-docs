@@ -72,3 +72,19 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 { fieldName : { validator: "UniqueValidator@cborm" } }
 ```
 
+## Supported Hibernate Versions
+
+### Lucee 5
+
+* Hibernate 3.5 - [https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
+* Hibernate 5.4 - [https://hibernate.org/orm/documentation/5.4/](https://hibernate.org/orm/documentation/5.4/)
+  * You will need to update to the latest ORM Beta Extension
+
+### Adobe 2016
+
+* Hibernate 4.3 - [https://hibernate.org/orm/documentation/4.3/](https://hibernate.org/orm/documentation/4.3/)
+
+### Adobe 2018, Adobe 2021
+
+* Hibernate 5.2 - [https://hibernate.org/orm/documentation/5.2/](https://hibernate.org/orm/documentation/5.2/)
+
