@@ -2,7 +2,7 @@
 
 ## Validation Functions
 
-Our active entity object will also give you access to our validation engine \([cbValidation](https://coldbox-validation.ortusbooks.com/)\) by giving your ORM entities the following functions:
+Our active entity object will also give you access to our validation engine ([cbValidation](https://coldbox-validation.ortusbooks.com)) by giving your ORM entities the following functions:
 
 ```javascript
 /**
@@ -122,9 +122,9 @@ Please remember that the `isValid()` function has several arguments you can use 
 
 ## Displaying Errors
 
-You can refer back to the [cbValidation](https://coldbox-validation.ortusbooks.com/overview/coldbox-validation/displaying-errors) docs for displaying errors:
+You can refer back to the [cbValidation](https://coldbox-validation.ortusbooks.com/overview/displaying-errors) docs for displaying errors:
 
-{% embed url="https://coldbox-validation.ortusbooks.com/overview/coldbox-validation/displaying-errors" %}
+{% embed url="https://coldbox-validation.ortusbooks.com/overview/displaying-errors" %}
 
 Here are the most common methods for retreving the errors from the Result object via the `getValidationResults()` method:
 
@@ -137,7 +137,7 @@ Here are the most common methods for retreving the errors from the Result object
 * `hasErrors( [field] )`
 * `getErrors()`
 
-The [API Docs ](https://apidocs.ortussolutions.com/#/coldbox-modules/cbvalidation/)in the module \(once installed\) will give you the latest information about these methods and arguments.
+The [API Docs ](https://apidocs.ortussolutions.com/#/coldbox-modules/cbvalidation/)in the module (once installed) will give you the latest information about these methods and arguments.
 
 ## Unique Property Validation
 
@@ -146,4 +146,3 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 ```javascript
 { username : { validator : "UniqueValidator@cborm", required : true } }
 ```
-
