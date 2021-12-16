@@ -2,6 +2,8 @@
 
 Logs are your best friend when it comes to Hibernate and its plethora of obscure error codes and situations.  Hibernate is incredible until it's not.  However, we definitely encourage you to tweak your server whenever you need deeper understanding of what's going on under the hood.
 
+![](<../.gitbook/assets/image (1).png>)
+
 ## ORM Util Logging
 
 We have provided a handy method in our ORM Utility object to help you set the logging level of hibernate globally and redirect the output of those logs to CommandBox (Lucee only for now). This must be done once the application loads in order to seed the levels and configuration and done only once. Therefore we recommend you update your `Application.cfc` with the following in the `onApplicationStart()` method

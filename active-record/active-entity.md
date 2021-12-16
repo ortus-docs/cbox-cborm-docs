@@ -2,9 +2,9 @@
 
 ![](../.gitbook/assets/active-record.jpg)
 
-This class allows you to implement the [Active Record](https://en.wikipedia.org/wiki/Active_record_pattern) pattern in your ORM entities by inheriting from our Active Entity class. This will make your ORM entities get all the functionality of our Virtual and Base ORM services so you can do finds, searches, listings, counts, execute queries, transaction safe deletes, saves, updates, criteria building, and even [validation](validation.md) right from within your ORM Entity. 
+This class allows you to implement the [Active Record](https://en.wikipedia.org/wiki/Active\_record\_pattern) pattern in your ORM entities by inheriting from our Active Entity class. This will make your ORM entities get all the functionality of our Virtual and Base ORM services so you can do finds, searches, listings, counts, execute queries, transaction safe deletes, saves, updates, criteria building, and even [validation](validation.md) right from within your ORM Entity.&#x20;
 
-The idea behind the Active Entity is to allow you to have a very nice abstraction to all the ColdFusion ORM capabilities \(hibernate\) and all of our ORM extensions like our ColdBox Criteria Builder. With Active Entity you will be able to:
+The idea behind the Active Entity is to allow you to have a very nice abstraction to all the ColdFusion ORM capabilities (hibernate) and all of our ORM extensions like our ColdBox Criteria Builder. With Active Entity you will be able to:
 
 * Find entities using a variety of filters and conditions
 * ORM paging
@@ -80,7 +80,7 @@ This enables WireBox dependency injection, which we need for `ActiveEntity` to w
 
 ## Building Entities
 
-Once your configuration is done we can now focus on building out your Active Entities.  You will do so by creating your entities like normal ORM objects but with two additions:  
+Once your configuration is done we can now focus on building out your Active Entities.  You will do so by creating your entities like normal ORM objects but with two additions:\
 
 
 1. They will inherit from our base class: `cborm.models.ActiveEntity`
@@ -110,4 +110,3 @@ component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 {% hint style="info" %}
 Please remember that your entities inherit all the functionality of the base and virtual services.  Except no entity names or datasources are passed around.
 {% endhint %}
-

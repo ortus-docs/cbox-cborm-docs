@@ -4,9 +4,9 @@ Hibernate also supports the ability to work with projections and aggregates.  In
 
 This is great for API driven applications as you DON"T have to retrieve the entire object graphs, you can decide which columns to bring back and return an array of structs with lightening speed.
 
-There are several projection types you can use which are great for doing counts, distinct counts, max values, sums, averages and much more. 
+There are several projection types you can use which are great for doing counts, distinct counts, max values, sums, averages and much more.&#x20;
 
-## withProjections\(\)
+## withProjections()
 
 The method in the criteria builder that will allow you to add projections is called `withProjections()`.  You will then use it's arguments to tell Hibernate what projection or aggregates to compile into the query.  Here is the method signature:
 
@@ -55,24 +55,24 @@ any function withProjections(
 
 Below are the available projections you can use from this method
 
-| Transform | Description | Example |
-| :--- | :--- | :--- |
-| `avg` | The name of the property to avg or a list or array of property names | _`withProjections(avg="salary")`_ |
-| `count` | The name of the property to count or a list or array of property names | _`withProjections(count="comments")`_ |
-| `countDistinct` | The name of the property to count distinct or a list or array of property names | _`withProjections(countDistinct="email")`_ |
-| `distinct` | The name of the property to do a distinct on, this can be a single property name a list or an array of property names | _`withProjections(distinct="email")`_ |
-| `groupProperty` | The name of the property to group by or a list or array of property names | _`withProjections(groupproperty="lastName")`_ |
-| `id` | Return the projected identifier value | _`withProjections(id=true)`_ |
-| `max` | The name of the property to max or a list or array of property names | _`withProjections(max="lastLogin")`_ |
-| `min` | The name of the property to min or a list or array of property names | _`withProjections(min="cid")`_ |
-| `property` | The name of the property to do a projected value on or a list or array of property names | _`withProjections(property="firstname")`_ |
-| `rowCount` | Do a row count on the criteria | _`withProjections(rowcount=true)`_ |
-| `sum` | The name of the property to sum or a list or array of property names | _`withProjections(sum="balance")`_ |
-| `sqlProjection` | Return projected value for sql fragment. Can accept a single config {sql,alias,property}, or an array of multiple configs. | _`withProjections(sqlProjection={sql="SELECT count(`_  `) from blog where Year < 2006 and Author={alias}.Author",  alias="BlogPosts",  property="Author" })*` |
-| `sqlGroupProjection` | Return projected value for sql fragment with grouping. Can accept a single config\( sql,alias,property,group}, or an array of multiple configs. | _`withProjections(sqlGroupProjection={sql="SELECT count(`_  `) from blog where Year < 2006 and Author={alias}.Author",  alias="BlogPosts",  property="Author",  group="Author" })*` |
-| `detachedSQLProjection` | Creates a sqlProjection\(\) based on Detached Criteria Builder | See [Detached Criteria Builder](https://github.com/ColdBox/cbox-cborm/wiki/ORM-Detached-Criteria-Builder) |
+| Transform               | Description                                                                                                                                    | Example                                                                                                                                                                                                                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `avg`                   | The name of the property to avg or a list or array of property names                                                                           | _`withProjections(avg="salary")`_                                                                                                                                                                                                                                            |
+| `count`                 | The name of the property to count or a list or array of property names                                                                         | _`withProjections(count="comments")`_                                                                                                                                                                                                                                        |
+| `countDistinct`         | The name of the property to count distinct or a list or array of property names                                                                | _`withProjections(countDistinct="email")`_                                                                                                                                                                                                                                   |
+| `distinct`              | The name of the property to do a distinct on, this can be a single property name a list or an array of property names                          | _`withProjections(distinct="email")`_                                                                                                                                                                                                                                        |
+| `groupProperty`         | The name of the property to group by or a list or array of property names                                                                      | _`withProjections(groupproperty="lastName")`_                                                                                                                                                                                                                                |
+| `id`                    | Return the projected identifier value                                                                                                          | _`withProjections(id=true)`_                                                                                                                                                                                                                                                 |
+| `max`                   | The name of the property to max or a list or array of property names                                                                           | _`withProjections(max="lastLogin")`_                                                                                                                                                                                                                                         |
+| `min`                   | The name of the property to min or a list or array of property names                                                                           | _`withProjections(min="cid")`_                                                                                                                                                                                                                                               |
+| `property`              | The name of the property to do a projected value on or a list or array of property names                                                       | _`withProjections(property="firstname")`_                                                                                                                                                                                                                                    |
+| `rowCount`              | Do a row count on the criteria                                                                                                                 | _`withProjections(rowcount=true)`_                                                                                                                                                                                                                                           |
+| `sum`                   | The name of the property to sum or a list or array of property names                                                                           | _`withProjections(sum="balance")`_                                                                                                                                                                                                                                           |
+| `sqlProjection`         | Return projected value for sql fragment. Can accept a single config {sql,alias,property}, or an array of multiple configs.                     | <p><em><code>withProjections(sqlProjection={sql="SELECT count(</code></em><code>  ) from blog where Year &#x3C; 2006 and Author={alias}.Author",</code> <br><code>alias="BlogPosts",</code> <br><code>property="Author" })*</code></p>                                       |
+| `sqlGroupProjection`    | Return projected value for sql fragment with grouping. Can accept a single config( sql,alias,property,group}, or an array of multiple configs. | <p><em><code>withProjections(sqlGroupProjection={sql="SELECT count(</code></em><code>  ) from blog where Year &#x3C; 2006 and Author={alias}.Author",</code> <br><code>alias="BlogPosts",</code> <br><code>property="Author",</code> <br><code>group="Author" })*</code></p> |
+| `detachedSQLProjection` | Creates a sqlProjection() based on Detached Criteria Builder                                                                                   | See [Detached Criteria Builder](https://github.com/ColdBox/cbox-cborm/wiki/ORM-Detached-Criteria-Builder)                                                                                                                                                                    |
 
-The value of the arguments is one, a list or an array of property names to run the projection on, with the exception of `id` and `rowcount` which take a `boolean` true. 
+The value of the arguments is one, a list or an array of property names to run the projection on, with the exception of `id` and `rowcount` which take a `boolean` true.&#x20;
 
 ### Aliases
 
@@ -127,13 +127,11 @@ var results = c
 
 Here is a detail overview of each projection type.
 
-### avg\(\)
+### avg()
 
 The name of the property to average or a list or array of property names
 
 ```javascript
 withProjections( avg = "salary" )
 ```
-
-
 
