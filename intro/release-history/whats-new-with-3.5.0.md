@@ -32,7 +32,7 @@ description: 2021-DEC-16
 
 [CBORM-15](https://ortussolutions.atlassian.net/browse/CBORM-15) Migration to github actions
 
-[CBORM-11](https://ortussolutions.atlassian.net/browse/CBORM-11) Allow Criteria Builder Get() and getOrFail() Methods to Return Projection List Properties
+[CBORM-11](https://ortussolutions.atlassian.net/browse/CBORM-11) Allow Criteria Builder `Get()` and `getOrFail()` Methods to Return Projection List Properties
 
 [CBORM-21](https://ortussolutions.atlassian.net/browse/CBORM-21) New cfformating rules
 

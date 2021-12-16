@@ -6,12 +6,12 @@ A criteria builder object can be requested from our Base ORM services or a virtu
 
 The arguments for the `newCriteria()` method are:
 
-| Argument | Type | Required | Default | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| `entityName` | string | true | --- | The name of the entity to bind this criteria builder with, the initial pivot. |
-| `useQueryCaching` | boolean | false | false | To allow for query caching of _list\(\)_ operations |
-| `queryCacheRegion` | string | false | `criteria.{entityName}` | The name of the cache region to use |
-| `datasource` | string | false | System Default | The datasource to bind the criteria query on, defaults to the one in this ORM service |
+| Argument           | Type    | Required | Default                 | Description                                                                           |
+| ------------------ | ------- | -------- | ----------------------- | ------------------------------------------------------------------------------------- |
+| `entityName`       | string  | true     | ---                     | The name of the entity to bind this criteria builder with, the initial pivot.         |
+| `useQueryCaching`  | boolean | false    | false                   | To allow for query caching of _list()_ operations                                     |
+| `queryCacheRegion` | string  | false    | `criteria.{entityName}` | The name of the cache region to use                                                   |
+| `datasource`       | string  | false    | System Default          | The datasource to bind the criteria query on, defaults to the one in this ORM service |
 
 {% hint style="warning" %}
 If you call `newCriteria()` from a virtual service layer or Active Entity, then you don't pass the `entityName` argument as it roots itself automatically.
@@ -30,9 +30,9 @@ getInstance( "User" ).newCriteria();
 
 ## Restrictions
 
-This criteria object will then be used to add **restrictions** to build up the exact query you want. Restrictions are basically your _where_ statements in SQL and they build on each other via ANDs by default.  For example, only retrieve products with a price over $30 or give me only active users.  
+This criteria object will then be used to add **restrictions** to build up the exact query you want. Restrictions are basically your _where_ statements in SQL and they build on each other via ANDs by default.  For example, only retrieve products with a price over $30 or give me only active users. &#x20;
 
-We provide you with tons of available [restrictions](restrictions/) and if none of those match what you need, you can even use a-la-carte SQL restrictions, in which you can just use SQL even with parameters.  You can also do OR statements or embedded ANDs, etc.  
+We provide you with tons of available [restrictions](restrictions/) and if none of those match what you need, you can even use a-la-carte SQL restrictions, in which you can just use SQL even with parameters.  You can also do OR statements or embedded ANDs, etc. &#x20;
 
 ```javascript
 productService
@@ -124,8 +124,8 @@ You can also tell Hibernate to transform the results to other formats for you on
 Now that the criteria builder object has all the restrictions and modifiers attached when can execute the SQL.  Please note that you can store a criteria builder object if you wanted to. It is lazy evaluated, it just represents your SQL.  It will only execute when you need it to execute via the following finalizer methods:
 
 * `list()` - Execute the criteria queries you have defined and return the results as an array of objects
-* `get()` - Convenience method to return a single instance that matches the built up criterias query, or **null** if the query returns **no** results. 
-* `getOrFail()` - Convenience method to return a single instance that matches the built up criterias query, or throws an exception if the query returns no results
+* `get( [properties] )` - Convenience method to return a single instance that matches the built up criterias query, or **null** if the query returns **no** results.&#x20;
+* `getOrFail( [properties] )` - Convenience method to return a single instance that matches the built up criterias query, or throws an exception if the query returns no results
 * `count()` - Get the record count using hibernate projections for the given criterias
 
 ```javascript
@@ -179,4 +179,3 @@ var results = userService
     });
     .list();
 ```
-
