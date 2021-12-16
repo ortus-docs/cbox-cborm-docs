@@ -21,7 +21,7 @@
 * [Basic Crud - Services](getting-started/basic-crud-services.md)
 * [Basic Crud - ActiveEntity](getting-started/basic-crud.md)
 
-## Base ORM Service <a id="base-orm-service-1"></a>
+## Base ORM Service <a href="#base-orm-service-1" id="base-orm-service-1"></a>
 
 * [Overview](base-orm-service-1/base-orm-service.md)
 * [Service Properties](base-orm-service-1/service-properties.md)
@@ -121,16 +121,16 @@
   * [Getting Started](criteria-queries/detached-criteria-builder/getting-started.md)
   * [Projections](criteria-queries/detached-criteria-builder/projections.md)
   * [Subqueries](criteria-queries/detached-criteria-builder/subqueries.md)
-  * [DetachedSQLProjection\(\)](criteria-queries/detached-criteria-builder/detachedsqlprojection.md)
+  * [DetachedSQLProjection()](criteria-queries/detached-criteria-builder/detachedsqlprojection.md)
   * [Criterias](criteria-queries/detached-criteria-builder/criterias.md)
   * [Associations](criteria-queries/detached-criteria-builder/associations.md)
 * [Help! I'm Not Getting the Result I expected!](criteria-queries/help-im-not-getting-the-result-i-expected.md)
 
-## Advanced Features <a id="orm-events"></a>
+## Advanced Features <a href="#orm-events" id="orm-events"></a>
 
-* [Mementifier](orm-events/mementifier.md)
 * [Automatic REST Crud](orm-events/automatic-rest-crud.md)
+* [Hibernate Logging](orm-events/hibernate-logging.md)
+* [Mementifier](orm-events/mementifier.md)
 * [ORM Events](orm-events/coldbox-orm-event-handler/README.md)
   * [Custom Event Handler](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
 * [Unique Property Validation](orm-events/untitled.md)
-
