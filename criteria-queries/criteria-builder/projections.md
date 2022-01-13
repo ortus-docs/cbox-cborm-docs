@@ -1,8 +1,15 @@
 # Projections & Aggregates
 
-Hibernate also supports the ability to work with projections and aggregates.  Instead of treating the results as an array of objects or a stream of objects you can return the result as a row with columns or a projection of the data.  This is similar to how you use to select data in a cfquery call.
+Hibernate also supports the ability to work with sql projections and sql aggregates.  Instead of treating the results as an array of objects or a stream of objects you can return the result as a row with columns of data.
 
-This is great for API driven applications as you DON"T have to retrieve the entire object graphs, you can decide which columns to bring back and return an array of structs with lightening speed.
+```javascript
+var statusReport = c
+    .withProjections( count: "isActive:authors", groupProperty: "isActive" )
+    .asStruct()
+    .list();
+```
+
+This is great for API driven applications as you DON"T have to retrieve the entire object graphs, you can decide which columns to bring back and return an array of structs with lightening speed by just using the `asStruct()` modifier.
 
 There are several projection types you can use which are great for doing counts, distinct counts, max values, sums, averages and much more.&#x20;
 
@@ -79,7 +86,11 @@ The value of the arguments is one, a list or an array of property names to run t
 Also, you can pass in a string separated with a **:** to denote an alias on the property when doing the SQL. The alias can then be used with any restriction the criteria builder can use.
 
 ```javascript
-Ex: avg="balance", avg="balance:myBalance", avg="balance, total", avg=["balance","total"]
+Ex: 
+avg="balance",
+avg="balance:myBalance", // balance as myBalance
+avg="balance, total", 
+avg=["balance","total"]
 ```
 
 {% hint style="info" %}
@@ -127,11 +138,151 @@ var results = c
 
 Here is a detail overview of each projection type.
 
-### avg()
+### avg
 
-The name of the property to average or a list or array of property names
+The name of the property to average or a list or array of property names to average on
 
 ```javascript
+// projection
 withProjections( avg = "salary" )
+// Produces
+select avg( salary ) from User
+
+// projection with alias
+withProjections( avg = "salary:totalSalary" )
+// Produces
+select avg( salary ) as totalSalary from User
+
+// Multiple projections
+withProjections( avg = "salary,balance" )
+// Produces
+select avg( salary ), avg( balance ) from User
 ```
 
+### count
+
+The name of the property to count on or a list or array of property names to count on
+
+```javascript
+// projection
+withProjections( count = "id" )
+// Produces
+select count( id ) from User
+
+// projection with alias
+isTrue( "isActive" )
+    .withProjections( count = "id:TotalUsers" )
+// Produces
+select count( id ) as totalUsers from User
+where isActive = true
+```
+
+### countDistinct
+
+Get a distinct count on a property or list of properties
+
+```javascript
+// projection
+withProjections( distinctCount = "city:cities" )
+// Produces
+SELECT COUNT( DISTINCT city ) as cities
+FROM User;
+```
+
+### distinct
+
+Distinct is used to return only distinct (different) values from a property or list of properties
+
+```javascript
+// projection
+withProjections( distinct = "city" )
+// Produces
+SELECT DISTINCT city
+FROM User;
+```
+
+### groupProperty
+
+Which properties to group in the SQL statement.
+
+```javascript
+// project users by country
+withProjections( property : "country", count : "id" , groupProperty : "country" )
+
+// Produces
+SELECT COUNT(id), Country
+FROM User
+GROUP BY Country;
+```
+
+### id
+
+Return an array of IDs of the current projected entity. Let's say we want all the user id's that have never logged in to the system. So we can use that to send them mails.
+
+```javascript
+isNull( "lastLogin" )
+    .withProjections( id : true )
+    .list();
+
+// Produces
+SELECT id
+FROM User
+WHERE lastLogin is null
+```
+
+### sqlProjection/sqlGroupProjection
+
+Do a projection based on arbitrary SQL and SQL grouping strings.  The value can be a single struct or an array of structs with the following pattern:
+
+* `sql` - The raw sql to execute
+* `alias` - The aliases to apply
+* `property` - The property projected on
+* `group` - What to group on if needed
+
+```javascript
+.withProjections(
+	groupProperty = "catid",
+	sqlProjection = [
+		{
+			sql      : "count( category_id )",
+			alias    : "count",
+			property : "catid"
+		}
+	],
+	sqlGroupProjection = [
+		{
+			sql      : "year( modifydate )",
+			group    : "year( modifydate )",
+			alias    : "modifiedDate",
+			property : "id"
+		},
+		{
+			sql      : "dateDiff('2021-12-31 23:59:59','2021-12-30')",
+			group    : "dateDiff('2021-12-31 23:59:59','2021-12-30')",
+			alias    : "someDateDiff",
+			property : "id"
+		}
+	]
+)
+.asStruct()
+.peek( function( c ){
+	debug( c.getSql( true, true ) );
+} )
+.list();
+```
+
+This will produce the following SQL
+
+```sql
+select
+    this.category_id as y0_,
+    count(category_id) as count,
+    year(modifydate) as modifiedDate,
+    dateDiff('2021-12-31 23:59:59', '2021-12-30') as someDateDiff
+from
+    categories this_
+group by
+    this.category_id,
+    year(modifydate),
+    dateDiff('2021-12-31 23:59:59', '2021-12-30')
+```
