@@ -230,6 +230,94 @@ FROM User
 WHERE lastLogin is null
 ```
 
+### max
+
+Return a max() sql projection on a a property or list of properties
+
+```javascript
+// projection
+withProjections( max = "salary" )
+// Produces
+select max( salary ) from User
+```
+
+### min
+
+Return a min() sql projection on a a property or list of properties
+
+```javascript
+// projection
+withProjections( min = "salary" )
+// Produces
+select min( salary ) from User
+```
+
+### property
+
+Return or a list of properties in the projection. Basically pick and choose in the select statement.  The cool thing is that this can be a property or a full relationship, which can give you an array of properties and objects.
+
+You can navigate relationships using the `dot` notation.
+
+```javascript
+// projection
+withProjections( property = "id,fname,lname,email" )
+// Produces
+select id, fname, lname, email from User
+
+// Get all site core settings in the database
+newCriteria()
+.isFalse( "isDeleted" )
+.isTrue( "isCore" )
+.joinTo( "site", "site" )
+.withProjections( property: "name,site.slug:siteSlug" )
+.asStruct()
+.list( sortOrder = "site.slug,name" );
+
+// Produces
+SELECT name, site.slug as siteSlug
+FROM setting, site
+WHERE setting.isDelete = false AND
+setting.isCore = true AND
+site.siteId = setting.FK_siteID
+order by site.slug, setting.name
+```
+
+### rowcount
+
+Run a `count( * )` on the projection alongside other projections.
+
+```javascript
+r = criteria
+.withProjections(
+	min      = "lastLogin",
+	rowCount = true,
+	max      = "lastLogin"
+)
+.peek( function( c ){
+	debug( c.getSql( true, true ) );
+} )
+.list();
+
+// Produces
+select
+    max(this.lastLogin) as y0_,
+    min(this.lastLogin) as y1_,
+    count(*) as y2_ // this is due to the rowcount
+from
+    users this_
+```
+
+### sum
+
+Run a sql sum() on a one or many properties
+
+```javascript
+// projection
+withProjections( sum = "salary:payroll" )
+// Produces
+select sum( salary ) as payroll from User
+```
+
 ### sqlProjection/sqlGroupProjection
 
 Do a projection based on arbitrary SQL and SQL grouping strings.  The value can be a single struct or an array of structs with the following pattern:
