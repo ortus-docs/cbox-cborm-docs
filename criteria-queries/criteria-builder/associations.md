@@ -2,7 +2,7 @@
 
 You can navigate associations in criteria queries in several ways:
 
-* Dot notation for many-to-one relationships ONLY
+* Dot notation for many-to-one relationships **ONLY**
 * Helper methods to create inner criterias or joins: `createCriteria(), joinTo()`
 
 ## Dot Notation Navigation
@@ -47,7 +47,7 @@ The arguments can be further explained below:
 * `associationName` : This is the name of the property on the target entity that is the association
 * `alias` : This is the alias to assign it so you can reference it later in the criterions following it
 * `joinType` : By default it is an inner join.  The available joins are: `INNER_JOIN, FULL_JOIN, LEFT_JOIN`
-* `withClause` : This is the criterion \(so it's a restriction\) to be added to the join condition, basically the `ON` clause.
+* `withClause` : This is the criterion (so it's a restriction) to be added to the join condition, basically the `ON` clause.
 
 ```javascript
 // Using virtual services
@@ -73,7 +73,7 @@ r = newCriteria()
 
 The last journey to query on associations is to pivot the root entity of the criteria to an association. This means that you will create a new criteria object based on the previous criteria, but now the target entity is the one you assign.  PHEW! That's a mouthful.  Basically, it's a nice way to traverse into the join and stay in that entity.
 
-This is accomplished via the `createCriteria()` method or the nice dynamic alias: `with{entity}`\(\) method.
+This is accomplished via the `createCriteria()` method or the nice dynamic alias: `with{entity}`() method.
 
 ```javascript
 /**
@@ -100,7 +100,7 @@ The arguments can be further explained below:
 * `associationName` : This is the name of the property on the target entity that is the association
 * `alias` : This is the alias to assign it so you can reference it later in the criterions following it
 * `joinType` : By default it is an inner join.  The available joins are: `INNER_JOIN, FULL_JOIN, LEFT_JOIN`
-* `withClause` : This is the criterion \(so it's a restriction\) to be added to the join condition, basically the `ON` clause.
+* `withClause` : This is the criterion (so it's a restriction) to be added to the join condition, basically the `ON` clause.
 
 {% hint style="danger" %}
 Now remember that you are rooting the criteria in this association, so you can't go back to the original entity properties.
@@ -112,4 +112,3 @@ var users = c.like("name","lui%")
      .withAdmins().like("name","fra%")
      .list();
 ```
-

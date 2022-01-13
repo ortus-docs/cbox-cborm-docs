@@ -77,7 +77,7 @@ var results = c.like("firstName","Lui%") // restriction
 **Tip**: Every restriction can also be negated by using the `not` prefix before each method: `notEq(), notIn(), notIsNull()`
 {% endhint %}
 
-### Associations
+## Associations
 
 You can also use your restrictions on the associated entity data. This is achieved via the [association](associations.md) methods section.
 
@@ -111,7 +111,7 @@ var results = c.like("firstName","Lui%") // restriction
      .list();
 ```
 
-### Result Modifiers
+## Result Modifiers
 
 You can also tell Hibernate to transform the results to other formats for you once you retrieve them.
 
@@ -119,7 +119,7 @@ You can also tell Hibernate to transform the results to other formats for you on
 * `asStruct()` - Applies a result transformer of ALIAS\_TO\_ENTITY\_MAP so you get an array of structs instead of array of objects
 * `asStream()` - Get the results as a CBstream
 
-## Results
+## Getting Results
 
 Now that the criteria builder object has all the restrictions and modifiers attached when can execute the SQL.  Please note that you can store a criteria builder object if you wanted to. It is lazy evaluated, it just represents your SQL.  It will only execute when you need it to execute via the following finalizer methods:
 
@@ -155,6 +155,7 @@ There are several methods available to you in the criteria objects to give you t
 * `stopSqlLog()` - Stop the internal logging.
 * `logSql()` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
 * `canLogSql()` - Returns whether or not CriteriaBuilder is currently configured to log SQL
+* `peek( function/closure )` - Used to peek into the criteria builder process. You pass in a closure/lambda that receives the criteria. You can then use it to peek into the sql or more.
 
 ```javascript
 var sql = userService
