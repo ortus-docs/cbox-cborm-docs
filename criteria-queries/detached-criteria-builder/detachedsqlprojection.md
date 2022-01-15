@@ -20,5 +20,5 @@ c.withProjections(
 ).list();
 ```
 
-> **INFO** If you need to use a property from the root entity in one of your criterias, simply prepend the property name with {alias}. **MORE** otice how a subquery method was not used in this example of the Detached Criteria Builder.
+> **INFO** If you need to use a property from the root entity in one of your criterias, simply prepend the property name with {alias}. **MORE** Notice how a subquery method was not used in this example of the Detached Criteria Builder.
 
