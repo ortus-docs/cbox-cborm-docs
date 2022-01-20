@@ -6,7 +6,7 @@ The _BaseORMService_ is a core model CFC of the module that will provide you wit
 
 ## Concept
 
-The idea behind this support class is to provide a very good base or parent service layer that can interact with ColdFusion ORM via hibernate and entities inspired by [Spring's Hibernate Template](http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/classic-spring.html#classic-spring-hibernate) support. This means that you don't need to create a service layer CFC in order to work with ORM entities.
+The idea behind this support class is to provide a good base or parent service layer that can interact with ColdFusion ORM via hibernate and entities inspired by [Spring's Hibernate Template](http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/classic-spring.html#classic-spring-hibernate) support. This means that you don't need to create a service layer CFC in order to work with ORM entities.
 
 It provides tons of methods for query executions, paging, transactions, session metadata, caching and much more. You can either use the class on its own or create more concrete service layers by inheriting from this class.
 
@@ -75,7 +75,7 @@ function index( event, rc, prc ){
 }
 ```
 
-Once you have a reference to the base ORM service then you can use any of its methods to interact with ORM entities. The drawback about leveraging the base ORM model is that you cannot add custom functions to it or tell it to work on a specific entity for all operations. It is a very simple API, but if you need more control then we can start using other approaches shown below.
+Once you have a reference to the base ORM service then you can use any of its methods to interact with ORM entities. The drawback about leveraging the base ORM model is that you cannot add custom functions to it or tell it to work on a specific entity for all operations. It is a simple API, but if you need more control then we can start using other approaches shown below.
 
 ## Virtual Services
 
@@ -84,4 +84,3 @@ We also have a [virtual service layer](../virtual-services/virtual-entity-servic
 ## Concrete Services
 
 This is where you can create your own CFC that inherits from our Virtual or Base ORM Service model and either add or override methods. You can read more about it in our [Concrete Services Section](concrete-services.md)
-

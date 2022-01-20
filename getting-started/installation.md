@@ -12,7 +12,7 @@ install cborm@be
 
 ### System Requirements
 
-* Lucee 5.x+ 
+* Lucee 5.x+&#x20;
 * ColdFusion 2016+
 
 ## Application.cfc Setup
@@ -28,14 +28,14 @@ this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 
 ## WireBox DSL
 
-The module registers a new WireBox DSL called `entityservice` which can produce virtual or base orm entity services. Below are the injections you can use:
+The module registers a new WireBox DSL called `entityservice` which can produce virtual or base ORM entity services. Below are the injections you can use:
 
 * `entityservice` -  Inject a global ORM service
 * `entityservice:{entityName}` - Inject a Virtual entity service according to `entityName`
 
 ## Module Settings
 
-Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -&gt; `cborm` structure:
+Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure:
 
 {% code title="config/ColdBox.cfc" %}
 ```javascript
@@ -78,8 +78,8 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 
 * Hibernate 3.5 - [https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
 * Hibernate 5.4 - [https://hibernate.org/orm/documentation/5.4/](https://hibernate.org/orm/documentation/5.4/)
-  * You will need to update to the latest ORM Beta Extension - [https://download.lucee.org/\#FAD1E8CB-4F45-4184-86359145767C29DE](https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE)
-  * [**5.4.29.6-BETA \(Aug 6, 2021\)**](https://ext.lucee.org/hibernate-orm-5.4.29.6-BETA.lex)
+  * You will need to update to the latest ORM Beta Extension - [https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE](https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE)
+  * [**5.4.29.6-BETA (Aug 6, 2021)**](https://ext.lucee.org/hibernate-orm-5.4.29.6-BETA.lex)
 
 ### Adobe 2016
 
@@ -88,4 +88,3 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 ### Adobe 2018, Adobe 2021
 
 * Hibernate 5.2 - [https://hibernate.org/orm/documentation/5.2/](https://hibernate.org/orm/documentation/5.2/)
-

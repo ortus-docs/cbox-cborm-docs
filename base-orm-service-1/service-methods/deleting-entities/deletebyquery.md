@@ -1,6 +1,6 @@
 # deleteByQuery
 
-Delete by using an HQL query and iterating via the results, it is not performing a delete query but it actually is a select query that should retrieve objects to remove
+Delete by using an HQL query and iterating via the results. It is not performing a delete query but  is a select query that should retrieve objects to remove
 
 ## Returns
 
@@ -8,15 +8,15 @@ Delete by using an HQL query and iterating via the results, it is not performing
 
 ## Arguments
 
-| Key | Type | Required | Default | description |
-| :--- | :--- | :--- | :--- | :--- |
-| query | string | Yes | --- |  |
-| params | any | No | --- |  |
-| max | numeric | No | 0 |  |
-| offfset | numeric | No | 0 |  |
-| flush | boolean | No | false |  |
-| transactional | boolean | No | From Property | Use transactions or not |
-| datasource | string | false |  | The datasource to use or use the default datasource |
+| Key           | Type    | Required | Default       | description                                         |
+| ------------- | ------- | -------- | ------------- | --------------------------------------------------- |
+| query         | string  | Yes      | ---           |                                                     |
+| params        | any     | No       | ---           |                                                     |
+| max           | numeric | No       | 0             |                                                     |
+| offfset       | numeric | No       | 0             |                                                     |
+| flush         | boolean | No       | false         |                                                     |
+| transactional | boolean | No       | From Property | Use transactions or not                             |
+| datasource    | string  | false    |               | The datasource to use or use the default datasource |
 
 ## Examples
 
@@ -36,4 +36,3 @@ ormService.deleteByQuery(query=query,max=20,offset=15,flush=true);
 // examples with named parameters
 ormService.deleteByQuery("from Post as p where p.author=:author", {author='Luis Majano'})
 ```
-

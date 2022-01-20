@@ -1,6 +1,6 @@
 # Basic Crud - Services
 
-Let's do a basic example of how to work with **cborm** when doing basic CRUD \(Create-Read-Update-Delete\). We will generate a ColdBox App, connect it to a database and leverage **a** virtual service layer for a nice quick CRUD App.
+Let's do a basic example of CRUD (Create-Read-Update-Delete). We will generate a ColdBox App, connect it to a database and leverage **a** virtual service layer for a nice quick CRUD App.
 
 The source code for this full example can be found in Github: [https://github.com/coldbox-samples/cborm-crud-demo](https://github.com/coldbox-samples/cborm-crud-demo) or in ForgeBox: [https://forgebox.io/view/cborm-crud-demo](https://forgebox.io/view/cborm-crud-demo)
 
@@ -21,7 +21,7 @@ cp .env.example .env
 
 ### Setup Environment
 
-Season the environment file \(`.env`\) with your database credentials and make sure that database exists:
+Season the environment file (`.env`) with your database credentials and make sure that database exists:
 
 ```bash
 # ColdBox Environment
@@ -243,7 +243,7 @@ function create( event, rc, prc ){
 }
 ```
 
-You might be asking yourself: Where does this magic `getMemento()` method come from? Well, it comes from the [mementifier](https://forgebox.io/view/mementifier) module which inspects ORM entities and injects them with this function to allow you to produce raw state from entities. \(Please see: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)\)
+You might be asking yourself: Where does this magic `getMemento()` method come from? Well, it comes from the [mementifier](https://forgebox.io/view/mementifier) module which inspects ORM entities and injects them with this function to allow you to produce raw state from entities. (Please see: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier))
 
 ### Read
 
@@ -260,7 +260,7 @@ function show( event, rc, prc ){
 }
 ```
 
-In this example, we use the `get()` method which retrieves a single entity by identifier. Also note the default value of `0` used as well. This means that if the incoming id is null then pass a `0`. The orm services will detect the `0` and by default give you a **new** Person object, the call will not fail. If you want your call to fail so you can show a nice exception for invalid identifiers you can use `getOrFail()` instead.
+In this example, we use the `get()` method which retrieves a single entity by identifier. Also note the default value of `0` used as well. This means that if the incoming id is null then pass a `0`. The ORM services will detect the `0` and by default give you a **new** Person object, the call will not fail. If you want your call to fail so you can show a nice exception for invalid identifiers you can use `getOrFail()` instead.
 
 ```javascript
 /**
@@ -438,4 +438,3 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/"{
 }
 ```
 {% endcode %}
-
