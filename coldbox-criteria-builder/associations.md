@@ -17,13 +17,23 @@ var users = c.like("name","lui%")
      .list();
 ```
 
-You can also use a hibernate property approach which aliases the association much how HQL approaches it by using the createAlias\("associationName","alias"\) method:
+You can also use a hibernate property approach which aliases the association much how HQL approaches it by using the `joinTo( "associationName", "alias" )` method:
 
 ```javascript
 var c = newCriteria("User");
 var users = c.like("name","lui%")
-     .createAlias("admins","a")
+     .joinTo("admins","a")
      .eq("a.name","Vero")
+     .list();
+```
+
+The `joinTo()` method accepts a third argument of `joinType`, which can be retrieved from the criteria object:
+
+```javascript
+var c = newCriteria( "User" );
+var users = c.like( "name", "lui%" )
+     .joinTo( "admins", "a", c.RIGHT_JOIN )
+     .eq( "a.name", "Vero" )
      .list();
 ```
 
@@ -31,7 +41,6 @@ Let's see the method signatures for these guys:
 
 ```javascript
 createCriteria(required string associationName,numeric joinType)
-createAlias(required string associationName, required string alias, numeric joinType)
+joinTo(required string associationName, required string alias, numeric joinType)
 with{AssociationName}( joinType )
 ```
-
