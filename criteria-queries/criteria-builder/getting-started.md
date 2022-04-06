@@ -44,7 +44,7 @@ userService
     .newCriteria()
     .isTrue( "isActive" )
     .notIsNull( "lastLogin" )
-    .orderBy( "lastLogin desc" )
+    .order( "lastLogin", "desc" )
     .firstResult()
     .get();
 
@@ -94,14 +94,14 @@ You can also add [modifiers](modifiers.md) for the execution of the query.  This
 * `order()` - Add an ordering to the result set, you can add as many as you like
 * `queryHint()` - Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement.
 * `readOnly()` - Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true
-* `timeout()` - Set a timeout for the underlying JDBC query.
+* `timeout()` - Set a timeout for the underlying JDBC query in milliseconds.
 
 ```javascript
 var results = c.like("firstName","Lui%") // restriction
      .firstResult( 25 ) // modifier
      .maxResults( 50 ) // modifier
      .order( "balance", "desc" ) // modifier
-     .timeout( 
+     .timeout( 5000 )
      // AND restrictions
      .and( 
           c.restrictions.between( "balance", 200, 300),
