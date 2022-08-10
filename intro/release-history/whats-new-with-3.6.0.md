@@ -1,5 +1,5 @@
 ---
-description: 2022-JAN-10
+description: January 10, 2022
 ---
 
 # What's New With 3.6.0

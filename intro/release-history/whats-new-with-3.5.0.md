@@ -1,5 +1,5 @@
 ---
-description: 2021-DEC-16
+description: December 16, 2021
 ---
 
 # What's New With 3.5.0

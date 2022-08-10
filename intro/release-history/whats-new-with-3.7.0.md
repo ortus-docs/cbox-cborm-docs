@@ -1,3 +1,7 @@
+---
+description: January 13, 2022
+---
+
 # What's New With 3.7.0
 
 ### Added

@@ -5,6 +5,8 @@
 ## Intro
 
 * [Release History](intro/release-history/README.md)
+  * [What's New With 3.9.0](intro/release-history/whats-new-with-3.9.0.md)
+  * [What's New With 3.8.0](intro/release-history/whats-new-with-3.8.0.md)
   * [What's New With 3.7.0](intro/release-history/whats-new-with-3.7.0.md)
   * [What's New With 3.6.0](intro/release-history/whats-new-with-3.6.0.md)
   * [What's New With 3.5.0](intro/release-history/whats-new-with-3.5.0.md)
@@ -28,11 +30,6 @@
 * [Overview](base-orm-service-1/base-orm-service.md)
 * [Service Properties](base-orm-service-1/service-properties.md)
 * [Concrete Services](base-orm-service-1/concrete-services.md)
-* [Automatic Java Types](base-orm-service-1/automatic-java-types.md)
-* [Dynamic Finders- Counters](base-orm-service-1/dynamic-finders-counters/README.md)
-  * [Method Signatures](base-orm-service-1/dynamic-finders-counters/method-signatures.md)
-  * [Method Expressions](base-orm-service-1/dynamic-finders-counters/method-expressions.md)
-  * [Query Options](base-orm-service-1/dynamic-finders-counters/query-options.md)
 * [Service Methods](base-orm-service-1/service-methods/README.md)
   * [Criteria Queries](base-orm-service-1/service-methods/criteria-queries/README.md)
     * [getRestrictions](base-orm-service-1/service-methods/criteria-queries/getrestrictions.md)
@@ -94,6 +91,12 @@
     * [createService](base-orm-service-1/service-methods/utility-methods/createservice.md)
     * [idCast](base-orm-service-1/service-methods/utility-methods/idcast.md)
     * [nullValue](base-orm-service-1/service-methods/utility-methods/nullvalue.md)
+    * [when](base-orm-service-1/service-methods/utility-methods/autocast-1.md)
+* [Dynamic Finders- Counters](base-orm-service-1/dynamic-finders-counters/README.md)
+  * [Method Signatures](base-orm-service-1/dynamic-finders-counters/method-signatures.md)
+  * [Method Expressions](base-orm-service-1/dynamic-finders-counters/method-expressions.md)
+  * [Query Options](base-orm-service-1/dynamic-finders-counters/query-options.md)
+* [Automatic Java Types](base-orm-service-1/automatic-java-types.md)
 
 ## Virtual Services
 
