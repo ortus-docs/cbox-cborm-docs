@@ -2,7 +2,7 @@
 
 ## Validation Functions
 
-Our active entity object will also give you access to our validation engine ([cbValidation](https://coldbox-validation.ortusbooks.com)) by giving your ORM entities the following functions:
+Our active entity object will also give you access to our validation engine ([cbValidation](https://coldbox-validation.ortusbooks.com/)) by giving your ORM entities the following functions:
 
 ```javascript
 /**
