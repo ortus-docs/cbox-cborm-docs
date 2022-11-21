@@ -115,11 +115,7 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 * Hibernate 3.5 - [https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
 * Hibernate 5.4 - [https://hibernate.org/orm/documentation/5.4/](https://hibernate.org/orm/documentation/5.4/)
   * You will need to update to the latest ORM Beta Extension - [https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE](https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE)
-  * [**5.4.29.6-BETA (Aug 6, 2021)**](https://ext.lucee.org/hibernate-orm-5.4.29.6-BETA.lex)
-
-### Adobe 2016
-
-* Hibernate 4.3 - [https://hibernate.org/orm/documentation/4.3/](https://hibernate.org/orm/documentation/4.3/)
+  * [**5.4.29.18-BETA (Oct 28, 2022)**](https://ext.lucee.org/hibernate-orm-5.4.29.18-BETA.lex)
 
 ### Adobe 2018, Adobe 2021
 

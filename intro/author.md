@@ -2,7 +2,7 @@
 
 ## Luis Fernando Majano Lainez
 
-![](<../../.gitbook/assets/Luis F Majano.jpg>)
+![](<../.gitbook/assets/Luis F Majano.jpg>)
 
 
 
