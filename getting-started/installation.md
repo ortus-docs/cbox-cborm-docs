@@ -1,7 +1,3 @@
----
-description: Quickly install cborm
----
-
 # Installation
 
 Leverage CommandBox to install into your ColdBox app:
@@ -17,11 +13,11 @@ install cborm@be
 ### System Requirements
 
 * Lucee 5.x+&#x20;
-* ColdFusion 2018+
+* ColdFusion 2016+
 
 ## Application.cfc Setup
 
-Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping to the module in the `Application.cfc` like this:
+Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping in the `Application.cfc` like this:
 
 {% code title="Application.cfc" %}
 ```javascript
@@ -39,7 +35,7 @@ The module registers a new WireBox DSL called `entityservice` which can produce 
 
 ## Module Settings
 
-Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure or by creating a `cborm.cfc` in the `config/modules` directory if you are in ColdBox 7.
+Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure:
 
 {% code title="config/ColdBox.cfc" %}
 ```javascript
@@ -68,41 +64,9 @@ moduleSettings = {
 ```
 {% endcode %}
 
-ColdBox 7 Config:
-
-{% code title="config/modules/cborm.cfc" lineNumbers="true" %}
-```javascript
-component{
-  
-  function configure(){
-     return {
-        // Resource Settings
-	resources : {
-		// Enable the ORM Resource Event Loader
-		eventLoader : false,
-		// Pagination max rows
-		maxRows : 25,
-		// Pagination max row limit: 0 = no limit
-		maxRowsLimit : 500
-	},
-        // WireBox Injection bridge
-        injection = {
-            // enable entity injection via WireBox
-            enabled = true, 
-            // Which entities to include in DI ONLY, if empty include all entities
-            include = "", 
-            // Which entities to exclude from DI, if empty, none are excluded
-            exclude = ""
-        }
-      }; 
-    }
-}
-```
-{% endcode %}
-
 ## Validation
 
-We have also integrated a `UniqueValidator` from the **validation** module into our ORM module. It is mapped into WireBox as `UniqueValidator@cborm` so you can use it in your model constraints like so:
+We have also integrated a `UniqueValidator` from the **validation** module into our ORM module. It is mapped into WireBox as `UniqueValidator@cborm` so you can use in your model constraints like so:
 
 ```javascript
 { fieldName : { validator: "UniqueValidator@cborm" } }
@@ -115,7 +79,11 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 * Hibernate 3.5 - [https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
 * Hibernate 5.4 - [https://hibernate.org/orm/documentation/5.4/](https://hibernate.org/orm/documentation/5.4/)
   * You will need to update to the latest ORM Beta Extension - [https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE](https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE)
-  * [**5.4.29.18-BETA (Oct 28, 2022)**](https://ext.lucee.org/hibernate-orm-5.4.29.18-BETA.lex)
+  * [**5.4.29.6-BETA (Aug 6, 2021)**](https://ext.lucee.org/hibernate-orm-5.4.29.6-BETA.lex)
+
+### Adobe 2016
+
+* Hibernate 4.3 - [https://hibernate.org/orm/documentation/4.3/](https://hibernate.org/orm/documentation/4.3/)
 
 ### Adobe 2018, Adobe 2021
 

@@ -86,7 +86,7 @@
     * [idCast](base-orm-service-1/service-methods/utility-methods/idcast.md)
     * [nullValue](base-orm-service-1/service-methods/utility-methods/nullvalue.md)
     * [when](base-orm-service-1/service-methods/utility-methods/when.md)
-* [Dynamic Finders- Counters](base-orm-service-1/dynamic-finders-counters/README.md)
+* [Dynamic Finders+Counters](base-orm-service-1/dynamic-finders-counters/README.md)
   * [Method Signatures](base-orm-service-1/dynamic-finders-counters/method-signatures.md)
   * [Method Expressions](base-orm-service-1/dynamic-finders-counters/method-expressions.md)
   * [Query Options](base-orm-service-1/dynamic-finders-counters/query-options.md)
