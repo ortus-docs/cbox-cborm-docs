@@ -1,21 +1,27 @@
+---
+description: A quick overview of cborm
+---
+
 # Overview
 
 The `cborm` module will enhance your ORM Entities and ColdBox application by providing you with features in the following areas:
 
-* Active Record Pattern
+* **Active Record Pattern**
   * You can extend your entities from our `ActiveEntity` class and take advantage of both [Active Record](https://en.wikipedia.org/wiki/Active\_record\_pattern) and Hibernate ORM
-* Entity Population
-  * Easily populate entities from json, structs, xml, queries and build up even the entity relationships from flat data.
-* Entity Marshalling to raw data types ([mementifier](https://forgebox.io/view/mementifier))
-  * Easily extract the data from entities and their relationships so you can marshall them to json, xml, etc.
-* Automatic CRUD Resource Handler
-  * If you extend our `cborm.models.resources.BaseHandler` it will generate the full CRUD for a specific entity based on ColdBox Resources
-* ORM Events
+* **Automatic CRUD Resource Handler**
+  * If you extend our `cborm.models.resources.BaseHandler` it will generate the full CRUD for a specific entity based on ColdBox Resources.
+* **Entity Population**
+  * Easily populate entities from JSON, structs, XML, and queries and build up even the entity relationships from flat data.
+* **Entity Marshalling to Raw Data Types (**[**mementifier**](https://forgebox.io/view/mementifier)**)**
+  * Easily extract the data from entities and their relationships so you can marshall them to JSON, XML, etc.
+* **Hibernate Criteria/JPA Queries**
+  * Tap into the real power of Hibernate. cborm will allow you to execute native criteria/jpa queries.  Even return arrays of structs, or arrays of mixed objects, native SQL, and much more.
+* **ORM Events**
   * Easily listen to multiple ORM events via ColdBox Interceptors
-* Service Layers
-  * Enhance the ability to list, query, find entities, work with native hibernate constructs and more.
-* Validation
-  * We provide you with a `unique` validator to validate against unique columns
+* **Service Layers**
+  * Enhance the ability to list, query, find entities, work with native hibernate constructs, and more.  You don't even have to create the service objects, we can create virtual ones for you.
+* **Validation**
+  * We provide you with a `unique` validator to validate against unique columns and much more.
 
 Just write your entities and their relationships and we will take care of the rest!
 
@@ -23,10 +29,10 @@ Just write your entities and their relationships and we will take care of the re
 
 ## Base ORM Service
 
-Let's begin our adventure with the `BaseORMService` model. This model can be injected or requested via WireBox and will be used to interact with any entity in our system or with Hibernate directly:
+Let's begin our adventure with the `BaseORMService` model. This model can be injected or requested via WireBox and will be used to interact with **any** entity in our system or with Hibernate directly:
 
 ```java
-// inject via dsl
+// inject via DSL
 property name="ormService" inject="entityService";
 // inject via alias
 property name="ormService" inject="baseORMService@cborm";
@@ -48,7 +54,7 @@ This service object acts as an abstraction layer to the ColdFusion ORM (Hibernat
 * Dynamic Finders
 * Counters
 * Dynamic Counters
-* Persistence (save,update,delete) and bulk persistence with transactions
+* Persistence (save, update, delete) and bulk persistence with transactions
 * Eviction Methods
 * Population Methods
 
@@ -67,7 +73,7 @@ component{
 
     function saveUser( event, rc, prc ){
         // retrieve and populate a new user object
-        var user = populateModel( ormService.new( "User" ) );
+        var user = populate( ormService.new( "User" ) );
 
         // save the entity using hibernate transactions
         ormService.save( user );
@@ -119,14 +125,14 @@ component{
 {% hint style="info" %}
 What is this `asStream()` call? What are Streams?
 
-A stream is an abstraction, it’s not a data structure. It’s not a collection where you can store elements. The most important difference between a stream and a structure is that a stream doesn’t hold the data. For example you cannot point to a location in the stream where a certain element exists. You can only specify the functions that operate on that data. A stream is an abstraction of a non-mutable collection of functions applied in some order to the data.
+A stream is an abstraction, it’s not a data structure. It’s not a collection where you can store elements. The most important difference between a stream and a structure is that a stream doesn’t hold the data. For example, you cannot point to a location in the stream where a certain element exists. You can only specify the functions that operate on that data. A stream is an abstraction of a non-mutable collection of functions applied in some order to the data.
 
 More information can be found here: [https://forgebox.io/view/cbstreams](https://forgebox.io/view/cbstreams)
 {% endhint %}
 
 ## Virtual Services
 
-We also have a virtual service layer that can be mapped to specific entities and create entity driven service layers **virtually**. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time. This is achieved via the `VirtualEntityService` model which inherits from the `BaseORMService` class.
+We also have a virtual service layer that can be mapped to specific entities and create entity-driven service layers **virtually**. Meaning you don't have to be passing any entity names to the API methods to save you precious typing time. This is achieved via the `VirtualEntityService` model which inherits from the `BaseORMService` class.
 
 You can achieve this in several manners:
 
@@ -148,18 +154,19 @@ contentService = getInstance( dsl = "entityService:Content" );
 ormService.createService( entityName="Content", useQueryCaching=true );
 ```
 
-That's it! You can use it just like the BaseORMService except no more passing the entity name.
+That's it! You can use it just like the `BaseORMService` except no more passing the entity name, which cleans up your code quite nicely.
 
 ### Example
 
 ```java
 component{
-
+    
+    // Inject an entity service bound to a User entity
     inject name="userService" inject="entityService:User";
 
     function saveUser( event, rc, prc ){
         // retrieve and populate a new user object
-        var user = populateModel( userService.new() );
+        var user = populate( userService.new() );
 
         // save the entity using hibernate transactions
         userService.save( user );
@@ -209,7 +216,7 @@ component{
 
 ## Concrete Services
 
-This is where you create your own CFC that inherits from our `VirtualEntityService` and either adds or overrides methods. The virtual and base services takes you about 90% of the way. With you concrete services, you can complete the functionality to your liking.
+This is where you create your own CFC that inherits from our `VirtualEntityService` and either adds or overrides methods. The virtual and base services take you about 90% of the way. With your concrete services, you can complete the functionality to your liking.
 
 All you need to do is inherit from the `cborm.models.VirtualEntityService` and call the parent class constructor with the available arguments:
 

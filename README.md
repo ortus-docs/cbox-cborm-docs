@@ -1,5 +1,5 @@
 ---
-description: ColdBox ORM Module
+description: ColdBox ORM Extensions for Hibernate
 ---
 
 # Introduction

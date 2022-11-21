@@ -1,3 +1,7 @@
+---
+description: Quickly install cborm
+---
+
 # Installation
 
 Leverage CommandBox to install into your ColdBox app:
@@ -13,11 +17,11 @@ install cborm@be
 ### System Requirements
 
 * Lucee 5.x+&#x20;
-* ColdFusion 2016+
+* ColdFusion 2018+
 
 ## Application.cfc Setup
 
-Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping in the `Application.cfc` like this:
+Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping to the module in the `Application.cfc` like this:
 
 {% code title="Application.cfc" %}
 ```javascript
@@ -35,7 +39,7 @@ The module registers a new WireBox DSL called `entityservice` which can produce 
 
 ## Module Settings
 
-Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure:
+Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure or by creating a `cborm.cfc` in the `config/modules` directory if you are in ColdBox 7.
 
 {% code title="config/ColdBox.cfc" %}
 ```javascript
@@ -64,9 +68,41 @@ moduleSettings = {
 ```
 {% endcode %}
 
+ColdBox 7 Config:
+
+{% code title="config/modules/cborm.cfc" lineNumbers="true" %}
+```javascript
+component{
+  
+  function configure(){
+     return {
+        // Resource Settings
+	resources : {
+		// Enable the ORM Resource Event Loader
+		eventLoader : false,
+		// Pagination max rows
+		maxRows : 25,
+		// Pagination max row limit: 0 = no limit
+		maxRowsLimit : 500
+	},
+        // WireBox Injection bridge
+        injection = {
+            // enable entity injection via WireBox
+            enabled = true, 
+            // Which entities to include in DI ONLY, if empty include all entities
+            include = "", 
+            // Which entities to exclude from DI, if empty, none are excluded
+            exclude = ""
+        }
+      }; 
+    }
+}
+```
+{% endcode %}
+
 ## Validation
 
-We have also integrated a `UniqueValidator` from the **validation** module into our ORM module. It is mapped into WireBox as `UniqueValidator@cborm` so you can use in your model constraints like so:
+We have also integrated a `UniqueValidator` from the **validation** module into our ORM module. It is mapped into WireBox as `UniqueValidator@cborm` so you can use it in your model constraints like so:
 
 ```javascript
 { fieldName : { validator: "UniqueValidator@cborm" } }
