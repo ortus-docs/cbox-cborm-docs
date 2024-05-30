@@ -27,18 +27,13 @@ public boolean function onApplicationStart(){
 
 The `setupHibernateLogging( level )` method accepts a logging level so you can control the output of the logs.
 
-| Level     | Description                                                                                               |
-| --------- | --------------------------------------------------------------------------------------------------------- |
-| **ALL**   | All levels including custom levels.                                                                       |
-| **DEBUG** | Designates fine-grained informational events that are most useful to debug an application.                |
-| **INFO**  | Designates informational messages that highlight the progress of the application at coarse-grained level. |
-| **WARN**  | Designates potentially harmful situations.                                                                |
-| **ERROR** | Designates error events that might still allow the application to continue running.                       |
-| **FATAL** | Designates very severe error events that will presumably lead the application to abort.                   |
-| **OFF**   | The highest possible rank and is intended to turn off logging.                                            |
-| **TRACE** | Designates finer-grained informational events than the DEBUG.                                             |
+<table><thead><tr><th width="150">Level</th><th>Description</th></tr></thead><tbody><tr><td><strong>ALL</strong></td><td>All levels including custom levels.</td></tr><tr><td><strong>DEBUG</strong></td><td>Designates fine-grained informational events that are most useful to debug an application.</td></tr><tr><td><strong>INFO</strong></td><td>Designates informational messages that highlight the progress of the application at coarse-grained level.</td></tr><tr><td><strong>WARN</strong></td><td>Designates potentially harmful situations.</td></tr><tr><td><strong>ERROR</strong></td><td>Designates error events that might still allow the application to continue running.</td></tr><tr><td><strong>FATAL</strong></td><td>Designates very severe error events that will presumably lead the application to abort.</td></tr><tr><td><strong>OFF</strong></td><td>The highest possible rank and is intended to turn off logging.</td></tr><tr><td><strong>TRACE</strong></td><td>Designates finer-grained informational events than the DEBUG.</td></tr></tbody></table>
 
 This basic setup will get you to almost 90% of all your logging needs.
+
+{% hint style="danger" %}
+Please note that in Lucee 6 and Log4J2 logging, the setup logging is not working as of yet.  So please bear with us as we figure out how to intercept it or consider sponsoring this feature.
+{% endhint %}
 
 ### Lucee Location Logs
 
