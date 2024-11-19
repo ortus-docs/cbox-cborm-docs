@@ -5,6 +5,8 @@
 ## Intro
 
 * [Release History](intro/release-history/README.md)
+  * [What's New With 4.5.0](intro/release-history/whats-new-with-4.5.0.md)
+  * [What's New With 4.4.0](intro/release-history/whats-new-with-4.4.0.md)
   * [What's new With 4.3.x](intro/release-history/whats-new-with-4.3.x.md)
   * [What's New With 4.2.0](intro/release-history/whats-new-with-4.2.0.md)
   * [What's New With 4.1.0](intro/release-history/whats-new-with-4.1.0.md)
