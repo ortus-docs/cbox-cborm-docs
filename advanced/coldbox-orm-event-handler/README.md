@@ -1,3 +1,8 @@
+---
+description: "Using ColdBox ORM Event Handler to listen to Hibernate ORM events via ColdBox Interceptors"
+icon: announcement
+---
+
 # ORM Events
 
 Hibernate can announce events to listener objects so they can tap in to the life-cycle of the entities. You can either listen to the events globally or within the entity itself by just declaring a few listener methods. The cborm module taps in to the global Hibernate events and re-transmits them as[ ColdBox interception points](https://coldbox.ortusbooks.com/digging-deeper/interceptors). This allows you to intercept ORM events via multiple CFC listeners instead of the rigid approach of a single listener CFC which the ColdFusion engines give you.
@@ -58,7 +63,7 @@ component extends="coldbox.system.Interceptor"{
     function ORMPostLoad( event, interceptData, rc, prc ){
         // audit the data.
         var state = interceptData.entity.getMemento();
-        autidService.logState( state, interceptData.entity );    
+        autidService.logState( state, interceptData.entity );
     }
 
 }
