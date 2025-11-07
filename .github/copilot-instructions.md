@@ -192,7 +192,11 @@ See the [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/) 
 **Supported Platforms**:
 - BoxLang 1.0+
 - Adobe ColdFusion 2023+
-- Lucee 5.x, 6.x
+- Lucee 5.x+
+
+{% hint style="warning" %}
+CBOrm 4.x does NOT support Adobe ColdFusion 2021 or earlier. You must upgrade to Adobe ColdFusion 2023+ to use CBOrm 4.x.
+{% endhint %}
 
 **Dependencies**:
 - ColdBox 7.0+

@@ -15,21 +15,24 @@ install cborm
 install cborm@be
 ```
 
-### System Requirements
+## System Requirements
 
-* Lucee 5.x+&#x20;
-* ColdFusion 2018+
+* BoxLang 1.0+
+* Adobe ColdFusion 2023+
+* Lucee 5.x+
 
-## Application.cfc Setup
+## Application Setup
 
-Unfortunately, due to the way that ORM is loaded by ColdFusion, if you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping to the module in the `Application.cfc` like this:
+If you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping to the module in the `Application.bx|cfc` like this:
 
-{% code title="Application.cfc" %}
+{% code title="Application.bx|cfc" %}
 ```javascript
 # In the pseudo constructor
 this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 ```
 {% endcode %}
+
+This is required because the ORM engine is bootstraped before ColdBox fully initializes and thus the module paths are not yet registered.
 
 ## WireBox DSL
 
@@ -40,7 +43,7 @@ The module registers a new WireBox DSL called `entityservice` which can produce 
 
 ## Module Settings
 
-Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure or by creating a `cborm.cfc` in the `config/modules` directory if you are in ColdBox 7.
+Here are the module settings you can place in your `ColdBox.cfc` under `moduleSettings` -> `cborm` structure or by creating a `cborm.cfc` in the `config/modules` directory.
 
 {% code title="config/ColdBox.cfc" %}
 ```javascript
@@ -69,37 +72,77 @@ moduleSettings = {
 ```
 {% endcode %}
 
-ColdBox 7 Config:
+ColdBox 7+ Config:
 
-{% code title="config/modules/cborm.cfc" lineNumbers="true" %}
+{% tabs %}
+
+{% tab title="BoxLang" %}
+{% code title="config/modules/cborm.bx" lineNumbers="true" %}
+
 ```javascript
-component{
-
+class{
   function configure(){
      return {
         // Resource Settings
-	resources : {
-		// Enable the ORM Resource Event Loader
-		eventLoader : false,
-		// Pagination max rows
-		maxRows : 25,
-		// Pagination max row limit: 0 = no limit
-		maxRowsLimit : 500
-	},
-        // WireBox Injection bridge
-        injection = {
-            // enable entity injection via WireBox
-            enabled = true,
-            // Which entities to include in DI ONLY, if empty include all entities
-            include = "",
-            // Which entities to exclude from DI, if empty, none are excluded
-            exclude = ""
-        }
+        resources : {
+            // Enable the ORM Resource Event Loader
+            eventLoader : false,
+            // Pagination max rows
+            maxRows : 25,
+            // Pagination max row limit: 0 = no limit
+            maxRowsLimit : 500
+        },
+            // WireBox Injection bridge
+            injection : {
+                // enable entity injection via WireBox
+                enabled : true,
+                // Which entities to include in DI ONLY, if empty include all entities
+                include : "",
+                // Which entities to exclude from DI, if empty, none are excluded
+                exclude : ""
+            }
+      }
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="CFML" %}
+{% code title="config/modules/cborm.cfc" lineNumbers="true" %}
+
+```javascript
+component{
+  function configure(){
+     return {
+        // Resource Settings
+        resources : {
+            // Enable the ORM Resource Event Loader
+            eventLoader : false,
+            // Pagination max rows
+            maxRows : 25,
+            // Pagination max row limit: 0 = no limit
+            maxRowsLimit : 500
+        },
+            // WireBox Injection bridge
+            injection = {
+                // enable entity injection via WireBox
+                enabled = true,
+                // Which entities to include in DI ONLY, if empty include all entities
+                include = "",
+                // Which entities to exclude from DI, if empty, none are excluded
+                exclude = ""
+            }
       };
     }
 }
 ```
+
 {% endcode %}
+{% endtab %}
+
+{% endtabs %}
 
 ## Validation
 
@@ -111,13 +154,44 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 
 ## Supported Hibernate Versions
 
-### Lucee 5
+### BoxLang 1.0+
 
-* Hibernate 3.5 - [https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](https://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
-* Hibernate 5.4 - [https://hibernate.org/orm/documentation/5.4/](https://hibernate.org/orm/documentation/5.4/)
-  * You will need to update to the latest ORM Beta Extension - [https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE](https://download.lucee.org/#FAD1E8CB-4F45-4184-86359145767C29DE)
-  * [**5.4.29.18-BETA (Oct 28, 2022)**](https://ext.lucee.org/hibernate-orm-5.4.29.18-BETA.lex)
+Hibernate is bundled with the `bx-orm` module.  Just install it via CommandBox:
 
-### Adobe 2018, Adobe 2021
+```bash
+install bx-orm
+```
 
-* Hibernate 5.2 - [https://hibernate.org/orm/documentation/5.2/](https://hibernate.org/orm/documentation/5.2/)
+The version of Hibernate bundled is:
+
+* Hibernate 5.6+ - [https://hibernate.org/orm/documentation/5.6/](https://hibernate.org/orm/documentation/5.6/)
+
+### Lucee 5+
+
+Hibernate is bundled with the Ortus ORM Extension for Lucee: https://forgebox.io/view/D062D72F-F8A2-46F0-8CBC91325B2F067B.  You can find our source code here: https://github.com/ortus-solutions/extension-hibernate
+
+You can install it via the Lucee Administrator, by using th extension ID: `D062D72F-F8A2-46F0-8CBC91325B2F067B` or via CommandBox:
+
+```bash
+box install D062D72F-F8A2-46F0-8CBC91325B2F067B
+```
+
+BY JVM argument
+
+```bash
+-Dlucee-extensions=D062D72F-F8A2-46F0-8CBC91325B2F067B
+```
+
+The version of Hibernate bundled is:
+
+```bash
+-Dhibernate.version=5.6.0.Final
+```
+
+* Hibernate 5.6+ - [https://hibernate.org/orm/documentation/5.6/](https://hibernate.org/orm/documentation/5.6/)
+
+> Please note that our Lucee Hibernate Extension is on LTS and will only receive critical bug fixes and security patches.  New features and enhancements will be focused on the BoxLang BX-ORM module.
+
+### Adobe 2023+
+
+* Hibernate 5.2+ - [https://hibernate.org/orm/documentation/5.2/](https://hibernate.org/orm/documentation/5.2/)
