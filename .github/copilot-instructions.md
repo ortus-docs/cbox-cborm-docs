@@ -1,10 +1,12 @@
-# Copilot Instructions for CBOrm Documentation
+# Copilot Instructions for CBORM Documentation
 
 ## Project Overview
 
-This is the **GitBook documentation** for CBOrm (ColdBox ORM Extensions), a Hibernate ORM abstraction and enhancement layer for CFML engines (BoxLang, Lucee, Adobe ColdFusion). The documentation is hosted on GitBook and maintained at https://github.com/ortus-docs/cbox-cborm-docs.
+This is the **GitBook documentation** for CBORM (ColdBox ORM Extensions), a Hibernate ORM abstraction and enhancement layer for CFML engines (BoxLang, Lucee, Adobe ColdFusion). The documentation is hosted on GitBook and maintained at https://github.com/ortus-docs/cbox-cborm-docs.
 
 **Source Code Repository**: https://github.com/coldbox-modules/cborm (separate from docs)
+
+**Important**: Always use "CBORM" (all caps) when referring to the module name in documentation.
 
 ## Documentation Architecture
 
@@ -95,7 +97,7 @@ icon: terminal
 ## Content Patterns & Guidelines
 
 ### Example Code Requirements
-1. **Real working examples**: All code must compile and run - test against actual CBOrm
+1. **Real working examples**: All code must compile and run - test against actual CBORM
 2. **Complete context**: Show necessary imports, property injection, or setup
 3. **Common use cases first**: Start with simple examples, progress to advanced
 4. **Active Entity examples**: Always extend `cborm.models.ActiveEntity`
@@ -140,7 +142,7 @@ See the [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/) 
 {% endhint %}
 ```
 
-## Key CBOrm Concepts to Document
+## Key CBORM Concepts to Document
 
 ### Service Layer Hierarchy
 - **BaseORMService**: Core service with all CRUD methods, inject via `entityService`
@@ -195,7 +197,7 @@ See the [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/) 
 - Lucee 5.x+
 
 {% hint style="warning" %}
-CBOrm 4.x does NOT support Adobe ColdFusion 2021 or earlier. You must upgrade to Adobe ColdFusion 2023+ to use CBOrm 4.x.
+CBORM 4.x does NOT support Adobe ColdFusion 2021 or earlier. You must upgrade to Adobe ColdFusion 2023+ to use CBORM 4.x.
 {% endhint %}
 
 **Dependencies**:
@@ -245,4 +247,4 @@ Access via: https://gitbook.com/docs/~gitbook/mcp
 
 ## FontAwesome Icons
 
-GitBook supports FontAwesome icons in headers via the `icon:` front matter property. Use for visual categorization of pages.
+GitBook supports FontAwesome 6+ icons in headers via the `icon:` front matter property. Use for visual categorization of pages. Reference the FontAwesome 6 icon library for available icon names: https://fontawesome.com/icons

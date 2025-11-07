@@ -1,3 +1,8 @@
+---
+description: "Concrete Services - Creating custom services that extend the base ORM service in CBORM."
+icon: puzzle-piece
+---
+
 # Concrete Services
 
 ![](https://github.com/ColdBox/cbox-cborm/wiki/ConcreteORMServices.jpg)
@@ -54,7 +59,7 @@ Then you can just inject your concrete service in your handlers, or other models
 component{
     // Concrete ORM service layer
     property name="authorService" inject="security.AuthorService";
-    // Aliased 
+    // Aliased
     property name="authorService" inject="id:AuthorService";
 
     function index( event, rc, prc ){

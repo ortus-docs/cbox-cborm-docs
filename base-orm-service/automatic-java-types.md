@@ -1,3 +1,8 @@
+---
+description: "Automatic Java Types - Handling Java type casting in ColdFusion ORM with CBORM."
+icon: code
+---
+
 # Automatic Java Types
 
 Most of the Hibernate extensions like criteria builders and even some dynamic finders and counters will have to rely on the underlying Java types in order to work. You do this in ColdFusion by using the `javaCast()` function available to you. So if you are using a primary key that is an `Integer` you might have to do the following in order to match your variable to the underlying Java type:

@@ -1,3 +1,8 @@
+---
+description: "Virtual Entity Service - A service layer bound to a specific ORM entity"
+icon: gear-code
+---
+
 # Overview
 
 The virtual entity service is another support class that can help you create **virtual** service layers that are bounded to a specific ORM entity for convenience. This class inherits from our Base ORM Service and allows you to do everything the base class provides, except you do not need to specify to which `entityName` or `entity` you are working with.&#x20;
@@ -22,7 +27,7 @@ The WireBox injection DSL has an injection namespace called `entityService` that
 component{
     // Virtual service layer based on the User entity
     property name="userService" inject="entityService:User";
-    
+
 }
 ```
 
@@ -52,7 +57,7 @@ You can also leverage the WireBox Binder to map your virtual services so you can
 {% code title="config/WireBox.cfc" %}
 ```java
 function configure(){
-    
+
     map( "UserService" )
         .to( "cborm.models.VirtualEntityService" )
         .initArg( name="entityName", value="User" )
@@ -67,17 +72,17 @@ Now you can just use it via the `UserService` alias:
 {% code title="handlers/user.cfc" %}
 ```java
 component{
-    
+
     // Inject Alias
     property name="userService" inject="UserService";
-    
+
     function index( event, rc, prc ){
         var usersFound = userService.count();
         var user = userService.new( {firstName="Luis",lastName="Majano",Awesome=true} );
         userService.save( user );
-        
+
         var user = userService.get( "123" );
-        
+
         var users = userService.newCriteria()
             .like("lastName", "%maj%")
             .isTrue("isActive")

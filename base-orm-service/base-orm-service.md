@@ -1,3 +1,8 @@
+---
+description: "Base ORM Service - A powerful base service layer for ColdFusion ORM entities."
+icon: database
+---
+
 # Overview
 
 ![class BaseORMService](https://github.com/ColdBox/cbox-cborm/wiki/BaseORMService.jpg)

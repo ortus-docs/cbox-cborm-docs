@@ -1,3 +1,8 @@
+---
+description: "Dynamic Finders and Counters - Utilize dynamic methods for querying ColdFusion ORM entities."
+icon: search
+---
+
 # Dynamic Finders- Counters
 
 The ORM module supports the concept of dynamic finders and counters for ColdFusion ORM entities. A dynamic finder/counter looks like a real method but it is a virtual method that is intercepted by via `onMissingMethod`. This is a great way for you to do finders and counters using a programmatic and visual representation of what HQL to run.
@@ -18,11 +23,11 @@ count = getInstance( "User" )
     .countByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "jo%" );
 ```
 
-### Automatic Casting
+## Automatic Casting
 
 Another important aspect of the dynamic finders is that we will AUTO CAST all the values for you.  So you don't have to mess with the right Java type, we will do it for you.
 
-### Streams
+## Streams
 
 We have also enabled the ability to return a stream of objects if you are using the `findAll` semantics via [cbStreams](https://forgebox.io/view/cbStreams).
 
@@ -30,4 +35,3 @@ We have also enabled the ability to return a stream of objects if you are using 
 userStream = getInstance( "User" )
     .findAllByLastLoginBetweeninGreaterThan( "01/01/2010", {asStream:true} );
 ```
-

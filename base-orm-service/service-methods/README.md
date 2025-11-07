@@ -1,3 +1,8 @@
+---
+description: "Service Methods - A comprehensive list of methods available in the Base ORM Service"
+icon: lightning
+---
+
 # Service Methods
 
 The Base ORM Service has a ton of methods to assist you with your ORM needs. We have compiled them under this section under several different categories:
@@ -17,4 +22,3 @@ The Base ORM Service has a ton of methods to assist you with your ORM needs. We 
 Like always, you can find the latest [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/) in the link below:
 
 {% embed url="https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/" %}
-
