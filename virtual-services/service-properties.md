@@ -1,6 +1,6 @@
 ---
 description: "Service Properties for Virtual Entity Services in CBORM"
-icon: settings
+icon: gears
 ---
 
 # Service Properties

@@ -1,6 +1,6 @@
 ---
 description: "Service Properties - Configuration options for the Base ORM Service in CBORM."
-icon: settings
+icon: gears
 ---
 
 # Service Properties

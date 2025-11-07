@@ -1,6 +1,6 @@
 ---
 description: "Constructor Properties for ActiveEntity in CBORM"
-icon: cogs
+icon: gears
 ---
 
 # Constructor Properties
