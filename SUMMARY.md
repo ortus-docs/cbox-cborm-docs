@@ -112,6 +112,7 @@
 * [Active Entity Overview](active-record/active-entity.md)
 * [Constructor Properties](active-record/constructor-properties.md)
 * [Usage](active-record/usage.md)
+* [Functional Helpers](active-record/functional-helpers.md)
 * [Validation](active-record/validation.md)
 
 ## Criteria Queries

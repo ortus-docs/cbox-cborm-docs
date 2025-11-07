@@ -180,3 +180,54 @@ var results = userService
     });
     .list();
 ```
+
+## Best Practices
+
+### Thread Safety in High-Concurrency Environments
+
+{% hint style="success" %}
+**Concurrency Fix**: As of CBORM 4.10.0, a critical concurrency issue was resolved where restrictions could overlap under high-load scenarios. The criteria builder now ensures thread-safe operation in production environments.
+{% endhint %}
+
+When building criteria queries in high-concurrency applications:
+
+1. **Create new criteria instances per request**: Always call `newCriteria()` for each query operation rather than reusing criteria builder instances
+2. **Avoid shared state**: Don't store criteria builders in application or server scope
+3. **Use proper scoping**: Ensure criteria builders are properly scoped to the request or function execution
+
+```javascript
+// ✅ GOOD: New criteria per request
+function getUsersByStatus( required string status ) {
+    return newCriteria()
+        .eq( "status", arguments.status )
+        .list();
+}
+
+// ❌ BAD: Reusing criteria builder
+variables.userCriteria = newCriteria(); // Don't do this!
+
+function getUsersByStatus( required string status ) {
+    return variables.userCriteria
+        .eq( "status", arguments.status )
+        .list();
+}
+```
+
+### Performance Optimization
+
+* **Use query caching wisely**: Enable `useQueryCaching` for frequently-executed queries with stable results
+* **Leverage projections**: Use projections to retrieve only needed data instead of full entity hydration
+* **Batch operations**: Use `list()` with pagination rather than loading all results at once
+* **Monitor SQL**: Use `logSQL()` and `getSqlLog()` during development to optimize queries
+
+```javascript
+// Optimized query with projections and caching
+productService
+    .newCriteria(
+        useQueryCaching = true,
+        queryCacheRegion = "products.active"
+    )
+    .isTrue( "isActive" )
+    .withProjections( property = "id,name,price" )
+    .list();
+```

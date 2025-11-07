@@ -20,6 +20,11 @@ install cborm@be
 * BoxLang 1.0+
 * Adobe ColdFusion 2023+
 * Lucee 5.x+
+* Hibernate 5.x+ (Hibernate 3 is no longer supported as of CBORM 4.9.0)
+
+{% hint style="warning" %}
+**Breaking Change**: CBORM 4.9.0 dropped support for Hibernate 3. All supported CFML engines must use Hibernate 5.x or later. If you're using an older CFML engine with Hibernate 3, you must upgrade before using CBORM 4.9.0+.
+{% endhint %}
 
 ## Application Setup
 
@@ -165,6 +170,10 @@ install bx-orm
 The version of Hibernate bundled is:
 
 * Hibernate 5.6+ - [https://hibernate.org/orm/documentation/5.6/](https://hibernate.org/orm/documentation/5.6/)
+
+{% hint style="info" %}
+**BoxLang Autocasting**: As of CBORM 4.8.0, CBORM leverages BoxLang's intelligent autocasting capabilities. When running on BoxLang, CBORM passes values through directly to take advantage of BoxLang's smarter type handling, improving performance and type safety.
+{% endhint %}
 
 ### Lucee 5+
 
