@@ -1,3 +1,8 @@
+---
+description: A basic example of CRUD (Create-Read-Update-Delete) using ColdBox ORM and ActiveEntity
+icon: gear
+---
+
 # Basic Crud - ActiveEntity
 
 Let's do a basic example of CRUD (Create-Read-Update-Delete).  We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.
@@ -55,7 +60,7 @@ Now open the `Application.cfc` and let's configure the ORM by adding the followi
 this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 
 // The default dsn name in the ColdBox scaffold
-this.datasource = "coldbox"; 
+this.datasource = "coldbox";
 // ORM Settings + Datasource
 this.ormEnabled = "true";
 this.ormSettings = {
@@ -74,7 +79,7 @@ public boolean function onRequestStart( string targetPage ){
 	// If we reinit our app, reinit the ORM too
 	if( application.cbBootstrap.isFWReinit() )
 		ormReload();
-	
+
 	// Process ColdBox Request
 	application.cbBootstrap.onRequestStart( arguments.targetPage );
 
@@ -105,7 +110,7 @@ If you get a `Could not instantiate connection provider: org.lucee.extension.orm
 Let's start by creating a **Person** object with a few properties, let's use CommandBox for this and our super duper `coldbox create orm-entity` command:
 
 ```bash
-coldbox create orm-entity 
+coldbox create orm-entity
     entityName="Person"
     activeEntity=true
     properties=name,age:integer,lastVisit:timestamp
@@ -122,17 +127,17 @@ component persistent="true" table="Person" extends="cborm.models.ActiveEntity"{
 
 	// Primary Key
 	property name="id" fieldtype="id" column="id" generator="native" setter="false";
-	
+
 	// Properties
 	property name="name" ormtype="string";
 	property name="age" ormtype="numeric";
 	property name="lastVisit" ormtype="timestamp";
-	
+
 	// Validation
 	this.constraints = {
 		// Example: age = { required=true, min="18", type="numeric" }
 	};
-	
+
 	// Constructor
 	function init(){
 		super.init( useQueryCaching="false" );
@@ -195,9 +200,9 @@ component extends="coldbox.system.testing.BaseTestCase"{
 We will now generate a handler and do CRUD actions for this Person:
 
 ```bash
-coldbox create handler 
-    name="persons" 
-    actions="index,create,show,update,delete" 
+coldbox create handler
+    name="persons"
+    actions="index,create,show,update,delete"
     views=false
 ```
 

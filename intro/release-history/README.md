@@ -1,6 +1,21 @@
+---
+description: This section contains the release history for CBOrm module.
+icon: list-timeline
+---
+
 # Release History
 
 In this section you will find the release notes for each version we release under this major version.  If you are looking for the release notes of previous major versions use the version switcher at the top left of this documentation book.  Here is a breakdown of our major version releases.
+
+## Version 4.0
+
+Version 4.x represents the modern era of CBOrm with full support for ColdBox 7+, enhanced BoxLang compatibility, and streamlined Hibernate 5+ support. This version series focuses on:
+
+- **Multi-Engine Excellence**: Full support for Adobe ColdFusion 2023+, Lucee 5.x/6.x, and BoxLang 1.0+
+- **BoxLang Native**: First-class BoxLang support with optimized autocasting and runtime compatibility
+- **Functional Programming**: Enhanced ActiveEntity with functional helpers (`when()`, `unless()`, `peek()`, `throwIf()`, etc.)
+- **Modern Hibernate**: Exclusive Hibernate 5.x+ support with removal of legacy Hibernate 3 compatibility
+- **Improved Testing**: Comprehensive multi-JDK and multi-engine automated testing
 
 ## Version 2.0
 

@@ -1,5 +1,6 @@
 ---
-description: ColdBox ORM Extensions for Hibernate
+description: cborm is the ColdBox ORM Module that enhances your experience with Hibernate ORM
+icon: sunglasses
 ---
 
 # Introduction
@@ -10,7 +11,7 @@ The `cborm` module is a module that will **enhance** your experience when workin
 
 ![](.gitbook/assets/hibernate-logo.svg)
 
-### Some Features
+## Features
 
 * **Service Layers** with all the methods you could probably think off to help you get started in any project
 * **Virtual service layers** so you can create virtual services for any entity in your application
@@ -26,21 +27,24 @@ The `cborm` module is a module that will **enhance** your experience when workin
 * Ability for finders and queries to be returned as Java streams using our [cbStreams](https://www.forgebox.io/view/cbstreams) project.
 
 ```javascript
-# A quick preview of some functionality
-
-var book = new Book().findByTitle( "My Awesome Book" );
-var book = new Book().getOrFail( 2 );
+// A quick preview of some functionality
+book = new Book().findByTitle( "My Awesome Book" );
+book = new Book().getOrFail( 2 );
 new Book().getOrFail( 4 ).delete();
 new Book().deleteWhere( isActive:false, isPublished:false );
 
+// Inject Virtual Entity Services
 property name="userService" inject="entityService:User";
 
-return userService.list();
-return userService.list( asStream=true );
+// Listing Capabilities
+userService.list();
+userService.list( asStream=true );
 
-var count = userService.countWhere( age:20, isActive:true );
-var users = userService.findAllByLastLoginBetween( "01/01/2019", "05/01/2019" );
+// Counting and dynamic finders
+count = userService.countWhere( age:20, isActive:true );
+users = userService.findAllByLastLoginBetween( "01/01/2019", "05/01/2019" );
 
+// Criteria Queries
 userService
     .newCriteria()
     .eq( "name", "luis" )
@@ -65,15 +69,13 @@ userService
     .list();
 ```
 
-
-
 **In other words, it makes using an ORM not SUCK!**
 
 ## Versioning
 
 The ColdBox ORM Module is maintained under the [Semantic Versioning](http://semver.org) guidelines as much as possible.Releases will be numbered with the following format:
 
-```
+```bash
 <major>.<minor>.<patch>
 ```
 

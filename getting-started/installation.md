@@ -1,5 +1,6 @@
 ---
 description: Quickly install cborm
+icon: download
 ---
 
 # Installation
@@ -57,9 +58,9 @@ moduleSettings = {
         // WireBox Injection bridge
         injection = {
             // enable entity injection via WireBox
-            enabled = true, 
+            enabled = true,
             // Which entities to include in DI ONLY, if empty include all entities
-            include = "", 
+            include = "",
             // Which entities to exclude from DI, if empty, none are excluded
             exclude = ""
         }
@@ -73,7 +74,7 @@ ColdBox 7 Config:
 {% code title="config/modules/cborm.cfc" lineNumbers="true" %}
 ```javascript
 component{
-  
+
   function configure(){
      return {
         // Resource Settings
@@ -88,13 +89,13 @@ component{
         // WireBox Injection bridge
         injection = {
             // enable entity injection via WireBox
-            enabled = true, 
+            enabled = true,
             // Which entities to include in DI ONLY, if empty include all entities
-            include = "", 
+            include = "",
             // Which entities to exclude from DI, if empty, none are excluded
             exclude = ""
         }
-      }; 
+      };
     }
 }
 ```

@@ -1,3 +1,8 @@
+---
+icon: book-open
+description: Information about the documentation book, contribution guidelines, and copyright.
+---
+
 # About This Book
 
 The source code for this book is hosted in GitHub: [https://github.com/ortus-docs/cbox-cborm-docs](https://github.com/ortus-docs/cbox-cborm-docs). You can freely contribute to it and submit pull requests. The contents of this book is copyright by [Ortus Solutions, Corp](http://www.ortussolutions.com) and cannot be altered or reproduced without author's consent. All content is provided _"As-Is"_ and can be freely distributed.

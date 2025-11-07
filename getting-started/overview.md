@@ -1,5 +1,6 @@
 ---
-description: A quick overview of cborm
+description: A quick overview of the cborm module and its features
+icon: database
 ---
 
 # Overview
@@ -106,9 +107,9 @@ component{
             .newCriteria( "Content" )
                 .isEq( "published", rc.isPublished  )
                 .isLt( "publishedDate", now() )
-                .or( 
-                    ormService.getRestrictions().isNull( "expireDate" ), 
-                    ormService.getRestrictions().isGT( "expireDate", now() ) 
+                .or(
+                    ormService.getRestrictions().isNull( "expireDate" ),
+                    ormService.getRestrictions().isGT( "expireDate", now() )
                 )
                 .isEq( "passwordProtection", "" )
                 .joinTo( "activeContent", "ac" )
@@ -160,7 +161,7 @@ That's it! You can use it just like the `BaseORMService` except no more passing 
 
 ```java
 component{
-    
+
     // Inject an entity service bound to a User entity
     inject name="userService" inject="entityService:User";
 
@@ -198,9 +199,9 @@ component{
             .newCriteria()
                 .isEq( "published", rc.isPublished  )
                 .isLt( "publishedDate", now() )
-                .or( 
-                    ormService.getRestrictions().isNull( "expireDate" ), 
-                    ormService.getRestrictions().isGT( "expireDate", now() ) 
+                .or(
+                    ormService.getRestrictions().isNull( "expireDate" ),
+                    ormService.getRestrictions().isGT( "expireDate", now() )
                 )
                 .isEq( "passwordProtection", "" )
                 .joinTo( "activeContent", "ac" )
@@ -286,9 +287,9 @@ component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
 
     // Constraints
     this.constraints = {
-        firstName = { required=true }, 
-        lastName  = { required=true }, 
-        username  = { required=true, min=5, validator="UniqueValidator@cborm" }, 
+        firstName = { required=true },
+        lastName  = { required=true },
+        username  = { required=true, min=5, validator="UniqueValidator@cborm" },
         password  = { required=true, min=6 }
     };
 
@@ -315,7 +316,7 @@ entityNew( "User" )
     .delete();
 
 prc.users = entityNew( "User" )
-    .findAllWhere( 
+    .findAllWhere(
        criteria = { isActive:true, role:entityNew( "Role" ).findByName( "Admin" ) },
        stream = true
     );
