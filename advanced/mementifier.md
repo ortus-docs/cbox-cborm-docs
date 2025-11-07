@@ -1,3 +1,9 @@
+---
+description: "Using the Mementifier module to extract ORM object state for auditing and JSON conversion"
+icon: memory
+---
+
+
 # Mementifier
 
 The [Mementifier](https://forgebox.io/view/mementifier) module is a dependency of cborm and it is used to extract the state of ORM objects into a digestible format that can be used for auditing or conversion to JSON or other formats.  You can find the latest documentation here: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)

@@ -1,3 +1,8 @@
+---
+description: "Using Detached Criteria Builder in CBORM for complex queries"
+icon: project-diagram
+---
+
 # Detached Criteria Builder
 
 Hibernate also supports the concept of [detached criterias](https://docs.jboss.org/hibernate/orm/5.4/userguide/html\_single/Hibernate\_User\_Guide.html#pc-detach).  They are most useful for join conditions, subselects, subqueries and to query outside the current session.  As usual Hibernate has funny names for features that SQL offers without all these mixup of words.  Plain and simple detached criterias are used for doing complex queries where you need to do groupings, sub selects, sub queries and more.

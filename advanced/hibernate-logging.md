@@ -1,3 +1,8 @@
+---
+description: "Configuring and tuning Hibernate logging"
+icon: logs
+---
+
 # Hibernate Logging
 
 Logs are your best friend when it comes to Hibernate and its plethora of obscure error codes and situations.  Hibernate is incredible until it's not.  However, we definitely encourage you to tweak your server whenever you need deeper understanding of what's going on under the hood.
@@ -10,10 +15,10 @@ We have provided a handy method in our ORM Utility object to help you set the lo
 
 ```javascript
 public boolean function onApplicationStart(){
-	
+
 	// SETUP THE LOGGING
 	new cborm.models.util.ORMUtilSupport().setupHibernateLogging( "INFO" );
-	
+
 	application.cbBootstrap = new coldbox.system.Bootstrap(
 		COLDBOX_CONFIG_FILE,
 		COLDBOX_APP_ROOT_PATH,

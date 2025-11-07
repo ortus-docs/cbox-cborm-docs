@@ -1,3 +1,8 @@
+---
+description: "Using Unique Property Validation in CBORM models"
+icon: check-to-slot
+---
+
 # Unique Property Validation
 
 We have also integrated a `UniqueValidator` from the **validation** module into our ORM module. It is mapped into WireBox as `UniqueValidator@cborm` so you can use in your model constraints like so:
@@ -18,13 +23,13 @@ component persistent="true" table="users"{
 	property name="userName" unique="true";
 	property name="password";
 	property name="lastLogin" ormtype="date";
-	
+
 	// M20 -> Role
 	property name="role" cfc="Role" fieldtype="many-to-one" fkcolumn="FKRoleID" lazy="true" notnull="false";
-	
+
 	// DI Test
 	property name="testDI" inject="model:testService" persistent="false" required="false";
-	
+
 	// Validation Constraints
 	this.constraints = {
 		"firstName" : { required = true },
@@ -41,21 +46,21 @@ Now here is a sample validation:
 {% code title="handlers/users.cfc" %}
 ```javascript
 component{
-    
+
     property name="userService" inject="entityService:User";
-    
+
     function create( event, rc, prc ){
         var oUser = populateModel( "User" );
         var vResults = validateModel( oUser );
-        
+
         if( !vResults.isValid() ){
             return event
                 .setHTTPHeader( 400, "Invalid Data" )
                 .renderData( type="json", data=vResults.getAllErrorsAsStruct() );
         }
-        
+
         userService.save( oUser );
-        
+
         return oUser.getMemento();
     }
 
@@ -63,4 +68,3 @@ component{
 }
 ```
 {% endcode %}
-

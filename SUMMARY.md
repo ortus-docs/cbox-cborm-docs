@@ -134,11 +134,11 @@
   * [Associations](criteria-queries/detached-criteria-builder/associations.md)
 * [Help! I'm Not Getting the Result I expected!](criteria-queries/help-im-not-getting-the-result-i-expected.md)
 
-## Advanced Features <a href="#orm-events" id="orm-events"></a>
+## Advanced Features <a href="#advanced" id="advanced"></a>
 
-* [Automatic REST Crud](orm-events/automatic-rest-crud.md)
-* [Hibernate Logging](orm-events/hibernate-logging.md)
-* [Mementifier](orm-events/mementifier.md)
-* [ORM Events](orm-events/coldbox-orm-event-handler/README.md)
-  * [Custom Event Handler](orm-events/coldbox-orm-event-handler/event-handler-cfc.md)
-* [Unique Property Validation](orm-events/untitled.md)
+* [Automatic REST Crud](advanced/automatic-rest-crud.md)
+* [Hibernate Logging](advanced/hibernate-logging.md)
+* [Mementifier](advanced/mementifier.md)
+* [ORM Events](advanced/coldbox-orm-event-handler/README.md)
+  * [Custom Event Handler](advanced/coldbox-orm-event-handler/event-handler-cfc.md)
+* [Unique Property Validation](advanced/unique-property-validation.md)

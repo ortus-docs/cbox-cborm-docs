@@ -1,3 +1,8 @@
+---
+description: "Creating Automatic RESTful CRUD services with CBORM"
+icon: spider-web
+---
+
 # Automatic REST Crud
 
 In cborm 2.5 we introduced the Base Resource Handler for ORM entities. This base handler will create a nice framework for creating a RESTFul CRUD for your entities based on ColdBox 6 Resources: [https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes](https://coldbox.ortusbooks.com/the-basics/routing/routing-dsl/resourceful-routes)
@@ -325,7 +330,7 @@ function index( event, rc, prc ){
 
 /**
  * Display all employees using my own orm service search which
- * must return a struct of 
+ * must return a struct of
  * - count : The number of records
  * - records : The array of objects
  * GET /api/v1/employees

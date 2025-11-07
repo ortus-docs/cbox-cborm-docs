@@ -1,3 +1,8 @@
+---
+description: "Using Criteria Builder in CBORM for dynamic queries"
+icon: filters
+---
+
 # Criteria Builder
 
 Hibernate provides several ways to retrieve data from the database.  We have seen the normal entity loading operations in our basic CRUD and we have seen several HQL and SQL query methods as well.  The last one is the [Hibernate Criteria Queries](https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/).
@@ -53,4 +58,3 @@ You can see below some of the Hibernate documentation on criteria queries.
 3. [http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html)
 4. [https://www.baeldung.com/hibernate-criteria-queries](https://www.baeldung.com/hibernate-criteria-queries)
 5. [https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/](https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/)
-

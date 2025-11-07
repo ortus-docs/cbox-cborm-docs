@@ -1,4 +1,9 @@
-# Help! I'm Not Getting the Result I expected!
+---
+description: "Troubleshooting unexpected results in Criteria Queries with CBORM"
+icon: life-ring
+---
+
+# Help! I'm Not Getting the Result I expected
 
 Since we’re not writing SQL, it can sometimes be frustrating to uncover why results from Criteria Builder and Detached Criteria Builder don’t match up with what you’re expecting.
 
