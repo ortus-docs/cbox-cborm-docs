@@ -1,3 +1,8 @@
+---
+description: "Concrete Virtual Services - Building custom services that inherit from Virtual Entity Services"
+icon: square-code
+---
+
 # Concrete Virtual Services
 
 ![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ConcreteORMServices.jpg)

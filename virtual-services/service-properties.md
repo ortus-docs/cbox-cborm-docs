@@ -1,3 +1,8 @@
+---
+description: "Service Properties for Virtual Entity Services in CBORM"
+icon: settings
+---
+
 # Service Properties
 
 There are a few properties you can instantiate the virtual service with or set them afterwards that affect operation. Below you can see a nice chart for them:
@@ -19,7 +24,7 @@ component extends="cborm.models.VirtualEntityService"{
 
   UserService function init(){
       super.init( entityName="User", useQueryCaching=true, eventHandling=false );
-      return this;    
+      return this;
   }
 
 }
