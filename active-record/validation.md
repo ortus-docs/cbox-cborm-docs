@@ -1,3 +1,8 @@
+---
+description: "Validation of Active Entities in CBORM using cbValidation"
+icon: check-to-slot
+---
+
 # Validation
 
 ## Validation Functions
@@ -40,7 +45,7 @@ Let's see the entity code so you can see the [constraints](https://coldbox-valid
 {% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" extends="cborm.models.ActiveEntity"{
-    
+
     // Properties
     property name="firstName";
     property name="lastName";
@@ -50,7 +55,7 @@ component persistent="true" extends="cborm.models.ActiveEntity"{
 
     // Validation Constraints
     this.constraints = {
-        "firstName" = {required=true}, 
+        "firstName" = {required=true},
         "lastName"  = {required=true},
         "email"     = {required=true,type="email"},
         "username"  = {required=true, size="5..10"},
@@ -77,7 +82,7 @@ component{
 
     function save(event,rc,prc){
         event.paramValue( "id", -1 );
-        
+
         var oUser = getInstance( "User" )
             .getOrFail( rc.id )
             .populate( rc )

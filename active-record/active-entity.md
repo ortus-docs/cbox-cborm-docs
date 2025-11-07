@@ -1,3 +1,8 @@
+---
+description: "Active Entity - Implementing Active Record Pattern in CBORM"
+icon: users-gear
+---
+
 # Active Entity Overview
 
 ![](../.gitbook/assets/active-record.jpg)
@@ -65,9 +70,9 @@ moduleSettings = {
     cborm = {
         injection = {
             // enable entity injection via WireBox
-            enabled = true, 
+            enabled = true,
             // Which entities to include in DI ONLY, if empty include all entities
-            include = "", 
+            include = "",
             // Which entities to exclude from DI, if empty, none are excluded
             exclude = ""
         }
@@ -91,14 +96,14 @@ Once your configuration is done we can now focus on building out your Active Ent
 {% code title="models/User.cfc" %}
 ```javascript
 component persistent="true" table="users" extends="cborm.models.ActiveEntity"{
-    
+
     property name="id" column="user_id" fieldType="id" generator="uuid";
 	property name="firstName";
 	property name="lastName";
 	property name="userName";
 	property name="password";
 	property name="lastLogin" ormtype="date";
-	
+
 	function init(){
 	   return super.init();
 	}

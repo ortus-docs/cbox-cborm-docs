@@ -1,3 +1,8 @@
+---
+description: "Constructor Properties for ActiveEntity in CBORM"
+icon: cogs
+---
+
 # Constructor Properties
 
 There are a few properties you can instantiate the **ActiveEntity** with or set them afterwards that affect operation. Below you can see a nice chart for them:
