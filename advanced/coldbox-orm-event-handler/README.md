@@ -1,6 +1,6 @@
 ---
 description: "Using ColdBox ORM Event Handler to listen to Hibernate ORM events via ColdBox Interceptors"
-icon: announcement
+icon: megaphone
 ---
 
 # ORM Events

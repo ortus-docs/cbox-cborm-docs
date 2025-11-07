@@ -1,6 +1,6 @@
 ---
 description: "Using Detached Criteria Builder in CBORM for complex queries"
-icon: project-diagram
+icon: plug-circle-xmark
 ---
 
 # Detached Criteria Builder

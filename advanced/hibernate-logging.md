@@ -1,6 +1,6 @@
 ---
 description: "Configuring and tuning Hibernate logging"
-icon: logs
+icon: file-export
 ---
 
 # Hibernate Logging

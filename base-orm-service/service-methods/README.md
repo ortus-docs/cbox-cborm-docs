@@ -1,6 +1,6 @@
 ---
 description: "Service Methods - A comprehensive list of methods available in the Base ORM Service"
-icon: lightning
+icon: bolt-lightning
 ---
 
 # Service Methods

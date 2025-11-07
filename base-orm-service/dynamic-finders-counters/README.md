@@ -1,6 +1,6 @@
 ---
 description: "Dynamic Finders and Counters - Utilize dynamic methods for querying ColdFusion ORM entities."
-icon: search
+icon: radar
 ---
 
 # Dynamic Finders- Counters
