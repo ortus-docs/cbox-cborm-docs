@@ -14,22 +14,37 @@ Our active entity object will also give you access to our validation engine ([cb
  * Validate the ActiveEntity with the coded constraints -> this.constraints, or passed in shared or implicit constraints
  * The entity must have been populated with data before the validation
  *
- * @fields One or more fields to validate on, by default it validates all fields in the constraints. This can be a simple list or an array.
- * @constraints An optional shared constraints name or an actual structure of constraints to validate on.
- * @locale An optional locale to use for i18n messages
+ * @fields        One or more fields to validate on, by default it validates all fields in the constraints. This can be a simple list or an array.
+ * @constraints   An optional shared constraints name or an actual structure of constraints to validate on.
+ * @locale        An optional locale to use for i18n messages
  * @excludeFields An optional list of fields to exclude from the validation.
+ * @includeFields An optional list of fields to include in the validation.
+ * @profiles      An optional list of profiles to use for the validation.
  */
 boolean function isValid(
-	string fields="*",
-	any constraints="",
-	string locale="",
-	string excludeFields=""
-){
+	string fields        = "*",
+	any constraints      = "",
+	string locale        = "",
+	string excludeFields = "",
+	string includeFields = "",
+	string profiles      = ""
+)
 
 /**
-* Get the validation results object.  This will be an empty validation object if isValid() has not being called yet.
-*/
-cbvalidation.models.result.IValidationResult function getValidationResults(){
+ * Get the validation results object.  This will be an empty validation object if isValid() has not being called yet.
+ */
+cbvalidation.models.result.IValidationResult function getValidationResults()
+
+/**
+ * Validate the entity (same arguments as isValid()) and return the validation results object
+ */
+ValidationResult function validate( ... )
+
+/**
+ * Validate the entity (same arguments as isValid()) and throw a `ValidationException` if it fails.
+ * The validation errors (JSON) are in the exception's extended information. Returns the entity back.
+ */
+ActiveEntity function validateOrFail( ... )
 ```
 
 ## Declaring Constraints
@@ -42,11 +57,12 @@ This makes it really easy for you to validate your ORM entities in two easy step
 
 Let's see the entity code so you can see the [constraints](https://coldbox-validation.ortusbooks.com/overview/coldbox-validation/declaring-constraints):
 
-{% code title="models/User.cfc" %}
+{% code title="models/User.bx" %}
 ```javascript
-component persistent="true" extends="cborm.models.ActiveEntity"{
+class persistent="true" extends="cborm.models.ActiveEntity" {
 
     // Properties
+    property name="id" fieldtype="id" generator="uuid";
     property name="firstName";
     property name="lastName";
     property name="email";
@@ -69,9 +85,9 @@ component persistent="true" extends="cborm.models.ActiveEntity"{
 
 Now let's check out the handlers to see how to validate the entity via the `isValid()` function:
 
-{% code title="handlers/users.cfc" %}
+{% code title="handlers/users.bx" %}
 ```javascript
-component{
+class {
 
     property name="messagebox" inject="messagebox@cbmessagebox";
 
@@ -85,9 +101,9 @@ component{
 
         var oUser = getInstance( "User" )
             .getOrFail( rc.id )
-            .populate( rc )
+            .populate( rc );
 
-        if( oUser.isValid() {
+        if( oUser.isValid() ){
             oUser.save();
             flash.put( "notice", "User Saved!" );
             relocate( "users.index" );
@@ -123,7 +139,25 @@ Please remember that the `isValid()` function has several arguments you can use 
 * constraints
 * locale
 * excludeFields
+* includeFields
+* profiles
 {% endhint %}
+
+If you prefer exceptions, use `validateOrFail()`, which throws a `ValidationException` when the entity is not valid, or `validate()`, which returns the validation results object:
+
+```javascript
+// Throws a ValidationException if invalid, else keeps chaining
+getInstance( "User" )
+    .new( rc )
+    .validateOrFail()
+    .save();
+
+// Get the results object back
+var results = getInstance( "User" ).new( rc ).validate();
+if( results.hasErrors() ){
+    return results.getAllErrors();
+}
+```
 
 ## Displaying Errors
 

@@ -10,7 +10,7 @@ Merge an entity or array of entities back into the session
 
 | Key    | Type | Required | Default | Description |
 | ------ | ---- | -------- | ------- | ----------- |
-| entity | any  | Yes      | ---     |             |
+| entity | any  | Yes      | ---     | A single entity or an array of entities to merge |
 
 ## Examples
 

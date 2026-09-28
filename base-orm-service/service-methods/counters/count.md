@@ -1,6 +1,6 @@
 # count
 
-Return the count of instances in the DB for the given entity name. You can also pass an optional where statement that can filter the count. Ex: count('User','age > 40 AND name="joe"'). You can even use named or positional parameters with this method: Ex: count('User','age > ? AND name = ?',\[40,"joe"])
+Return the count of instances in the DB for the given entity name. You can also pass an optional where statement that can filter the count. Ex: count('User','age > 40 AND name="joe"'). You can even use named or positional parameters with this method: Ex: `count( 'User', 'age > ?1 AND name = ?2', [ 40, "joe" ] )`. Positional parameters can be written as `?1`, `?2` (JPA style) or as plain `?`.
 
 ## Returns
 
@@ -23,6 +23,8 @@ ormService.count("Book");
 ormService.count("User","age > 40 AND name='Bob'");
 // Get the count for users with passed in positional parameters
 ormService.count("User","age > ? AND name=?",[40,'Bob']);
+// Or with numbered positional parameters
+ormService.count("User","age > ?1 AND name=?2",[40,'Bob']);
 // Get the count for users with passed in named parameters
 ormService.count("Post","title like :title and year = :year",{title="coldbox",year="2007"});
 ```

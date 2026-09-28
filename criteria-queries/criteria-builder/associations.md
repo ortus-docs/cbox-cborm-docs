@@ -1,114 +1,140 @@
+---
+description: "Query on associations with dotted paths, joins, aliases, with{Association}() and fetching"
+---
+
 # Associations
 
-You can navigate associations in criteria queries in several ways:
+You can put conditions on associated entities in several ways:
 
-* Dot notation for many-to-one relationships **ONLY**
-* Helper methods to create inner criterias or joins: `createCriteria(), joinTo()`
+* **Dotted paths**: `isEq( "role.slug", "admin" )`. The builder joins the association for you.
+* **Joins with aliases**: `joinTo( "role", "r" )` and then `isEq( "r.slug", "admin" )`.
+* **Scoped conditions**: `withRole( ( r ) => r.isEq( "slug", "admin" ) )` or `createCriteria( "role" )`.
 
-## Dot Notation Navigation
+## Dotted paths
 
-This type of navigation is the easiest but ONLY works with `many-to-one` associations.  Let's say you have a User entity with a Role and the Role has the following properties: `id, name, slug` and you want to get all users that have the role slug of `admin` and are active.  Then you could do this:
+A dotted path joins the associations it goes through, for any kind of association (many-to-one, one-to-many, many-to-many, one-to-one), and as deep as you need.
 
 ```javascript
-// Using virtual services
+// Active users with the admin role
 function findAllAdmins(){
-     return newCriteria()
-          .isTrue( "active" )
-          .eq( "role.slug", "admin" )
-          .list();
-}
-```
-
-## Joins
-
-You can also use the `joinTo()` method, which previously was called `createAlias()` to create joins to related associations.  Let's check out the method signature first:
-
-```javascript
-/**
- * Join an association, assigning an alias to the joined association
- *
- * You can also use the following alias method : <code>joinTo()</code>
- *
- * @associationName The name of the association property: A dot-separated property path
- * @alias The alias to assign to the joined association (for later reference).
- * @joinType The hibernate join type to use, by default it uses an inner join. Available as properties: criteria.FULL_JOIN, criteria.INNER_JOIN, criteria.LEFT_JOIN
- * @withClause The criterion to be added to the join condition (ON clause)
- */
-any function joinTo(
-	required string associationName,
-	required string alias,
-	numeric joinType=this.INNER_JOIN,
-	any withClause
-)
-```
-
-The arguments can be further explained below:
-
-* `associationName` : This is the name of the property on the target entity that is the association
-* `alias` : This is the alias to assign it so you can reference it later in the criterions following it
-* `joinType` : By default it is an inner join.  The available joins are: `INNER_JOIN, FULL_JOIN, LEFT_JOIN`
-* `withClause` : This is the criterion (so it's a restriction) to be added to the join condition, basically the `ON` clause.
-
-```javascript
-// Using virtual services
-function findAllAdmins(){
-     return newCriteria()
-          .isTrue( "active" )
-          .joinTo( "role", "r" )
-               .eq( "r.slug", "admin" )
-          .list();
+    return newCriteria()
+        .isTrue( "isActive" )
+        .isEq( "role.slug", "admin" )
+        .list();
 }
 
-// no join type, but withClause
-r = newCriteria()
-     .joinTo(
-          associationName="users",
-          alias="u",
-          withClause=getRestrictions().like( "u.lastName", "M%" )
-     )
-     .list();
+// Posts in a category of a given site
+postService
+    .newCriteria()
+    .isEq( "categories.slug", "boxlang" )
+    .isEq( "site.slug", "blog" )
+    .list();
 ```
 
-## Inner Criterias
+How paths are joined:
 
-The last journey to query on associations is to pivot the root entity of the criteria to an association. This means that you will create a new criteria object based on the previous criteria, but now the target entity is the one you assign.  PHEW! That's a mouthful.  Basically, it's a nice way to traverse into the join and stay in that entity.
+* A condition uses an **inner** join, so rows without the association are left out.
+* Inside `or()` and `not()` a **left** join is used, so a row without the association can still match another branch.
+* Ordering and projections use a **left** join, so ordering never drops rows.
+* The same path is joined only once and reused.
+* `role.id` compares the foreign key and needs no join.
+* When a condition goes through a to-many association, each root entity is still returned once, and `count()` counts each one once.
 
-This is accomplished via the `createCriteria()` method or the nice dynamic alias: `with{entity}`() method.
+An association can also be compared directly with an id or an entity:
 
 ```javascript
-/**
- * Create a new Criteria, "rooted" at the associated entity and using an Inner Join
- *
- * @associationName The name of the association property to root the restrictions with
- * @alias The alias to use for this association property on restrictions
- * @joinType The hibernate join type to use, by default it uses an inner join. Available as properties: criteria.FULL_JOIN, criteria.INNER_JOIN, criteria.LEFT_JOIN
- * @withClause The criteria to use with the join
- */
-any function createCriteria(
-	required string associationName,
-	string alias,
-	numeric joinType,
-	any withClause
-)
-
-// Dynamic Methods
-with{AssociationName}( joinType )
+postService.newCriteria().isEq( "author", 42 ).list();
+postService.newCriteria().isEq( "author", currentUser ).list();
+postService.newCriteria().isIn( "author", [ 1, 42 ] ).list();
 ```
 
-The arguments can be further explained below:
+## Joins and aliases: `joinTo()`
 
-* `associationName` : This is the name of the property on the target entity that is the association
-* `alias` : This is the alias to assign it so you can reference it later in the criterions following it
-* `joinType` : By default it is an inner join.  The available joins are: `INNER_JOIN, FULL_JOIN, LEFT_JOIN`
-* `withClause` : This is the criterion (so it's a restriction) to be added to the join condition, basically the `ON` clause.
+`joinTo( association, alias, [joinType] )` (alias `createAlias()`) joins an association and gives it an alias you can use in later paths. The root entity's alias is `this`.
 
-{% hint style="danger" %}
-Now remember that you are rooting the criteria in this association, so you can't go back to the original entity properties.
+```javascript
+// Using a virtual service
+function findAllAdmins(){
+    return newCriteria()
+        .isTrue( "isActive" )
+        .joinTo( "role", "r" )
+        .isEq( "r.slug", "admin" )
+        .list();
+}
+
+// Aliases can be chained
+postService
+    .newCriteria()
+    .joinTo( "author", "a" )
+    .joinTo( "a.role", "ar" )
+    .isEq( "ar.slug", "editor" )
+    .list();
+```
+
+| Argument      | Description |
+| ------------- | ----------- |
+| `association` | The association property, or a dotted path to one (also accepted as `associationName`) |
+| `alias`       | The alias to use in later paths |
+| `joinType`    | `inner` (default), `left`, `right` or `full`, or one of the cborm constants below |
+
+The join type can be a name or one of the cborm constants on the criteria: `c.INNER_JOIN`, `c.LEFT_JOIN` (or `c.LEFT_OUTER_JOIN`), `c.RIGHT_JOIN` (or `c.RIGHT_OUTER_JOIN`) and `c.FULL_JOIN` (or `c.FULL_OUTER_JOIN`). There are also shortcut methods.
+
+```javascript
+c.joinTo( "role", "r", "left" );
+c.joinTo( "role", "r", c.LEFT_JOIN );
+c.leftJoin( "role", "r" );   // also innerJoin(), rightJoin(), fullJoin()
+```
+
+Right and full joins need database support (MySQL and MariaDB have no full join).
+
+## Scoped conditions: `with{Association}()` and `createCriteria()`
+
+`with{Association}( [joinType], [callback] )` joins an association and makes it the start of unqualified paths, so you can write `isEq( "slug", "admin" )` instead of `isEq( "role.slug", "admin" )`.
+
+* With a closure, the scope applies to the conditions the closure adds, then returns to the root entity.
+* Without a closure, it applies until you call `end()` (aliases `endAssociation()`, `resetCriteria()`).
+
+`createCriteria( association, [joinType], [callback] )` is the same thing with the association name as an argument.
+
+```javascript
+// With a closure
+userService
+    .newCriteria()
+    .like( "firstName", "Lui%" )
+    .withRole( ( r ) => r.isEq( "slug", "admin" ) )
+    .list();
+
+// Without a closure, until end()
+userService
+    .newCriteria()
+    .withRole( "left" )
+        .isEq( "slug", "admin" )
+    .end()
+    .like( "firstName", "Lui%" )
+    .list();
+
+// cborm style
+userService
+    .newCriteria()
+    .like( "firstName", "Lui%" )
+    .createCriteria( "role" )
+        .isEq( "slug", "admin" )
+    .list();
+```
+
+## Fetching associations
+
+`fetch( association )` (alias `joinFetch()`) loads an association together with the root entities (a `left join fetch`), so reading it later needs no extra query:
+
+```javascript
+var posts = postService.newCriteria().fetch( "author" ).fetch( "categories" ).list();
+```
+
+{% hint style="info" %}
+**Changes from cborm 5**
+
+* Dotted paths work through every association type, not only many-to-one.
+* The `withClause` argument of `joinTo()` and `createCriteria()` (an extra condition in the join's `ON` clause) has no equivalent. For inner joins, add the condition with the alias instead, which returns the same rows. For a left join with an `ON` condition, use HQL through `executeQuery()`.
+* `createCriteria()` no longer takes an alias: its second argument is the join type or a closure. Use `joinTo()` when you need an alias.
+* After `createCriteria()` or `with{Association}()` you can return to the root entity with `end()`.
 {% endhint %}
-
-```javascript
-var c = newCriteria("User");
-var users = c.like("name","lui%")
-     .withAdmins().like("name","fra%")
-     .list();
-```

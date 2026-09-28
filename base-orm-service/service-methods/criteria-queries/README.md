@@ -1,3 +1,3 @@
 # Criteria Queries
 
-These methods allows you to tap into the Criteria Queries API so you can do fluent and functional queries with your ORM objects.
+These methods let you tap into the criteria builder (the bx-orm `entityCriteria()` builder) so you can write fluent and functional queries with your ORM entities. See [Criteria Builder](../../../criteria-queries/criteria-builder/README.md).

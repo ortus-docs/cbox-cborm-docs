@@ -1,6 +1,12 @@
 # new
 
-Get a new entity object by entity name. You can also pass in a structure called `properties` that will be used to populate the new entity with or you can use optional named parameters to call setters within the new entity to have shorthand population.
+Get a new entity object by entity name. You can also pass in a structure called `properties` that will be used to populate the new entity with.
+
+The entity is created, autowired by WireBox (if entity injection is enabled), populated and then the `ORMPostNew` interception is announced (when `eventHandling` is enabled).
+
+{% hint style="warning" %}
+**Changed in cborm 6**: `ORMPostNew` is announced **once** per `new()` call, after the entity is autowired and populated. A plain `entityNew()` also announces `ORMPostNew` now, but it does not autowire or populate the entity.
+{% endhint %}
 
 ## Returns
 
@@ -18,6 +24,7 @@ Get a new entity object by entity name. You can also pass in a structure called 
 | ignoreEmpty          | boolean | false    | false   | Ignore empty property values on populations                                         |
 | include              | string  | false    | ---     | A list of keys to include in the population from the incoming properties memento    |
 | exclude              | string  | false    | ---     | A list of keys to exclude in the population from the incoming properties memento    |
+| ignoreTargetLists    | boolean | false    | false   | Ignore target lists during population                                               |
 
 ## Examples
 

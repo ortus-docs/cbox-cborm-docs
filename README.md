@@ -1,11 +1,15 @@
 ---
-description: cborm is the ColdBox ORM Module that enhances your experience with Hibernate ORM
+description: cborm is the ColdBox ORM Module that enhances your experience with the BoxLang ORM (bx-orm and Hibernate)
 icon: sunglasses
 ---
 
 # Introduction
 
-The `cborm` module is a module that will **enhance** your experience when working with the ColdFusion ORM powered by [Hibernate](https://hibernate.org/). It will not only enhance it with dynamic goodness but give you a fluent and human approach to working with Hibernate. Basically making working with Hibernate not SUCK!
+The `cborm` module **enhances** your experience with the BoxLang ORM, powered by the [bx-orm](https://forgebox.io/view/bx-orm) module and [Hibernate](https://hibernate.org/). It adds service layers, active record, dynamic finders and a fluent criteria builder on top of the ORM, and gives you a human approach to working with Hibernate. Basically making working with Hibernate not SUCK!
+
+{% hint style="success" %}
+**cborm 6** is a pure BoxLang module built on `bx-orm` 2 (Hibernate 7). CFML applications run on BoxLang through the `bx-compat-cfml` module. If you run Adobe ColdFusion or Lucee, stay on the cborm 5.x series. See [What's New With 6.0.0](intro/release-history/whats-new-with-6.0.0.md) and [Upgrading to 6](intro/release-history/upgrading-to-6.md).
+{% endhint %}
 
 ![](.gitbook/assets/CBORM300.png)
 
@@ -13,18 +17,19 @@ The `cborm` module is a module that will **enhance** your experience when workin
 
 ## Features
 
-* **Service Layers** with all the methods you could probably think off to help you get started in any project
+* **Service Layers** with all the methods you could probably think of to help you get started in any project
 * **Virtual service layers** so you can create virtual services for any entity in your application
 * Automatic RESTFul resources handler, focus on your domain objects and business logic, not the boilerplate of REST
 * `ActiveEntity` our implementation of Active Record for ORM
-* Fluent queries via Hibernate's criteria and detached criteria queries with some Dynamic CFML goodness
-* Automatic transaction demarcation for save and delete operations
-* Dynamic finders and counters for expressive and fluent shorthand SQL
-* Automatic Java casting
-* Entity population from json, structs, xml, and queryies including building up their relationships
+* Fluent queries via the bx-orm criteria builder (`newCriteria()`), with cborm's method names, restrictions, subqueries, projections and an SQL log
+* Automatic transaction demarcation for save and delete operations, riding BoxLang `transaction{}` blocks
+* Dynamic finders and counters for expressive and fluent shorthand queries
+* Case-insensitive entity and property names in HQL, criteria and dynamic finders
+* Automatic value conversion: bx-orm converts values to the right Java types for you
+* Entity population from json, structs, xml, and queries including building up their relationships
 * Entity validation via [cbValidation](https://forgebox.io/view/cbvalidation)
 * Includes the [Mementifier project](https://www.forgebox.io/view/mementifier) to produce memento states from any entity, great for producing JSON
-* Ability for finders and queries to be returned as Java streams using our [cbStreams](https://www.forgebox.io/view/cbstreams) project.
+* Ability for finders and queries to be returned as streams using our [cbStreams](https://www.forgebox.io/view/cbstreams) project.
 
 ```javascript
 // A quick preview of some functionality
@@ -56,12 +61,11 @@ userService
     .isTrue( "isActive" )
     .joinTo( "role" )
         .eq( "name", "admin" )
-    .asStream()
     .list();
 
 userService
     .newCriteria()
-    .withProjections( property="id,fname:firstName,lname:lastName,age" )
+    .withProjections( property="id,firstName:fname,lastName:lname,age" )
     .isTrue( "isActive" )
     .joinTo( "role" )
         .eq( "name", "admin" )
@@ -91,7 +95,7 @@ Apache 2 License: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache
 
 ## Important Links
 
-* **Code**: [https://github.com/coldbox-modules/cbox-cborm](https://github.com/coldbox-modules/cbox-cborm)
+* **Code**: [https://github.com/coldbox-modules/cborm](https://github.com/coldbox-modules/cborm)
 * **Issues**: [https://ortussolutions.atlassian.net/browse/CBORM](https://ortussolutions.atlassian.net/browse/CBORM)
 * **ForgeBox**: [https://forgebox.io/view/cborm](https://forgebox.io/view/cborm)
 

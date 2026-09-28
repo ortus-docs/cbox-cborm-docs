@@ -24,6 +24,6 @@ Finds and returns the first result for the given query or throws an exception if
 ormService.findOrFail("from Post as p where p.author='Luis Majano'");
 // With positional parameters
 ormService.findOrFail("from Post as p where p.author=?", ["Luis Majano"]);
-// with a named parameter (since 0.5)
+// with named parameters
 ormService.findOrFail("from Post as p where p.author=:author and p.isActive=:active", { author="Luis Majano",active=true} );
 ```

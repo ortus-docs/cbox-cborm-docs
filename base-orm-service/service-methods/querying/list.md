@@ -1,6 +1,6 @@
 # list
 
-List **all** of the instances of the passed in entity class name with or without any filtering of properties, no HQL needed.&#x20;
+List **all** of the instances of the passed in entity class name with or without any filtering of properties, no HQL needed. It delegates to the `bx-orm` `entityLoad()` function.
 
 You can pass in several optional arguments like a struct of filtering criteria, a `sortOrder` string, `offset`, `max`, `ignorecase`, and `timeout`. Caching for the list is based on the _`useQueryCaching`_ class property and the _`cachename`_ property is based on the `queryCacheRegion` class property.
 
@@ -8,7 +8,7 @@ You can pass in several optional arguments like a struct of filtering criteria, 
 
 * This function returns array if **asQuery = false**
 * This function returns a query if **asQuery = true**
-* This function returns a stream if **asStream = true**
+* This function returns a [cbStreams](https://forgebox.io/view/cbstreams) stream if **asStream = true**
 
 ## Arguments
 
@@ -20,11 +20,9 @@ You can pass in several optional arguments like a struct of filtering criteria, 
 | offset     | numeric | No       | 0       | Pagination offset                                                                         |
 | max        | numeric | No       | 0       | Max records to return                                                                     |
 | timeout    | numeric | No       | 0       | Query timeout                                                                             |
-| ignoreCase | boolean | No       | false   | Case insensitive or case sensitive searches, we default to case sensitive filtering.      |
-| asQuery    | boolean | No       | false   | Return query or array of objects                                                          |
-| asStream   | boolean | No       | false   | Returns the result as a Java Stream using [cbStreams](https://forgebox.io/view/cbstreams) |
-
-
+| ignoreCase | boolean | No       | false   | Sort text properties case-insensitively (applies when you pass a `sortOrder`)             |
+| asQuery    | boolean | No       | `defaultAsQuery` | Return query or array of objects                                                 |
+| asStream   | boolean | No       | false   | Returns the result as a [cbStreams](https://forgebox.io/view/cbstreams) stream            |
 
 ## Examples
 
@@ -42,4 +40,6 @@ users = ormService.list( "User", {isActive=false}, "lastName,firstName" );
 users = ormService.list( "Comment", {postID=rc.postID}, "createdDate desc" );
 
 qUsers = ormService.list( entityName="User", asQuery = true );
+
+userStream = ormService.list( entityName="User", asStream = true );
 ```
