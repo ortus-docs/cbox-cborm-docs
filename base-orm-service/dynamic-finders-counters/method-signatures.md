@@ -2,14 +2,14 @@
 
 We have three types of dynamic finders and counters:
 
-* `findBy` : Find ONE entity according to method signature, if more than one record is found an exception is thrown
+* `findBy` : Find ONE entity according to method signature, if more than one record is found a `NonUniqueResultException` is thrown
 * `findAllBy` : Find ALL entities according to method signature
 * `countBy` : Give you a count of entities according to method signature
 
 Let's say you have the following entity:
 
 ```javascript
-component persistent="true" name="User" extends="cborm.models.ActiveEntity"{
+class persistent="true" entityName="User" table="users" extends="cborm.models.ActiveEntity" {
 
      property name="id" column="user_id" fieldType="id" generator="uuid";
      property name="lastName";
@@ -42,7 +42,7 @@ You can also use the virtual entity service instead of active entity.
 ```javascript
 // Get a virtual entity service via DI, there are many ways to get a virtual entity service
 // Look at virtual entity service docs for retrieval
-property name="userService" inject="entityservice:userService";
+property name="userService" inject="entityService:User";
 
 user = userService.findByLastName( "Majano" );
 
@@ -62,9 +62,9 @@ count = userService.countByLastLoginGreaterThanAndLastNameLike( "01/01/2010", "j
 If you just use a vanilla Base ORM Service, then the first argument must be the `entityName`:
 
 ```javascript
-// Get a virtual entity service via DI, there are many ways to get a base entity service
+// Get the base ORM service via DI
 // Look at base entity service docs for retrieval
-property name="userService" inject="entityservice";
+property name="ormService" inject="entityService";
 
-user = userService.findByLastName( "User", "Majano" );
+user = ormService.findByLastName( "User", "Majano" );
 ```

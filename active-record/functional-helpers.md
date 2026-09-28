@@ -631,14 +631,10 @@ Functional helpers work well alongside [cbvalidation](../active-record/validatio
 ```groovy
 user = new User()
     .populate( rc )
-    .throwUnless(
-        user.isValid(),
-        "ValidationException",
-        "Validation failed",
-        user.getValidationResults().getAllErrorsAsJson()
-    )
+    // Throws a ValidationException with the errors if the entity is not valid
+    .validateOrFail()
     .when(
-        user.isNewEntity(),
+        isNull( rc.id ),
         ( entity ) => mailService.sendWelcomeEmail( entity.getEmail() )
     )
     .save()
@@ -649,14 +645,10 @@ user = new User()
 ```javascript
 user = new User()
     .populate( rc )
-    .throwUnless(
-        user.isValid(),
-        "ValidationException",
-        "Validation failed",
-        user.getValidationResults().getAllErrorsAsJson()
-    )
+    // Throws a ValidationException with the errors if the entity is not valid
+    .validateOrFail()
     .when(
-        user.isNewEntity(),
+        isNull( rc.id ),
         function( entity ) {
             mailService.sendWelcomeEmail( entity.getEmail() );
         }

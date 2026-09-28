@@ -10,7 +10,7 @@ Refresh the state of an entity or array of entities from the database
 
 | Key    | Type | Required | Default | Description |
 | ------ | ---- | -------- | ------- | ----------- |
-| entity | any  | Yes      | ---     |             |
+| entity | any  | Yes      | ---     | The entity or array of entities to refresh |
 
 ## Examples
 

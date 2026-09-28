@@ -1,101 +1,59 @@
+---
+description: "Add native SQL conditions to a criteria query with sql()"
+---
+
 # SQL Restrictions
 
-SQL restrictions will allow you to add ad-hoc SQL to the criteria you are building. Simple enough, but we have made great strides to make this look easy for a developer but behind the scenes we take each sql you pass and compile it so we can abstract all the native Java types for you. This means that you can use it in a similar manner to `executeQuery()` in CFML.
+When no condition method fits, `sql()` adds a native SQL condition to the criteria. The fragment is sent to the database as written, inside the query the criteria builds, and its values are always bound as parameters.
 
-## Method Signature
-
-The method you will use for this restriction is `sql()`
+## Method signature
 
 ```javascript
-/**
- * Use arbitrary SQL to modify the resultset
- *
- * @sql The sql to execute, it can contain parameters via positional `?` placeholders
- * @params This is an array of value definitions which need to be a struct of { value: , type: } or if the value is a simple value, we will try to infer it's type
- */
-function sql( required string sql, array params=[] )
+sql( sql, [params] )
+sqlRestriction( sql, [params] ) // alias
 ```
 
-### Arguments
+| Argument | Description |
+| -------- | ----------- |
+| `sql`    | A native SQL boolean condition. Use `?` for each value, `{alias}.column` for a column of the root entity and `{property}` (or `{association.property}`) for a property. |
+| `params` | The values for the `?` placeholders, in order: an array (or a comma-separated list). |
 
-The method takes in two arguments:
-
-* `sql` - The ad-hoc query to execute.  You can use positional parameters via the `?` placeholder.
-* `params` - An array of parameters to bind the SQL with, can be simple values or a struct of a values and a supported type or a combination of both.
-
-### SQL Params
-
-The parameters you bind the SQL with can be of two types
-
-1. Plain values.
-2. Typed values
-
-If you use plain values, then we will INFER the type from it, which is not as accurate as using a typed value. A typed value is a struct with the value and a valid type.
+The number of values must match the number of `?` placeholders, otherwise an `orm.query.parameter` error is raised. A `?` inside a quoted SQL string literal is not a placeholder.
 
 ```javascript
-c.sql( "isActive = true" );
+// No parameters
+c.sql( "char_length( {alias}.last_name ) = 10" );
 
-// simple values
-c.sql( "id = ?", [ 123 ] );
-c.sql( "userName = ? and firstName like ?", [ "joe", "%joe%"] );
+// Positional values
+c.sql( "{alias}.user_name = ?", [ "joe" ] );
+c.sql( "{alias}.user_name = ? and {alias}.first_name like ?", [ "joe", "%joe%" ] );
 
-// strong typed values
-c.sql( "id = ?", [ { value:123, type=c.TYPES.integer } ] );
-c.sql( "isActive = ?", [ { value:true, type=c.TYPES.boolean } ] );
-c.sql( "userName = ? and firstName like ?", [
-    { value : "joe", type : "string" },
-    { value : "%joe%", type : "string" }
-] );
+// Properties instead of column names
+c.sql( "upper({firstName}) = ?", [ "LUIS" ] );
+c.sql( "lower({role.name}) = ? or {lastName} = ?", [ "admin", "Majano" ] );
 ```
 
-#### Valid Types
+## Referencing columns and properties
 
-Below you can see the `TYPES` struct available in the criteria builder object which map the CFML types to the native Hibernate Types.
+* `{alias}.column` refers to a column of the root entity's table. The column must be mapped by the entity (a property column, an id or an association's foreign key column), otherwise an `orm.property.unknown` error is raised.
+* `{property}` refers to a property by name, and `{association.property}` goes through an association, which is joined like any other dotted path.
+* Plain, unqualified column names are passed to the database as written. That works when the name is unambiguous in the final SQL, but `{alias}.column` or `{property}` is safer.
+
+## Consider a function path first
+
+Many SQL restrictions only exist to call a database function. A [function path](README.md#function-paths) does that without leaving the criteria API, and keeps property names checked:
 
 ```javascript
-this.TYPES = {
-    "string"      : "StringType",
-    "clob"        : "ClobType",
-    "text"        : "TextType",
-    "char"        : "ChareacterType",
-    "boolean"     : "BooleanType",
-    "yesno"       : "YesNoType",
-    "truefalse"   : "TrueFalseType",
-    "byte"        : "ByteType",
-    "short"       : "ShortType",
-    "integer"     : "IntegerType",
-    "long"        : "LongType",
-    "float"       : "FloatType",
-    "double"      : "DoubleType",
-    "bigInteger"  : "BigIntegerType",
-    "bigDecimal"  : "BigDecimalType",
-    "timestamp"   : "TimestampType",
-    "time"        : "TimeType",
-    "date"        : "DateType",
-    "calendar"    : "CalendarType",
-    "currency"    : "CurrencyType",
-    "locale"      : "LocaleType",
-    "timezone"    : "TimeZoneType",
-    "url"         : "UrlType",
-    "class"       : "ClassType",
-    "blob"        : "BlobType",
-    "binary"      : "BinaryType",
-    "uuid"        : "UUIDCharType",
-    "serializable": "SerializableType"
-};
+// Instead of c.sql( "upper({alias}.first_name) = ?", [ "LUIS" ] )
+c.isEq( "upper(firstName)", "LUIS" );
+
+// Instead of c.sql( "char_length( {alias}.last_name ) = 10" )
+c.isEq( "length(lastName)", 10 );
 ```
 
-#### Inferred Types
+{% hint style="info" %}
+**Changes from cborm 5**
 
-The inferred types we infer are the following and in the following order.
-
-1. Binary
-2. Boolean
-3. Time
-4. Date
-5. uuid
-6. float
-7. numeric
-8. url
-9. string
-10. text
+* Parameters are plain values. The typed `{ value : ..., type : ... }` structs, the `c.TYPES` map and the type inference rules no longer exist: bx-orm binds each value and the JDBC driver converts it. If a value needs a specific type, convert it in BoxLang before passing it (a number, a date, a boolean).
+* Prefer `{alias}.column` or `{property}` over bare column names, since the SQL table aliases Hibernate 7 generates differ from Hibernate 5's.
+{% endhint %}

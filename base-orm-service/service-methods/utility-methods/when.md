@@ -1,6 +1,6 @@
 # when
 
-This method gives you the ability to fluently create chains of executions by evaluating the incoming `target` as a `boolean`. If true it will execute the `success` closure, else the `failure` closure if passed.
+This method gives you the ability to fluently create chains of executions by evaluating the incoming `target` as a `boolean`. If true it will execute the `success` closure, else the `failure` closure if passed. Both closures receive the service as their argument.
 
 ## Returns
 
@@ -18,13 +18,13 @@ This method gives you the ability to fluently create chains of executions by eva
 
 ```javascript
 baseService
-.when( 
-    !isNull( rc.createdDate ), 
-    ( service ) => service.autoCast( "User", "createdDate", rc.createdDate )
-)
-.when(
-    rc.search.len(),
-    ( service ) => service.like( "name", rc.search ),
-    ( service ) => service.isTrue( "search" )
-)
+    .when(
+        rc.keyExists( "clearCache" ),
+        ( service ) => service.evictQueries()
+    )
+    .when(
+        rc.flushSession ?: false,
+        ( service ) => service.clear(),
+        ( service ) => service.evict( prc.user )
+    );
 ```

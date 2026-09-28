@@ -1,62 +1,63 @@
 ---
-description: "Using Detached Criteria Builder in CBORM for complex queries"
+description: "Subqueries in criteria queries: c.subquery() replaces the cborm 5 Detached Criteria Builder"
 icon: plug-circle-xmark
 ---
 
-# Detached Criteria Builder
+# Subqueries
 
-Hibernate also supports the concept of [detached criterias](https://docs.jboss.org/hibernate/orm/5.4/userguide/html\_single/Hibernate\_User\_Guide.html#pc-detach).  They are most useful for join conditions, subselects, subqueries and to query outside the current session.  As usual Hibernate has funny names for features that SQL offers without all these mixup of words.  Plain and simple detached criterias are used for doing complex queries where you need to do groupings, sub selects, sub queries and more.
-
-{% embed url="https://docs.jboss.org/hibernate/stable/orm/javadocs/org/hibernate/criterion/DetachedCriteria.html" %}
-
-> Some applications need to create criteria queries in "detached mode", where the Hibernate session is not available. Then you can execute the search in an arbitrary session.
-
-To create an instance of Detached Criteria Builder, simply call the _`createSubcriteria()`_ method on your existing criteria object and incorporate it via the `add()` method.
+A subquery is a query inside another query: "users who wrote a post in the last week", "posts more expensive than every book", "roles with no users". In cborm 6 you create one from a criteria with `c.subquery( entityName, alias )` and pass it to a subquery condition of the same criteria (`exists()`, `isIn()`, `propertyIn()`, `subGe()`, ...).
 
 ```javascript
-var c = newCriteria();
+// Users who wrote a published post
+var c = userService.newCriteria();
+var authors = c
+    .exists(
+        c.subquery( "Post", "p" )
+            .eqProperty( "p.author", "this" )
+            .isTrue( "isPublished" )
+    )
+    .list();
 
+// Users with a draft post: their id is in the subquery's projected values
+var c = userService.newCriteria();
+var drafters = c
+    .isIn(
+        "id",
+        c.subquery( "Post", "p" )
+            .isEq( "status", "draft" )
+            .withProjections( property = "author.id" )
+    )
+    .list();
+```
+
+A subquery is a criteria builder too: it has the same conditions, joins and projections as the main criteria. It can't be run on its own: calling `list()`, `count()` or `get()` on it is an `orm.argument` error.
+
+* [Getting Started](getting-started.md): create a subquery, correlate it with the outer query, add conditions and joins.
+* [Projections](projections.md): choose what the subquery selects.
+* [Subqueries](subqueries.md): every condition that takes a subquery, including the quantified `All`/`Some` forms.
+
+{% hint style="info" %}
+**Changes from cborm 5**
+
+Hibernate 7 removed `DetachedCriteria`, so cborm's `DetachedCriteriaBuilder` is gone. `c.subquery()` replaces it (`createSubcriteria()` and `detachedCriteria()` are aliases), and the subquery conditions keep their cborm names (`propertyIn`, `subEq`, `subGeAll`, `propertyLtSome`, `exists`, ...). The call order changed: the subquery is now an argument of the condition, added to the outer criteria, instead of a condition called on the subquery and passed to `add()`.
+
+```javascript
+// cborm 5
 c.add(
-    c.createSubCriteria()
+    c.createSubcriteria( "Post", "p" )
+        .withProjections( property = "author.id" )
+        .isEq( "status", "draft" )
+        .propertyIn( "id" )
+);
+
+// cborm 6
+c.propertyIn(
+    "id",
+    c.subquery( "Post", "p" )
+        .withProjections( property = "author.id" )
+        .isEq( "status", "draft" )
 );
 ```
 
-Once you have an instance of the sub criteria, then just add in your restrictions:
-
-```javascript
-prc.pageTitle = "Criteria Builder - Subquery";
-var c = carService.newCriteria();
-
-// add subquery
-prc.results = c.add(
-		c.createSubcriteria( "Car", "carstaff" )
-			// the property in the subquery to use or retrieve
-			.withProjections( property : "CarID" )
-			.joinTo( "carstaff.SalesPeople", "staff" )
-				.joinTo( "staff.Position", "position" )
-					.isEq( "position.LongName", "Finance Officer" )
-		// then we use propertyIn() to get all the Cars from the sub query
-		.propertyIn( "CarID" )
-)
-.list()
-// Map it to the memento, so we can see it nicely.
-.map( function( item ){
-	return item.getMemento();
-} );
-```
-
-{% hint style="success" %}
-**Hint**: Remember you can use the `getSQL()` method to get the actual SQL that will be produced.  You can even add the argument: `returnExecutableSql` and get the actual executable SQL.
-{% endhint %}
-
-With the  Detached Criteria Builder, you can expand the power and flexibility of your criteria queries with support for criteria and projection subqueries, all while using the same intuitive patterns of Criteria Builder. No fuss, just more flexibility and control for your criteria queries!
-
-For more information about Detached Criteria and Subqueries, check out the following Hibernate documentation resources:
-
-1. Hibernate Docs: [http://docs.jboss.org/hibernate/orm/3.5/reference/en/html/querycriteria.html#querycriteria-detachedqueries](http://docs.jboss.org/hibernate/orm/3.5/reference/en/html/querycriteria.html#querycriteria-detachedqueries)
-2. Hibernate DetachedCriteria: [http://docs.jboss.org/hibernate/orm/3.5/api/org/hibernate/criterion/DetachedCriteria.html](http://docs.jboss.org/hibernate/orm/3.5/api/org/hibernate/criterion/DetachedCriteria.html)
-3. Hibernate Subqueries: [http://docs.jboss.org/hibernate/orm/3.5/api/org/hibernate/criterion/Subqueries.html](http://docs.jboss.org/hibernate/orm/3.5/api/org/hibernate/criterion/Subqueries.html)
-
-{% hint style="info" %}
-The best place to see all of the functionality of the cborm Detached Criteria Builder is to check out the latest API Docs: [https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/)
+Detached criteria can no longer be executed in another session, and `detachedSQLProjection` has no equivalent: see [Projections](projections.md).
 {% endhint %}

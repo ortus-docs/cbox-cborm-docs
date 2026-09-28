@@ -15,12 +15,12 @@ The `cborm` module will enhance your ORM Entities and ColdBox application by pro
   * Easily populate entities from JSON, structs, XML, and queries and build up even the entity relationships from flat data.
 * **Entity Marshalling to Raw Data Types (**[**mementifier**](https://forgebox.io/view/mementifier)**)**
   * Easily extract the data from entities and their relationships so you can marshall them to JSON, XML, etc.
-* **Hibernate Criteria/JPA Queries**
-  * Tap into the real power of Hibernate. cborm will allow you to execute native criteria/jpa queries.  Even return arrays of structs, or arrays of mixed objects, native SQL, and much more.
+* **Criteria and HQL Queries**
+  * Tap into the real power of Hibernate through the bx-orm criteria builder and HQL. Return entities, arrays of structs, queries, projections, subqueries and much more.
 * **ORM Events**
   * Easily listen to multiple ORM events via ColdBox Interceptors
 * **Service Layers**
-  * Enhance the ability to list, query, find entities, work with native hibernate constructs, and more.  You don't even have to create the service objects, we can create virtual ones for you.
+  * Enhance the ability to list, query, find entities, work with the ORM session, and more.  You don't even have to create the service objects, we can create virtual ones for you.
 * **Validation**
   * We provide you with a `unique` validator to validate against unique columns and much more.
 
@@ -44,7 +44,7 @@ getInstance( "BaseORMService@cborm" );
 getInstance( dsl="entityService" );
 ```
 
-This service object acts as an abstraction layer to the ColdFusion ORM (Hibernate) and can work with any entity in your system as all methods most likely receive the `entityName` argument. You will be able to do the following category of actions from this service class:
+This service object acts as an abstraction layer to the BoxLang ORM (bx-orm and Hibernate) and can work with any entity in your system as all methods most likely receive the `entityName` argument. You will be able to do the following category of actions from this service class:
 
 * Hibernate Session utility methods
 * Entity metadata methods
@@ -70,7 +70,7 @@ Once you have access to the injected base ORM service, you can use it in all of 
 ```javascript
 component{
 
-    inject name="ormService" inject="entityService";
+    property name="ormService" inject="entityService";
 
     function saveUser( event, rc, prc ){
         // retrieve and populate a new user object

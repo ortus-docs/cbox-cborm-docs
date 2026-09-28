@@ -7,7 +7,7 @@ Evict entity object(s) from the hibernate session or first-level cache.
 
 ## Returns
 
-* This function returns _void_
+* This function returns the service (`this`)
 
 ## Arguments
 

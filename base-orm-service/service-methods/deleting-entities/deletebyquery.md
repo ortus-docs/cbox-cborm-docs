@@ -1,38 +1,41 @@
 # deleteByQuery
 
-Delete by using an HQL query and iterating via the results. It is not performing a delete query but  is a select query that should retrieve objects to remove
+Delete entities by using an HQL query. Do not add the `delete` keyword to your query, it is added automatically for you, so you pass the `from ... where ...` part. The query runs as a single DML HQL `delete` statement and returns the number of records deleted.
+
+{% hint style="danger" %}
+No cascading will be done and no ORM events are fired, since the entities are not loaded into the session.
+{% endhint %}
 
 ## Returns
 
-* This function returns _void_
+* This function returns _numeric_ (the number of records deleted)
 
 ## Arguments
 
-| Key           | Type    | Required | Default       | description                                         |
-| ------------- | ------- | -------- | ------------- | --------------------------------------------------- |
-| query         | string  | Yes      | ---           |                                                     |
-| params        | any     | No       | ---           |                                                     |
-| max           | numeric | No       | 0             |                                                     |
-| offfset       | numeric | No       | 0             |                                                     |
-| flush         | boolean | No       | false         |                                                     |
-| transactional | boolean | No       | From Property | Use transactions or not                             |
-| datasource    | string  | false    |               | The datasource to use or use the default datasource |
+| Key           | Type    | Required | Default            | Description                                                                 |
+| ------------- | ------- | -------- | ------------------ | --------------------------------------------------------------------------- |
+| query         | string  | Yes      | ---                | The HQL query without the `delete` keyword                                  |
+| params        | any     | No       | `{}`               | Named (struct) or positional (array) parameters                             |
+| flush         | boolean | No       | false              | Flush the session after deleting                                            |
+| transactional | boolean | No       | From Property      | Wrap the call in a BoxLang `transaction{}` (joins an active one if present) |
+| datasource    | string  | No       | Service datasource | The datasource to use                                                       |
 
 ## Examples
 
 ```javascript
 // delete all blog posts
-ormService.deleteByQuery("from Post");
-// delete query with positional parameters
-ormService.deleteByQuery("from Post as b where b.author=? and b.isActive = :active",['Luis Majano',false]);
+ormService.deleteByQuery( "from Post" );
 
-// Use query options
-var query = "from User as u where u.isActive=false order by u.creationDate desc"; 
-// first 20 stale inactive users 
-ormService.deleteByQuery(query=query,max=20); 
-// 20 posts starting from my 15th entry
-ormService.deleteByQuery(query=query,max=20,offset=15,flush=true);
+// delete query with positional parameters
+ormService.deleteByQuery( "from Post as b where b.author = ?1 and b.isActive = ?2", [ "Luis Majano", false ] );
 
 // examples with named parameters
-ormService.deleteByQuery("from Post as p where p.author=:author", {author='Luis Majano'})
+ormService.deleteByQuery( "from Post as p where p.author = :author", { author : "Luis Majano" } );
+
+// delete and flush
+ormService.deleteByQuery(
+    query  = "from User as u where u.isActive = :active",
+    params = { active : false },
+    flush  = true
+);
 ```
