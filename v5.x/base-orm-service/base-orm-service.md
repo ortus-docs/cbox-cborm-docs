@@ -1,5 +1,5 @@
 ---
-description: Base ORM Service - A powerful base service layer for ColdFusion ORM entities.
+description: "Base ORM Service - A powerful base service layer for BoxLang ORM (bx-orm) entities."
 icon: database
 ---
 
@@ -7,11 +7,15 @@ icon: database
 
 ![class BaseORMService](https://github.com/ColdBox/cbox-cborm/wiki/BaseORMService.jpg)
 
-The _BaseORMService_ is a core model CFC of the module that will provide you with a tremendous gammut of API methods to interact with ColdFusion ORM Entities.
+The _BaseORMService_ is a core model class of the module that will provide you with a tremendous gamut of API methods to interact with ORM entities.
+
+{% hint style="info" %}
+In cborm 6 the `BaseORMService` keeps the same methods and arguments as cborm 5, but every method now delegates to the `bx-orm` built-in functions (`entityLoad()`, `ormExecuteQuery()`, `entityCriteria()`, ...) running on Hibernate 7. Adobe ColdFusion and Lucee are not supported by cborm 6: use the cborm 5.x series for those engines.
+{% endhint %}
 
 ## Concept
 
-The idea behind this support class is to provide a good base or parent service layer that can interact with ColdFusion ORM via hibernate and entities inspired by [Spring's Hibernate Template](http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/classic-spring.html#classic-spring-hibernate) support. This means that you don't need to create a service layer CFC in order to work with ORM entities.
+The idea behind this support class is to provide a good base or parent service layer that can interact with the BoxLang ORM (`bx-orm`, Hibernate) and entities inspired by [Spring's Hibernate Template](http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/classic-spring.html#classic-spring-hibernate) support. This means that you don't need to create a service layer class in order to work with ORM entities.
 
 It provides tons of methods for query executions, paging, transactions, session metadata, caching and much more. You can either use the class on its own or create more concrete service layers by inheriting from this class.
 
@@ -32,7 +36,7 @@ You can also request a Base ORM Service via the registered WireBox ID which is e
 
 ```javascript
 // Inject
-inject name="ORMService" inject="BaseORMService@cborm";
+property name="ORMService" inject="BaseORMService@cborm";
 
 // Retrieve
 wireBox.getInstance( "BaseORMService@cborm" );
@@ -47,36 +51,35 @@ Once you have access to the injected base ORM service, you can use it in all of 
 {% endhint %}
 
 ```javascript
-component{
+class {
 
-  inject name="ORMService" inject="entityService";
+    property name="ORMService" inject="entityService";
 
-  function saveUser( event, rc, prc ){
-      // retrieve and populate a new user object
-      var user = populateModel( ORMService.new( "User" ) );
+    function saveUser( event, rc, prc ){
+        // retrieve and populate a new user object
+        var user = populateModel( ORMService.new( "User" ) );
 
-      // save the entity using hibernate transactions
-      ORMService.save( user );
+        // save the entity inside a transaction
+        ORMService.save( user );
 
-      setNextEvent( "user.list" );
-  }
+        relocate( "user.list" );
+    }
 
-  function list( event, rc, prc ){
+    function list( event, rc, prc ){
+        // get a listing of all users with paging
+        prc.users = ORMService.list(
+            entityName = "User",
+            sortOrder  = "fname",
+            offset     = event.getValue( "startrow", 1 ),
+            max        = 20
+        );
 
-    //get a listing of all users with paging
-    prc.users = ORMService.list(
-        entityName= "User",
-        sortOrder = "fname",
-        offset     = event.getValue("startrow",1),
-        max         = 20
-    );
+        event.setView( "user/list" );
+    }
 
-    event.setView( "user/list" );
-  }
-}
-
-function index( event, rc, prc ){
-    prc.data = ORMService.findAll( "Permission" );
+    function index( event, rc, prc ){
+        prc.data = ORMService.findAll( "from Permission" );
+    }
 }
 ```
 
@@ -88,4 +91,4 @@ We also have a [virtual service layer](../virtual-services/virtual-entity-servic
 
 ## Concrete Services
 
-This is where you can create your own CFC that inherits from our Virtual or Base ORM Service model and either add or override methods. You can read more about it in our [Concrete Services Section](concrete-services.md)
+This is where you can create your own class that inherits from our Virtual or Base ORM Service model and either add or override methods. You can read more about it in our [Concrete Services Section](concrete-services.md)

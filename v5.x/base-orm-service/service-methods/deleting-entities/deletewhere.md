@@ -4,12 +4,18 @@ Deletes entities by using name value pairs as arguments to this function. One ma
 
 ## Returns
 
-* This function returns _numeric_
+* This function returns _numeric_ (the number of records deleted)
+
+## Arguments
 
 | Key           | Type    | Required | Default       | Description          |
 | ------------- | ------- | -------- | ------------- | -------------------- |
 | entityName    | string  | Yes      | ---           |                      |
-| transactional | boolean | No       | From Property | Use transactions not |
+| flush         | boolean | No       | false         | Not used: the DML delete runs right away |
+| transactional | boolean | No       | From Property | Use transactions or not |
+| datasource    | string  | No       | Service datasource | The datasource to use |
+
+Any other named argument becomes an `AND` condition of the `where` clause. If you pass no conditions, the method throws a `BaseORMService.NoWhereArgumentsFound` exception instead of deleting everything. This is a DML HQL delete, so no cascades or ORM events take place.
 
 ## Examples
 

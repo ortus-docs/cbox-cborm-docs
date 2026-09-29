@@ -10,13 +10,15 @@ User.countBy{property}[Conditional=equal][Operator]?{property}[Conditional][Oper
 
 If a conditional keyword is not passed, we assume you want equality. Remember that!
 
+Property names, conditionals and operators are matched case-insensitively, so `findAllByLastNameLike()` and `findAllBylastnamelike()` compile to the same HQL.
+
 {% hint style="danger" %}
 **IMPORTANT:** The **?** means that you can concatenate the same pattern over and over again.
 {% endhint %}
 
 ## Conditionals
 
-The available conditionals in ColdBox are:
+The available conditionals are:
 
 * `LessThanEquals` - Less than or equal to passed value
 * `LessThan` - Less than to passed value

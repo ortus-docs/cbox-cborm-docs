@@ -13,7 +13,7 @@ Returns the key (id field) of a given entity, either simple or composite keys.
 
 | Key    | Type   | Required | Default | Description                      |
 | ------ | ------ | -------- | ------- | -------------------------------- |
-| entity | string | Yes      | ---     | The entity name or entity object |
+| entity | any    | Yes      | ---     | The entity name or entity object |
 
 ## Examples
 

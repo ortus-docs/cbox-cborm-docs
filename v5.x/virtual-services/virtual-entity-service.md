@@ -1,5 +1,5 @@
 ---
-description: Virtual Entity Service - A service layer bound to a specific ORM entity
+description: "Virtual Entity Service - A service layer bound to a specific ORM entity"
 icon: gear-code
 ---
 
@@ -9,10 +9,10 @@ The virtual entity service is another support class that can help you create **v
 
 ![](https://github.com/ColdBox/cbox-cborm/wiki/VirtualEntityService.jpg)
 
-You can also use this class as a base class and template out its methods to more concrete usages. The idea behind this virtual entity service layer is to allow you to have a very nice abstraction to all the CF ORM capabilities (hibernate) and promote best practices.
+You can also use this class as a base class and template out its methods to more concrete usages. The idea behind this virtual entity service layer is to allow you to have a very nice abstraction to all the BoxLang ORM (`bx-orm`, Hibernate) capabilities and promote best practices.
 
 {% hint style="success" %}
-**Tip:** Please remember that you can use **ANY** method found in the [Base ORM Service](../getting-started/overview.md#base-orm-service) except that you will not pass an argument of `entityName` anymore as you have now been bounded to that specific entity.
+**Tip:** Please remember that you can use **ANY** method found in the [Base ORM Service](../base-orm-service/base-orm-service.md) except that you will not pass an argument of `entityName` anymore as you have now been bounded to that specific entity.
 {% endhint %}
 
 ## Injection Virtual Services
@@ -24,7 +24,7 @@ The WireBox injection DSL has an injection namespace called `entityService` that
 | `entityService:{entity}` | A virtual service based on the `{entity}` |
 
 ```javascript
-component{
+class {
     // Virtual service layer based on the User entity
     property name="userService" inject="entityService:User";
 
@@ -50,11 +50,15 @@ var users = userService.newCriteria()
     .list(sortOrder="lastName");
 ```
 
+{% hint style="info" %}
+`newCriteria()` returns a `bx-orm` `entityCriteria()` builder bound to the service's entity. Check out the [Criteria Builder](../criteria-queries/criteria-builder/README.md) section for all its methods.
+{% endhint %}
+
 ## Mapping Virtual Services
 
 You can also leverage the WireBox Binder to map your virtual services so you can abstract the object's constructions or add constructor arguments to their definition and have full control:
 
-{% code title="config/WireBox.cfc" %}
+{% code title="config/WireBox.bx" %}
 ```java
 function configure(){
 
@@ -69,9 +73,9 @@ function configure(){
 
 Now you can just use it via the `UserService` alias:
 
-{% code title="handlers/user.cfc" %}
+{% code title="handlers/user.bx" %}
 ```java
-component{
+class {
 
     // Inject Alias
     property name="userService" inject="UserService";

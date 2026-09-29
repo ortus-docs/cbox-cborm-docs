@@ -1,10 +1,10 @@
 # saveAll
 
-Saves an array of passed entities in specified order and transaction safe
+Saves an array of passed entities in specified order in a single transaction. The `ORMPreSave` and `ORMPostSave` interception points are announced for each entity when `eventHandling` is enabled.
 
 ## Returns
 
-* This function returns _void_
+* This function returns the service (`this`)
 
 ## Arguments
 
@@ -13,15 +13,13 @@ Saves an array of passed entities in specified order and transaction safe
 | entities      | array   | Yes      | ---     | The array of entities to persist   |
 | forceInsert   | boolean | No       | false   |                                    |
 | flush         | boolean | No       | false   |                                    |
-| transactional | boolean | No       | true    | Use ColdFusion transactions or not |
+| transactional | boolean | No       | `useTransactions` | Wrap the call in a BoxLang `transaction{}` or not |
 
 ## Examples
 
 ```javascript
-var user = ormService.new("User");
-populateModel(user);
-var user2 = ormService.new("User");
-populateModel(user);
+var user1 = populateModel( ormService.new( "User" ) );
+var user2 = populateModel( ormService.new( "User" ) );
 
-ormService.saveAll( [user1,user2] );
+ormService.saveAll( [ user1, user2 ] );
 ```
