@@ -1,7 +1,5 @@
 ---
-description: >-
-  Concrete Virtual Services - Building custom services that inherit from Virtual
-  Entity Services
+description: "Concrete Virtual Services - Building custom services that inherit from Virtual Entity Services"
 icon: square-code
 ---
 
@@ -17,7 +15,7 @@ Let's say you are using the virtual service but you find that they do not comple
 Below is a sample service layer:
 
 ```javascript
- component extends="cborm.models.VirtualEntityService" singleton{
+class extends="cborm.models.VirtualEntityService" singleton {
 
     // DI
     property name="settingService"  inject="id:settingService@cb";
@@ -36,27 +34,25 @@ Below is a sample service layer:
     * Get the total number of approved comments in the system
     */
     numeric function getApprovedCommentCount(){
-        return countWhere( { "isApproved" = true } );
+        return countWhere( isApproved = true );
     }
 
     /**
     * Get the total number of unapproved comments in the system
     */
     numeric function getUnApprovedCommentCount(){
-        return countWhere( { "isApproved" = false } );
+        return countWhere( isApproved = false );
     }
 
     /**
     * Comment listing for UI of approved comments, returns struct of results=[comments,count]
-    * @contentID.hint The content ID to filter on
-    * @contentType.hint The content type discriminator to filter on
-    * @max.hint The maximum number of records to return, 0 means all
-    * @offset.hint The offset in the paging, 0 means 0
-    * @sortOrder.hint Sort the comments asc or desc, by default it is desc
+    * @contentID The content ID to filter on
+    * @max The maximum number of records to return, 0 means all
+    * @offset The offset in the paging, 0 means 0
+    * @sortOrder Sort the comments asc or desc, by default it is desc
     */
     function findApprovedComments(
         contentID,
-        contentType,
         max=0,
         offset=0,
         sortOrder="desc"
@@ -67,14 +63,9 @@ Below is a sample service layer:
         // only approved comments
         c.isTrue("isApproved");
 
-        // By Content?
+        // By Content? Dotted paths join the association for you, and no casting is needed
         if( structKeyExists( arguments,"contentID" ) AND len( arguments.contentID ) ){
-            c.eq( "relatedContent.contentID", idCast( arguments.contentID ) );
-        }
-        // By Content Type Discriminator: class is a special hibernate deal
-        if( structKeyExists( arguments,"contentType" ) AND len( arguments.contentType ) ){
-            c.createCriteria("relatedContent")
-                .isEq( "class", arguments.contentType );
+            c.isEq( "relatedContent.contentID", arguments.contentID );
         }
 
         // run criteria query and projections count
@@ -90,3 +81,7 @@ Below is a sample service layer:
     }
 }
 ```
+
+{% hint style="info" %}
+`newCriteria()` returns a `bx-orm` `entityCriteria()` builder. Check out the [Criteria Builder](../criteria-queries/criteria-builder/README.md) section for all its methods.
+{% endhint %}

@@ -10,7 +10,7 @@ Returns the persisted Property Names of the entity in array format
 
 | Key    | Type   | Required | Default | Description |
 | ------ | ------ | -------- | ------- | ----------- |
-| entity | string | Yes      | ---     |             |
+| entity | any    | Yes      | ---     | The entity name or entity object |
 
 ## Examples
 

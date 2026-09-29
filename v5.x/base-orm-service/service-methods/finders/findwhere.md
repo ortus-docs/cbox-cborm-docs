@@ -1,6 +1,10 @@
 # findWhere
 
-Find one entity (or null if not found) according to a criteria structure ex: findWhere(entityName="Category", {category="Training"}), findWhere(entityName="Users",{age=40,retired=false});
+Find one entity (or null if not found) according to a criteria structure ex: `findWhere( "Category", { category : "Training" } )`, `findWhere( "User", { age : 40, retired : false } )`
+
+{% hint style="warning" %}
+**Changed in cborm 6**: if more than one entity matches the criteria, an `orm.query.nonUnique` error is raised instead of silently returning the first one (unless query caching is enabled on the service, where the first match is returned). Use `findAllWhere()` when several entities can match.
+{% endhint %}
 
 ## Returns
 

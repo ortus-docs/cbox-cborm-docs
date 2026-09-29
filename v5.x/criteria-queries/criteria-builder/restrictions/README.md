@@ -1,368 +1,216 @@
+---
+description: "Every condition method of the criteria builder, groups with or/and/not, and c.restrictions"
+---
+
 # Restrictions
 
-The ColdBox restrictions class allows you to create criterions upon certain properties, associations and even SQL for your ORM entities. This is the meat and potatoes of criteria queries, where you build a set of criteria to match against or in SQL terms, your `WHERE` statements.
-
-The ColdBox criteria class offers most of the criterion methods found in the native hibernate Restrictions class:
-
-* [http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html)
-* [https://docs.jboss.org/hibernate/core/4.3/javadocs/org/hibernate/criterion/Restrictions.html](https://docs.jboss.org/hibernate/core/4.3/javadocs/org/hibernate/criterion/Restrictions.html)
-* [https://docs.jboss.org/hibernate/orm/5.0/javadocs/org/hibernate/criterion/Restrictions.html](https://docs.jboss.org/hibernate/orm/5.0/javadocs/org/hibernate/criterion/Restrictions.html)
-
-If one isn't defined in the CFML equivalent, just call it as it appears in the Javadocs and we will proxy the call to the native Hibernate class for you.
-
-## Direct Reference
-
-You can get a direct reference to the Restrictions class via the Base/Virtual ORM services (`getRestrictions())`, or the Criteria object itself has a public property called `restrictions` which you can use rather easily. We prefer the latter approach. Now, please understand that the ColdBox Criteria Builder masks all this complexity and in very rare cases will you be going to our restrictions class directly. Most of the time you will just be happily concatenating methods on the Criteria Builder.
+Restrictions are the conditions of your query, the `WHERE` clause in SQL terms. You add them by calling condition methods on the criteria, and they build on each other with `and`. Values are always bound as query parameters and converted to the property's type (see [Value Casting](value-casting.md)).
 
 ```javascript
-// From base ORM service
-var restrictions = service.getRestrictions()
-
-// From Criteria Builder
-newCriteria().restrictions
+var users = userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .like( "lastName", "Ma%" )
+    .between( "age", 18, 65 )
+    .isIn( "role.name", [ "admin", "editor" ] )
+    .list();
 ```
 
-Ok, now that the formalities have been explained let's build some criterias.
+## Condition methods
 
-## Building Restrictions
+Every condition takes a property path first. Paths can use dots to go through associations (`role.name`, see [Associations](../associations.md)) and can be function calls (`lower(email)`, see [Function paths](#function-paths)).
 
-To build our criteria queries we can use the methods in the criteria object or go directly to the restrictions object for very explicit criterions as explained above. We will also go to the restrictions object when we do conjunctions and disjunctions, which are fancy words for AND's, OR's and NOT's. To build criterias we will be calling these criterion methods and concatenate them in order to form a nice DSL language that describes what we will retrieve. Once we have added all the criteria then we can use several other concatenated methods to set executions options and then finally retrieve our results or do projections on our results.
-
-### between( property, minValue, maxValue )
-
-Where the property value is between two distinct values
-
-```javascript
-c.between("age",10,30);
-```
-
-### conjunction( required array restrictionValues )
-
-Group expressions together in a single conjunction (A and B and C...) and return the conjunction
-
-```javascript
-c.conjunction( [  
-    c.restrictions.between("balance",100,200),
-    c.restrictions.lt("salary",20000) 
-] );
-```
-
-### disjunction( required array restrictionValues )
-
-Group expressions together in a single disjunction (A or B or C...)
+| Method (aliases)                                                      | Meaning                                                                                              |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `isEq( property, value )` (`eq`)                                      | `property = value`. A `null` value means `property is null`                                          |
+| `ne( property, value )` (`isNe`, `isNotEq`, `notEqual`)               | `property <> value`. A `null` value means `property is not null`                                      |
+| `isGt( property, value )` (`gt`)                                      | `property > value`                                                                                   |
+| `isGe( property, value )` (`ge`, `isGte`, `gte`)                      | `property >= value`                                                                                  |
+| `isLt( property, value )` (`lt`)                                      | `property < value`                                                                                   |
+| `isLe( property, value )` (`le`, `isLte`, `lte`)                      | `property <= value`                                                                                  |
+| `like( property, pattern )` (`isLike`, `whereLike`)                   | `property like pattern`. You include the `%` wildcards                                               |
+| `ilike( property, pattern )` (`isIlike`, `whereIlike`)                | Case-insensitive `like`                                                                              |
+| `between( property, min, max )` (`isBetween`, `whereBetween`)         | Inclusive range                                                                                      |
+| `isIn( property, values )` (`in`, `whereIn`)                          | `values` is an array, a comma-separated list or a [subquery](../../detached-criteria-builder/README.md). An empty list matches nothing |
+| `isNotIn( property, values )` (`whereNotIn`)                          | The opposite of `isIn()`                                                                             |
+| `isNull( property )` (`whereNull`)                                    | `property is null`                                                                                   |
+| `isNotNull( property )` (`whereNotNull`)                              | `property is not null`                                                                               |
+| `isTrue( property )`, `isFalse( property )`                           | Boolean properties                                                                                   |
+| `isEmpty( property )`, `isNotEmpty( property )`                       | Collections (one-to-many, many-to-many) with no rows, or with at least one                           |
+| `sizeEq`, `sizeNe`, `sizeGt`, `sizeGe`, `sizeLt`, `sizeLe( property, size )` | Compare a collection's size                                                                  |
+| `eqProperty`, `neProperty`, `gtProperty`, `geProperty`, `ltProperty`, `leProperty( property, otherProperty )` | Compare two properties                                           |
+| `idEq( id )`                                                          | Match the entity id. For a composite id, pass a struct: `idEq( { orderId : 1, lineNumber : 2 } )`     |
+| `sql( sql, params )` (`sqlRestriction`)                               | A native SQL condition, see [SQL Restrictions](sql-restrictions.md)                                  |
+| `exists( subquery )`, `notExists( subquery )`, `property*`, `sub*`    | Subquery conditions, see [Subqueries](../../detached-criteria-builder/subqueries.md)                 |
 
 ```javascript
-c.disjunction( [  
-    c.restrictions.between("balance",100,200),
-    c.restrictions.lt("salary",20000) 
-] );
-```
-
-### isEQ( property, value )
-
-Where a property equals a particular value, you can also use eq()
-
-```javascript
-c.eq("age",30);
-```
-
-### isGT( property, value )
-
-Where a property is greater than a particular value, you can also use gt()
-
-```javascript
-c.gt("publishedDate", now() );
-```
-
-### gtProperty( property,otherProperty )
-
-Where a one property must be greater than another
-
-```javascript
-c.gtProperty("balance","overdraft");
-```
-
-### isGE( property,value )
-
-Where a property is greater than or equal to a particular value, you can also use ge()
-
-```javascript
-c.ge("age",18);
-```
-
-### geProperty( property, otherProperty )
-
-Where one property must be greater than or equal to another
-
-```javascript
-c.geProperty("balance","overdraft");
-```
-
-### idEQ( required any propertyValue )
-
-Where an object's id equals the specified value
-
-```javascript
+c.between( "age", 10, 30 );
+c.isEq( "age", 30 );
+c.isGt( "publishedDate", now() );
+c.gtProperty( "balance", "overdraft" );
 c.idEq( 4 );
+c.ilike( "lastName", "maj%" );
+c.isIn( "id", [ 1, 2, 3, 4 ] );
+c.isEmpty( "comments" );
+c.isFalse( "isPublished" );
+c.isNull( "passwordProtection" );
+c.ne( "status", "banned" );
+c.neProperty( "password", "passwordHash" );
+c.sizeGe( "comments", 10 );
+c.isTrue( "isActive" );
 ```
 
-### iLike( required string property, required string propertyValue )
-
-A case-insensitive 'like' expression
+Arguments can also be passed by name. Each method accepts its cborm argument names: `property` (or `propertyName`), `value` (or `propertyValue`), `minValue`/`maxValue` for `between()`, `otherProperty` for the property comparisons.
 
 ```javascript
-c.iLike("lastName", "maj%");
+c.isEq( property = "lastName", value = "Majano" );
+c.between( property = "age", minValue = 18, maxValue = 65 );
 ```
 
-### isIn( required string property, required any propertyValue )
+## `where()` shorthands
 
-Where a property is contained within the specified list of values, the property value can be a collection (struct) or array or list, you can also use in()
+`where()` is a compact way to write the most common conditions:
 
 ```javascript
-c.isIn( "id", [1,2,3,4] );
+c.where( "lastName", "Majano" );                    // isEq
+c.where( "age", ">=", 18 );                          // =, !=, <>, >, >=, <, <=, like, ilike, in, not in
+c.where( { lastName : "Majano", isActive : true } ); // several isEq; a null value means is null
+c.where( ( c ) => c.isEq( "a", 1 ).isEq( "b", 2 ) ); // an and-group
 ```
-
-### isEmpty( required string property )
-
-Where a collection property is empty
-
-```javascript
-c.isEmpty("childPages");
-```
-
-### isNotEmpty( required string property )
-
-Where a collection property is not empty
-
-```javascript
-c.isNotEmpty("childPages");
-```
-
-### isFalse( required string property )
-
-Where a collection property is false
-
-```javascript
-c.isFalse("isPublished");
-```
-
-### isNull( required string property )
-
-Where a property is null
-
-```javascript
-c.isNull("passwordProtection");
-```
-
-### isNotNull( required string property )
-
-Where a property is NOT null
-
-```javascript
-c.isNotNull("publishedDate");
-```
-
-### isLT( required string property, required any propertyValue )
-
-Where a property is less than a particular value, you can also use lt()
-
-```javascript
-c.isLT("age", 40 );
-```
-
-### ltProperty( required string property, required string otherProperty )
-
-Where a one property must be less than another
-
-```javascript
-c.ltProperty("sum", "balance");
-```
-
-### isLE( required string property, required any propertyValue )
-
-Where a property is less than or equal a particular value, you can also use le()
-
-```javascript
-c.isLE("age", 30);
-```
-
-### leProperty( required string property, required string otherProperty )
-
-Where a one property must be less than or equal to another
-
-```javascript
-c.LeProperty("balance","balance2");
-```
-
-### like( required string property, required string propertyValue )
-
-Equivalent to SQL like expression
-
-```javascript
-c.like("content", "%search%");
-```
-
-### ne( required string property, required any propertyValue )
-
-Where a property does not equal a particular value
-
-```javascript
-c.ne("isPublished", true);
-```
-
-### neProperty( required string property, required any otherProperty )
-
-Where one property does not equal another
-
-```javascript
-c.neProperty("password","passwordHash");
-```
-
-### sizeEq( required string property, required any propertyValue )
-
-Where a collection property's size equals a particular value
-
-```javascript
-c.sizeEq("comments",30);
-```
-
-### sizeGT( required string property, required any propertyValue )
-
-Where a collection property's size is greater than a particular value
-
-```javascript
-c.sizeGT("children",5);
-```
-
-### sizeGE( required string property, required any propertyValue )
-
-Where a collection property's size is greater than or equal to a particular value
-
-```javascript
-c.sizeGE("children", 10);
-```
-
-### sizeLT( required string property, required any propertyValue )
-
-Where a collection property's size is less than a particular value
-
-```javascript
-c.sizeLT("childPages", 25 );
-```
-
-### sizeLE( required string property, required any propertyValue )
-
-Where a collection property's size is less than or equal a particular value
-
-```javascript
-c.sizeLE("childPages", 25 );
-```
-
-### sizeNE( required string property, required any propertyValue )
-
-Where a collection property's size is not equal to a particular value
-
-```javascript
-c.sizeNE("childPages",0);
-```
-
-### sql( required sql, params )
-
-Use arbitrary SQL to modify the resultset
-
-```javascript
-c.sql("char_length( lastName ) = 10");
-```
-
-### and( Criterion, Criterion, ... )
-
-Return the conjuction of N expressions as arguments
-
-```javascript
-c.and( c.restrictions.eq("name","luis"), c.restrictions.gt("age",30) );
-```
-
-### or( Criterion, Criterion, …. )
-
-Return the disjunction of N expressions as arguments
-
-```javascript
-c.or( c.restrictions.eq("name","luis"), c.restrictions.eq("name", "joe") );
-```
-
-### isNot( required any criterion )
-
-Return the negation of an expression. You can also use not()
-
-```javascript
-c.isNot( c.restrictions.eg("age", 30) );
-```
-
-### isTrue( required string property )
-
-Returns if the property is true
-
-```javascript
-c.isTrue("isPublished");
-```
-
-{% hint style="info" %}
-Adobe ColdFusion may throw an "Invalid CFML construct" error for certain CBORM methods that match [reserved operator names](https://helpx.adobe.com/coldfusion/developing-applications/the-cfml-programming-language/elements-of-cfml/reserved-words-in-coldfusion.html), such as `.and()`, `.or()`, and `.eq()`. You can use `.$and()`, `.$or()`, and `.isEq()` to avoid these errors and build cross-engine compatible code.
-{% endhint %}
-
-{% hint style="info" %}
-In some cases (`isEq(), isIn(),` etc), you may receive data type mismatch errors. These can be resolved by using JavaCast on your criteria value or use our auto caster methods: `idCast(), autoCast()`
-{% endhint %}
-
-```javascript
-c.isEq("userID", idCast( 3 ) );
-```
-
-You can also use the `add()` method to add a manual restriction or array of restrictions to the criteria you are building.
-
-```javascript
-c.add( c.restrictions.eq("name","luis") )
-```
-
-But as you can see from the code, the facade methods are much nicer.
 
 ## Negation
 
-Every restriction method you see above or in the docs can also be negated very easily by just prefixing the method with a `not` .
+Every condition can be negated by prefixing its name with `not`:
 
 ```javascript
-c
-    .notEq("userID", idCast( 3 ) )
-    .notBetween()
-    .notIsTrue()
-    .notIsFalse();
+c.notEq( "status", "banned" )
+    .notIn( "id", [ 1, 2, 3 ] )
+    .notLike( "email", "%@example.com" )
+    .notBetween( "age", 18, 21 )
+    .notIsNull( "lastLogin" )
+    .notEmpty( "posts" );
 ```
 
-## when()
-
-There are times where you need if statements in order to add criterias based on incoming input. That's ok, but we can do better by adding a `when( test, target )` function that will evaluate the `test` argument or expression. If it evaluates to true then the target closure is called for you with the criteria object so you can do your criterias:
+To negate a group of conditions, use `not()` (alias `isNot()`) with a closure or a restriction:
 
 ```javascript
-newCriteria()
-    .when( isBoolean( arguments.isPublished ), function( c ){
-        // Published process
-        c
-            .isEq( "isPublished", isPublished )
-            .when( isPublished, function( c ){
+// not ( lastName = 'Majano' and firstName = 'Luis' )
+c.not( ( c ) => c.isEq( "lastName", "Majano" ).isEq( "firstName", "Luis" ) );
+
+// not ( status = 'banned' )
+c.not( c.restrictions.isEq( "status", "banned" ) );
+```
+
+## Groups: `or()` and `and()`
+
+Conditions are joined with `and` by default. `or()` joins the conditions of its arguments with `or`, and `and()` joins them with `and`, which is useful inside an `or()`. Each argument is a restriction (see below) or a closure that receives the criteria.
+
+```javascript
+// firstName = 'Luis' or lastName = 'Majano'
+c.or( c.restrictions.isEq( "firstName", "Luis" ), c.restrictions.isEq( "lastName", "Majano" ) );
+
+// The same with a closure: its conditions are joined with or
+c.or( ( c ) => c.isEq( "firstName", "Luis" ).isEq( "lastName", "Majano" ) );
+
+// ( firstName = 'Luis' and lastName like 'M%' ) or age < 30
+c.or( ( c ) => c
+    .and( ( a ) => a.isEq( "firstName", "Luis" ).like( "lastName", "M%" ) )
+    .isLt( "age", 30 )
+);
+```
+
+When you pass several closures to `or()`, each closure is one alternative and its own conditions must all match:
+
+```javascript
+// ( role = admin and isActive ) or ( role = editor )
+c.or(
+    ( c ) => c.isEq( "role.name", "admin" ).isTrue( "isActive" ),
+    ( c ) => c.isEq( "role.name", "editor" )
+);
+```
+
+Aliases: `$or`, `anyOf`, `orWhere` and `disjunction` for `or()`; `$and`, `allOf` and `conjunction` for `and()`.
+
+## `c.restrictions` and `getRestrictions()`
+
+`c.restrictions` builds a condition **without adding it** to the criteria: the cborm way of preparing conditions for `add()`, `or()`, `and()` and `not()`. It has every condition method above, with the same names and aliases, including the `not...` forms, plus `or()`, `and()` and `not()` to nest them.
+
+The services give you the same object through `getRestrictions()`: see [getRestrictions()](../../../base-orm-service/service-methods/criteria-queries/getrestrictions.md).
+
+```javascript
+var c = userService.newCriteria();
+var r = c.restrictions; // or userService.getRestrictions()
+
+c.add( r.like( "firstName", "A%" ), r.isNotNull( "email" ) );
+c.or( r.isEq( "role.name", "admin" ), r.isGt( "age", 30 ) );
+c.not( r.isEq( "status", "banned" ) );
+c.add( r.or( r.isEq( "a", 1 ), r.and( r.isEq( "b", 2 ), r.not( r.isNull( "c" ) ) ) ) );
+
+// Restrictions and closures can be mixed
+c.or( r.isEq( "a", 1 ), ( c ) => c.isEq( "b", 2 ) );
+```
+
+A restriction is resolved against the criteria it is added to, so restrictions are not tied to an entity. Calling a method that is not a condition, such as `c.restrictions.list()`, is an `orm.argument` error.
+
+`add( restriction, ... )` adds one or more restrictions (or closures) with `and`:
+
+```javascript
+c.add( c.restrictions.isEq( "firstName", "Luis" ) );
+```
+
+{% hint style="info" %}
+**Changes from cborm 5**
+
+* Restrictions are no longer Hibernate `Criterion` objects, and methods that are not listed here are not proxied to Hibernate's `Restrictions` class any more.
+* `and()`, `or()`, `conjunction()` and `disjunction()` take restrictions or closures as separate arguments, not an array. To combine an array of restrictions, add them inside a closure: `c.or( ( g ) => myRestrictions.each( ( r ) => g.add( r ) ) )`.
+* Values no longer need `javaCast()`, `idCast()` or `autoCast()`: see [Value Casting](value-casting.md).
+{% endhint %}
+
+## Function paths
+
+Any property argument can be a function call, in conditions, in `order()` and in projections. This often replaces a native `sql()` restriction.
+
+```javascript
+c.isEq( "year(createdDate)", 2025 );
+c.isEq( "lower(email)", "luis@example.com" );
+c.isEq( "upper(substring(lastName, 1, 3))", "MAJ" );
+c.isEq( "coalesce(nickname, 'none')", "none" );
+c.isEq( "lower(role.name)", "admin" ); // paths join as usual
+c.order( "length(lastName) desc" );
+```
+
+* Each function argument must be a property path, a nested function call, a number or a `'quoted string'` (`''` escapes a quote). Pass anything else as the condition value, where it is bound as a parameter.
+* The function can be an HQL function (`lower`, `upper`, `length`, `substring`, `coalesce`, `year`, `cast`, ...), a function of the database dialect, or one of the application's named SQL functions (bx-orm `sqlFunctions` setting).
+* An unknown function name is passed to the database, which rejects it when the query runs.
+
+## Conditional building: `when()` and `unless()`
+
+Instead of wrapping criteria calls in `if` statements, use `when( test, callback, [otherwise] )`. When the test is true, the callback is called with the criteria; when it is false, the optional `otherwise` callback is. `unless()` is the opposite. The test can also be a closure that receives the criteria and returns a boolean.
+
+```javascript
+var posts = postService
+    .newCriteria()
+    .when( !isNull( arguments.isPublished ), ( c ) => {
+        c.isEq( "isPublished", isPublished )
+            .when( isPublished, ( c ) => {
                 c.isLt( "publishedDate", now() )
-                .$or( 
-                    c.restrictions.isNull( "expireDate" ), 
-                    c.restrictions.isGT( "expireDate", now() ) 
-                )
-                .isEq( "passwordProtection","" );
-            })
-        }
+                    .or(
+                        c.restrictions.isNull( "expireDate" ),
+                        c.restrictions.isGt( "expireDate", now() )
+                    )
+                    .isEq( "passwordProtection", "" );
+            } );
     } )
-  .when( !isNull( arguments.showInSearch ), function( c ){
-          c.isEq( "showInSearch", showInSearch );
-   } )
-   .when( arguments.isActive, function( c ){
-            c.isTrue( "isActive" );
-   })
-  .list()
+    .when( !isNull( arguments.showInSearch ), ( c ) => c.isEq( "showInSearch", showInSearch ) )
+    .when( arguments.isActive, ( c ) => c.isTrue( "isActive" ), ( c ) => c.isFalse( "isActive" ) )
+    .unless( arguments.showDeleted, ( c ) => c.isFalse( "isDeleted" ) )
+    .list();
+```
+
+`apply( callback )` (alias `scope()`) calls a reusable closure with the criteria, which is handy for shared filters:
+
+```javascript
+var onlyActive = ( c ) => c.isTrue( "isActive" ).isNull( "deletedDate" );
+
+userService.newCriteria().apply( onlyActive ).like( "lastName", "M%" ).list();
 ```

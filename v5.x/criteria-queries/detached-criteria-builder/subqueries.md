@@ -1,71 +1,117 @@
+---
+description: "Every condition that takes a subquery: exists, isIn, property*, sub* and the quantified All/Some forms"
+---
+
 # Subqueries
 
-If you are using Detached Criteria Builder for a criteria subquery, you will also need to use one of the methods from the ColdBox subqueries class. This is what will ultimately bind the subquery result to the root entity.
-
-The most important thing to remember is that this subquery is what needs to be added as a criterion to your criteria query. So whether you are doing a simple subquery or building up a complex detached criteria, the result of one of the methods below should be what is added as a criterion to the criteria query (see example below).
-
-Examples
+A subquery becomes part of the query through a **subquery condition** called on the outer criteria. The subquery is always the last argument.
 
 ```javascript
-// wrong way...will fail because the subquery method “propertyIn()” is not what is added
-c.add(
-   c.createSubcriteria( ‘Car’, ‘CarSub’ )
-    .withProjections( property=’CarID’ )
-    .propertyIn( ‘CarID’ )
-    .isEq( ‘Make’, ‘Ford’ )
-).list();
+var c = userService.newCriteria();
 
-// right way...since propertyIn() is last in the chain, it’s value will be what is ultimately added as a criteria
-c.add(
-   c.createSubcriteria( ‘Car’, ‘CarSub’ )
-    .withProjections( property=’CarID’ )
-    .isEq( ‘Make’, ‘Ford’ )
-    .propertyIn( ‘CarID’ )
-).list();
-
-// right way--split up
-dc = c.createSubcriteria( ‘Car’, ‘CarSub’ )
-  .withProjections( property=’CarID’ )
-  .isEq( ‘Make’, ‘Ford’ );
-c.add( dc.propertyIn( ‘CarID’ ) ).list();
+var users = c
+    .isTrue( "isActive" )
+    .propertyIn( "id", c.subquery( "Post", "p" ).isTrue( "isPublished" ).withProjections( property = "author.id" ) )
+    .list();
 ```
 
-| Method                                   | Description                                                                                                   |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| detachedSQLProjection                    | A single or array of DetachedCriteriaBuilders which will return the projected value                           |
-| subEq(value)                             | Where the result of the subquery is eq to a specific value                                                    |
-| subEqAll(value)                          | Where all values in the subquery result are equal to a specific value                                         |
-| subGe(value)                             | Where values in the subquery result are greater than or equal to a specific value                             |
-| subGeAll(value)                          | Where all values in the subquery result are equal to a specific value                                         |
-| subGeSome(value)                         | Where some values in the subquery result are greater than a specific value                                    |
-| subGt(value)                             | Where values in the subquery result are greater than a specific value                                         |
-| subGtAll(required string value)          | Where all values in the subquery result are greater than a specific value                                     |
-| subGtSome(required string value)         | Where some values in the subquery result are greater than a specific value                                    |
-| subIn(required string value)             | Where values in the subquery result are contained within the specified list of values                         |
-| subLe(required string value)             | Where values in the subquery result are less than or equal to a specific value                                |
-| subLeAll(required string value)          | Where all values in the subquery result are less than or equal to a specific value                            |
-| subLeSome(required string value)         | Where some values in the subquery result are less than or equal to a specific value                           |
-| subLt(required string value)             | Where values in the subquery result are less than a specific value                                            |
-| subLtAll(required string value)          | Where all values in the subquery result are less than a specific value                                        |
-| subLtSome(required string value)         | Where some values in the subquery result are less than a specific value                                       |
-| subNe(required string value)             | Where values in the subquery result are not equal to a specific value                                         |
-| subNotIn(required string value)          | Where values in the subquery result are not contained within the specified list of values                     |
-| exists                                   | Where the subquery returns some result                                                                        |
-| notExists                                | Where the subquery does not return a result                                                                   |
-| propertyEq(required string property)     | Where values in the subquery result are equal to the the specified property value                             |
-| propertyEqAll(required string property)  | Where all values in the subquery result are equal to the the specified property value                         |
-| propertyGe(required string property)     | Where values in the subquery result are greater than or equal to the the specified property value             |
-| propertyGeAll(required string property)  | Where all values in the subquery result are greater than or equal to the the specified property value         |
-| propertyGeSome(required string property) | Where some values in the subquery result are greater than or equal to the the specified property value        |
-| propertyGt(required string property)     | Where values in the subquery result are greater than the the specified property value                         |
-| propertyGtAll(required string property)  | Where all values in the subquery result are greater than the the specified property value                     |
-| propertyGtSome(required string property) | Where some values in the subquery result are greater than the the specified property value                    |
-| propertyIn(required string property)     | Where values in the subquery result are contained in within the list of values for the specified property     |
-| propertyLe(required string property)     | Where values in the subquery result are less than or equal to the the specified property value                |
-| propertyLeAll(required string property)  | Where all values in the subquery result are less than or equal to the the specified property value            |
-| propertyLeSome(required string property) | Where some values in the subquery result are less than or equal to the the specified property value           |
-| propertyLt(required string property)     | Where values in the subquery result are less than the the specified property value                            |
-| propertyLtAll(required string property)  | Where all values in the subquery result are less than the the specified property value                        |
-| propertyLtSome(required string property) | Where some values in the subquery result are less than the the specified property value                       |
-| propertyNe(required string property)     | Where values in the subquery result are not equal to the the specified property value                         |
-| propertyNotIn(required string property)  | Where values in the subquery result are not contained in within the list of values for the specified property |
+Subquery conditions are ordinary conditions: they can be negated with the `not` prefix, grouped with `or()`, `and()` and `not()`, and built with `c.restrictions`.
+
+## Existence
+
+| Method                  | Meaning |
+| ----------------------- | ------- |
+| `exists( subquery )`    | The subquery returns at least one row |
+| `notExists( subquery )` | The subquery returns no rows |
+
+```javascript
+// Roles with no users
+var c = roleService.newCriteria();
+var unused = c.notExists( c.subquery( "User", "u" ).eqProperty( "u.role", "this" ) ).list();
+```
+
+## Compare a property with a subquery
+
+These compare a property of the outer query with the value the subquery selects (its [projection](projections.md)).
+
+| Method                                   | Meaning |
+| ---------------------------------------- | ------- |
+| `propertyEq( property, subquery )`       | `property = ( subquery )` |
+| `propertyNe( property, subquery )`       | `property <> ( subquery )` |
+| `propertyGt( property, subquery )`       | `property > ( subquery )` |
+| `propertyGe( property, subquery )`       | `property >= ( subquery )` |
+| `propertyLt( property, subquery )`       | `property < ( subquery )` |
+| `propertyLe( property, subquery )`       | `property <= ( subquery )` |
+| `propertyIn( property, subquery )`       | `property in ( subquery )`. `isIn( property, subquery )` is the same |
+| `propertyNotIn( property, subquery )`    | `property not in ( subquery )`. `isNotIn( property, subquery )` is the same |
+
+```javascript
+// The most recent post
+var c = postService.newCriteria();
+var latest = c
+    .propertyEq( "publishedDate", c.subquery( "Post", "p2" ).withProjections( max = "publishedDate" ) )
+    .get();
+```
+
+## Compare a value with a subquery
+
+These compare a value you pass with the value the subquery selects.
+
+| Method                             | Meaning |
+| ---------------------------------- | ------- |
+| `subEq( value, subquery )`         | `value = ( subquery )` |
+| `subNe( value, subquery )`         | `value <> ( subquery )` |
+| `subGt( value, subquery )`         | `value > ( subquery )` |
+| `subGe( value, subquery )`         | `value >= ( subquery )` |
+| `subLt( value, subquery )`         | `value < ( subquery )` |
+| `subLe( value, subquery )`         | `value <= ( subquery )` |
+| `subIn( value, subquery )`         | `value in ( subquery )` |
+| `subNotIn( value, subquery )`      | `value not in ( subquery )` |
+
+```javascript
+// Users with at least 5 posts: 5 <= ( select count(*) ... )
+var c = userService.newCriteria();
+var prolific = c
+    .subLe( 5, c.subquery( "Post", "p" ).eqProperty( "p.author", "this" ).withProjections( rowCount = true ) )
+    .list();
+```
+
+## Quantified comparisons: `All` and `Some`
+
+The quantified forms compare with **every** row (`All`) or **at least one** row (`Some`) of the subquery, for example `price >= all ( select ... )`.
+
+| Compare a property                      | Compare a value                   | Meaning |
+| --------------------------------------- | --------------------------------- | ------- |
+| `propertyEqAll( property, subquery )`   | `subEqAll( value, subquery )`     | `= all` |
+| `propertyGtAll( property, subquery )`   | `subGtAll( value, subquery )`     | `> all` |
+| `propertyGtSome( property, subquery )`  | `subGtSome( value, subquery )`    | `> some` |
+| `propertyGeAll( property, subquery )`   | `subGeAll( value, subquery )`     | `>= all` |
+| `propertyGeSome( property, subquery )`  | `subGeSome( value, subquery )`    | `>= some` |
+| `propertyLtAll( property, subquery )`   | `subLtAll( value, subquery )`     | `< all` |
+| `propertyLtSome( property, subquery )`  | `subLtSome( value, subquery )`    | `< some` |
+| `propertyLeAll( property, subquery )`   | `subLeAll( value, subquery )`     | `<= all` |
+| `propertyLeSome( property, subquery )`  | `subLeSome( value, subquery )`    | `<= some` |
+
+There is no `EqSome` form: use `propertyIn()` or `subIn()`, which mean the same.
+
+```javascript
+var c = productService.newCriteria();
+var bookPrices = c.subquery( "Product", "p" ).isEq( "p.category", "books" ).withProjections( property = "price" );
+
+// Products at least as expensive as every book
+var premium = c.propertyGeAll( "price", bookPrices ).list();
+```
+
+```javascript
+// Is there a book that costs more than 10? 10 < some ( select price ... )
+var c = productService.newCriteria();
+var hasPricey = c
+    .subLtSome( 10, c.subquery( "Product", "p" ).isEq( "p.category", "books" ).withProjections( property = "price" ) )
+    .exists();
+```
+
+{% hint style="info" %}
+**Changes from cborm 5**
+
+In cborm 5 the subquery method was called on the detached criteria and the result was passed to `add()`: `c.add( dc.propertyIn( "id" ) )` or `c.add( dc.subEq( 5 ) )`. In cborm 6 the method is called on the outer criteria with the subquery as its last argument: `c.propertyIn( "id", dc )`, `c.subEq( 5, dc )`. The method names are unchanged.
+{% endhint %}

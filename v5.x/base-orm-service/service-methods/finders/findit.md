@@ -1,6 +1,6 @@
-# findit
+# findIt
 
-Finds and returns the first result for the given query or null if no entity was found. You can either use the query and params combination or send in an example entity to find.
+Finds and returns the first result for the given query or `null` if no entity was found. The query is limited to one row, so it never fails when more than one row matches.
 
 ## Returns
 
@@ -23,6 +23,8 @@ Finds and returns the first result for the given query or null if no entity was 
 ormService.findIt("from Post as p where p.author='Luis Majano'");
 // With positional parameters
 ormService.findIt("from Post as p where p.author=?", ["Luis Majano"]);
-// with a named parameter (since 0.5)
+// With numbered positional parameters
+ormService.findIt("from Post as p where p.author=?1", ["Luis Majano"]);
+// with named parameters
 ormService.findIt("from Post as p where p.author=:author and p.isActive=:active", { author="Luis Majano",active=true} );
 ```

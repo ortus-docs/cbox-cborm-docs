@@ -1,7 +1,5 @@
 ---
-description: >-
-  Functional helper methods for building expressive, chainable ActiveEntity
-  operations
+description: Functional helper methods for building expressive, chainable ActiveEntity operations
 icon: link
 ---
 
@@ -33,13 +31,14 @@ any function peek( required target )
 
 ### Arguments
 
-| Argument | Type    | Required | Description                                        |
-| -------- | ------- | -------- | -------------------------------------------------- |
-| target   | closure | Yes      | A closure that receives the entity as its argument |
+| Argument | Type     | Required | Description                                            |
+| -------- | -------- | -------- | ------------------------------------------------------ |
+| target   | closure  | Yes      | A closure that receives the entity as its argument     |
 
 ### Examples
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 // Debug entity state during building
@@ -103,6 +102,7 @@ user = new User()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ## when()
@@ -117,15 +117,16 @@ any function when( required boolean target, required success, failure )
 
 ### Arguments
 
-| Argument | Type    | Required | Description                           |
-| -------- | ------- | -------- | ------------------------------------- |
-| target   | boolean | Yes      | The boolean expression to evaluate    |
-| success  | closure | Yes      | Closure to execute if target is true  |
-| failure  | closure | No       | Closure to execute if target is false |
+| Argument | Type     | Required | Description                                           |
+| -------- | -------- | -------- | ----------------------------------------------------- |
+| target   | boolean  | Yes      | The boolean expression to evaluate                    |
+| success  | closure  | Yes      | Closure to execute if target is true                  |
+| failure  | closure  | No       | Closure to execute if target is false                 |
 
 ### Examples
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 // Set role based on admin flag
@@ -215,6 +216,7 @@ post = new Post()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ## unless()
@@ -229,15 +231,16 @@ any function unless( required boolean target, required success, failure )
 
 ### Arguments
 
-| Argument | Type    | Required | Description                           |
-| -------- | ------- | -------- | ------------------------------------- |
-| target   | boolean | Yes      | The boolean expression to evaluate    |
-| success  | closure | Yes      | Closure to execute if target is false |
-| failure  | closure | No       | Closure to execute if target is true  |
+| Argument | Type     | Required | Description                                           |
+| -------- | -------- | -------- | ----------------------------------------------------- |
+| target   | boolean  | Yes      | The boolean expression to evaluate                    |
+| success  | closure  | Yes      | Closure to execute if target is false                 |
+| failure  | closure  | No       | Closure to execute if target is true                  |
 
 ### Examples
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 // Deactivate user unless email is verified
@@ -301,6 +304,7 @@ post = new Post()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ## throwIf()
@@ -315,16 +319,17 @@ any function throwIf( required boolean target, required type, message = "", deta
 
 ### Arguments
 
-| Argument | Type    | Required | Default | Description                        |
-| -------- | ------- | -------- | ------- | ---------------------------------- |
-| target   | boolean | Yes      |         | The boolean expression to evaluate |
-| type     | string  | Yes      |         | The exception type to throw        |
-| message  | string  | No       | ""      | The exception message              |
-| detail   | string  | No       | ""      | Additional exception details       |
+| Argument | Type     | Required | Default | Description                                      |
+| -------- | -------- | -------- | ------- | ------------------------------------------------ |
+| target   | boolean  | Yes      |         | The boolean expression to evaluate               |
+| type     | string   | Yes      |         | The exception type to throw                      |
+| message  | string   | No       | ""      | The exception message                            |
+| detail   | string   | No       | ""      | Additional exception details                     |
 
 ### Examples
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 // Validate age requirement
@@ -424,6 +429,7 @@ user = new User()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ## throwUnless()
@@ -438,16 +444,17 @@ any function throwUnless( required boolean target, required type, message = "", 
 
 ### Arguments
 
-| Argument | Type    | Required | Default | Description                        |
-| -------- | ------- | -------- | ------- | ---------------------------------- |
-| target   | boolean | Yes      |         | The boolean expression to evaluate |
-| type     | string  | Yes      |         | The exception type to throw        |
-| message  | string  | No       | ""      | The exception message              |
-| detail   | string  | No       | ""      | Additional exception details       |
+| Argument | Type     | Required | Default | Description                                      |
+| -------- | -------- | -------- | ------- | ------------------------------------------------ |
+| target   | boolean  | Yes      |         | The boolean expression to evaluate               |
+| type     | string   | Yes      |         | The exception type to throw                      |
+| message  | string   | No       | ""      | The exception message                            |
+| detail   | string   | No       | ""      | Additional exception details                     |
 
 ### Examples
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 // Require email validation
@@ -545,6 +552,7 @@ user = new User()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ## Best Practices
@@ -554,6 +562,7 @@ user = new User()
 You can chain multiple functional helpers together to build complex entity logic:
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 user = new User()
@@ -609,25 +618,23 @@ user = new User()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ### Use with CBValidation
 
-Functional helpers work well alongside [cbvalidation](validation.md) for comprehensive entity validation:
+Functional helpers work well alongside [cbvalidation](../active-record/validation.md) for comprehensive entity validation:
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 ```groovy
 user = new User()
     .populate( rc )
-    .throwUnless(
-        user.isValid(),
-        "ValidationException",
-        "Validation failed",
-        user.getValidationResults().getAllErrorsAsJson()
-    )
+    // Throws a ValidationException with the errors if the entity is not valid
+    .validateOrFail()
     .when(
-        user.isNewEntity(),
+        isNull( rc.id ),
         ( entity ) => mailService.sendWelcomeEmail( entity.getEmail() )
     )
     .save()
@@ -638,14 +645,10 @@ user = new User()
 ```javascript
 user = new User()
     .populate( rc )
-    .throwUnless(
-        user.isValid(),
-        "ValidationException",
-        "Validation failed",
-        user.getValidationResults().getAllErrorsAsJson()
-    )
+    // Throws a ValidationException with the errors if the entity is not valid
+    .validateOrFail()
     .when(
-        user.isNewEntity(),
+        isNull( rc.id ),
         function( entity ) {
             mailService.sendWelcomeEmail( entity.getEmail() );
         }
@@ -653,6 +656,7 @@ user = new User()
     .save();
 ```
 {% endtab %}
+
 {% endtabs %}
 
 ### Performance Considerations

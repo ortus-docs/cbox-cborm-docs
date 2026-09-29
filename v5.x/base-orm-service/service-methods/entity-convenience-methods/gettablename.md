@@ -10,7 +10,7 @@ Returns the table name of the passed in entity
 
 | Key    | Type   | Required | Default | Description |
 | ------ | ------ | -------- | ------- | ----------- |
-| entity | string | Yes      | ---     |             |
+| entity | any    | Yes      | ---     | The entity name or entity object |
 
 ## Examples
 

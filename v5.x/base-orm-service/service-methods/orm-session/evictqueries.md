@@ -4,7 +4,7 @@ Evict all queries in the default cache or the cache region that is passed in.
 
 ## Returns
 
-* This function returns _void_
+* This function returns the service (`this`)
 
 ## Arguments
 
@@ -21,5 +21,5 @@ ormService.evictQueries();
 // evict queries for this service
 ormService.evictQueries( ormService.getQueryCacheRegion() );
 // evict queries for my artists
-ormService.evictQueries( "MyArtits" );
+ormService.evictQueries( "MyArtists" );
 ```

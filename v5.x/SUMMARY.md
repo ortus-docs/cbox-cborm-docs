@@ -5,6 +5,8 @@
 ## Intro
 
 * [Release History](intro/release-history/README.md)
+  * [What's New With 6.0.0](intro/release-history/whats-new-with-6.0.0.md)
+  * [Upgrading to 6](intro/release-history/upgrading-to-6.md)
   * [What's New With 4.12.0](intro/release-history/whats-new-with-4.12.0.md)
   * [What's New With 4.11.0](intro/release-history/whats-new-with-4.11.0.md)
   * [What's New With 4.10.0](intro/release-history/whats-new-with-4.10.0.md)
@@ -28,7 +30,7 @@
 * [Basic Crud - Services](getting-started/basic-crud-services.md)
 * [Basic Crud - ActiveEntity](getting-started/basic-crud.md)
 
-## Base ORM Service
+## Base ORM Service <a href="#base-orm-service" id="base-orm-service"></a>
 
 * [Overview](base-orm-service/base-orm-service.md)
 * [Service Properties](base-orm-service/service-properties.md)
@@ -122,17 +124,16 @@
   * [Restrictions](criteria-queries/criteria-builder/restrictions/README.md)
     * [Value Casting](criteria-queries/criteria-builder/restrictions/value-casting.md)
     * [SQL Restrictions](criteria-queries/criteria-builder/restrictions/sql-restrictions.md)
-  * [Modifiers](criteria-queries/criteria-builder/modifiers.md)
-  * [Results](criteria-queries/criteria-builder/results.md)
   * [Associations](criteria-queries/criteria-builder/associations.md)
   * [Projections & Aggregates](criteria-queries/criteria-builder/projections.md)
-* [Detached Criteria Builder](criteria-queries/detached-criteria-builder/README.md)
+  * [Modifiers](criteria-queries/criteria-builder/modifiers.md)
+  * [Results](criteria-queries/criteria-builder/results.md)
+  * [SQL Log & Debugging](criteria-queries/criteria-builder/sql-log.md)
+  * [Interception Events](criteria-queries/criteria-builder/interception-events.md)
+* [Subqueries](criteria-queries/detached-criteria-builder/README.md)
   * [Getting Started](criteria-queries/detached-criteria-builder/getting-started.md)
   * [Projections](criteria-queries/detached-criteria-builder/projections.md)
   * [Subqueries](criteria-queries/detached-criteria-builder/subqueries.md)
-  * [DetachedSQLProjection()](criteria-queries/detached-criteria-builder/detachedsqlprojection.md)
-  * [Criterias](criteria-queries/detached-criteria-builder/criterias.md)
-  * [Associations](criteria-queries/detached-criteria-builder/associations.md)
 * [Help! I'm Not Getting the Result I expected!](criteria-queries/help-im-not-getting-the-result-i-expected.md)
 
 ## Advanced Features <a href="#advanced" id="advanced"></a>

@@ -3,7 +3,7 @@
 Get an entity using a primary key, if the id is not found this method returns null. You can also pass an id = 0 and the service will return to you a new entity.
 
 {% hint style="success" %}
-No casting is necessary on the Id value type as we do this automatically for you.
+No casting is necessary on the Id value type: `bx-orm` converts it to the entity's id type for you.
 {% endhint %}
 
 ## Returns
