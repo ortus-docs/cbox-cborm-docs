@@ -12,10 +12,11 @@ No casting is necessary on the Id value type: `bx-orm` converts it to the entity
 
 ## Arguments
 
-| Key        | Type   | Required | Default | Description |
-| ---------- | ------ | -------- | ------- | ----------- |
-| entityName | string | Yes      | ---     |             |
-| id         | any    | Yes      | ---     |             |
+| Key        | Type   | Required | Default | Description                                                                      |
+| ---------- | ------ | -------- | ------- | -------------------------------------------------------------------------------- |
+| entityName | string | Yes      | ---     |                                                                                  |
+| id         | any    | Yes      | ---     |                                                                                  |
+| options    | struct | No       | `{}`    | `bx-orm` `entityLoadByPK()` options: `lock`, `timeout`, `skipLocked`, `readOnly` |
 
 ## Examples
 

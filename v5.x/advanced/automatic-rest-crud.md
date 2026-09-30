@@ -116,6 +116,10 @@ component
 
 The mementifier is a critical piece as it will allow you to pass in to the rest service `includes` and `excludes` so you can decide what will be marshalled out of the service.
 
+{% hint style="info" %}
+Mementifier is installed with cborm and is the default marshaller: the handler calls the entity's `getMemento()`. If an entity has no `getMemento()` (mementifier's ORM injection turned off, for example), the handler falls back to `bx-orm`'s `entityToStruct()` with the same `includes`, `excludes` and `ignoreDefaults`, and the entity's `this.memento` definition. In that fallback an unknown include is answered with a 400 `ValidationException` instead of being ignored.
+{% endhint %}
+
 ## Register The Resource Routes
 
 Now that you have finished your entities, you can now register the resources you will be managing. Open your `config/ColdBox.cfc` or your Module's router:
@@ -189,7 +193,7 @@ The base resource handler will generate the following methods for you that will 
 
 ### Consistent Output
 
-REST is all about uniformity and consistency. The output packet produced by any of the actions you create or use, will adhere to the following schema:
+REST is all about uniformity and consistency. The output packet produced by any of the actions you create or use, will adhere to the following schema. cborm 6 builds the `pagination` block itself (cbPaginator is no longer a dependency), with the same keys:
 
 ```javascript
 {
@@ -261,7 +265,7 @@ Each action can take in not only the incoming parameters that your entities requ
 | `includes`       | `string`  | `empty`               | One or a list of properties you want to include in the output packet apart from the default Includes defined in your entity. Adheres to the [mementifier](mementifier.md) |
 | `excludes`       | `string`  | `empty`               | One or a list of properties you want to exclude in the output packet apart from the default excludes defined in your entity. Adheres to the [mementifier](mementifier.md) |
 | `ignoreDefaults` | `boolean` | `false`               | If true, it will ignore all default includes and excludes and ONLY use the includes and excludes you pass. Adheres to the [mementifier](mementifier.md)                   |
-| `sortOrder`      | `string`  | `variables.sortOrder` | The sort ordering you want to apply to the result set. Adheres to the criteria query [sort() method](../criteria-queries/criteria-builder/README.md)             |
+| `sortOrder`      | `string`  | `variables.sortOrder` | The sort ordering you want to apply to the result set. Adheres to the criteria query [sort() method](../criteria-queries/criteria-builder/README.md)                      |
 | `page`           | `numeric` | `1`                   | Pagination is included, so you can pass in the page of records you would like to visualize.                                                                               |
 
 ### Create()
