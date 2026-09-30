@@ -11,7 +11,7 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 { fieldName : { validator: "UniqueValidator@cborm" } }
 ```
 
-That's it! Once you define a property with this validator, then `cbValidation` will delegate to the cborm `UniqueValidator` so it can identify if the value is unique in the database. Below you can see an example entity that marks the `userName` property as unique for validation purposes.
+That's it! Once you define a property with this validator, then `cbValidation` will delegate to the cborm `UniqueValidator` so it can identify if the value is unique in the database. It runs an `EXISTS` query that leaves the entity itself out when it already has an id, including entities with a composite id. Below you can see an example entity that marks the `userName` property as unique for validation purposes.
 
 {% code title="models/User.cfc" %}
 ```javascript

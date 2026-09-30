@@ -8,14 +8,14 @@ Deletes entities by using name value pairs as arguments to this function. One ma
 
 ## Arguments
 
-| Key           | Type    | Required | Default       | Description          |
-| ------------- | ------- | -------- | ------------- | -------------------- |
-| entityName    | string  | Yes      | ---           |                      |
-| flush         | boolean | No       | false         | Not used: the DML delete runs right away |
-| transactional | boolean | No       | From Property | Use transactions or not |
-| datasource    | string  | No       | Service datasource | The datasource to use |
+| Key           | Type    | Required | Default            | Description                                              |
+| ------------- | ------- | -------- | ------------------ | -------------------------------------------------------- |
+| entityName    | string  | Yes      | ---                |                                                          |
+| flush         | boolean | No       | false              | Flush the session after the delete                       |
+| transactional | boolean | No       | From Property      | Use transactions or not                                  |
+| datasource    | string  | No       | Service datasource | Not used: the delete runs on the entity's own datasource |
 
-Any other named argument becomes an `AND` condition of the `where` clause. If you pass no conditions, the method throws a `BaseORMService.NoWhereArgumentsFound` exception instead of deleting everything. This is a DML HQL delete, so no cascades or ORM events take place.
+Any other named argument becomes an `AND` condition of the `where` clause. If you pass no conditions, the method throws a `BaseORMService.NoWhereArgumentsFound` exception instead of deleting everything. This is a DML HQL delete built with a `bx-orm` criteria query, so no cascades or ORM events take place. Each argument name must be a property of the entity (an unknown one raises `orm.property.unknown`), and pending changes in the session are flushed first, so entities you saved earlier in the request are deleted too.
 
 ## Examples
 

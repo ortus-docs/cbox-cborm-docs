@@ -5,20 +5,21 @@ Find all the entities for the specified HQL query and its named or positional pa
 ## Returns
 
 * This function returns _array_
-* This function returns a [cbStreams](https://forgebox.io/view/cbstreams) stream if **asStream = true**
+* This function returns a Java `Stream` if **asStream = true** (see [Java Streams](../../../advanced/java-streams.md))
 
 ## Arguments
 
-| Key        | Type    | Required | Default            | Description                                                         |
-| ---------- | ------- | -------- | ------------------ | ------------------------------------------------------------------- |
-| query      | string  | No       | ---                | The HQL Query to execute                                            |
-| params     | any     | No       | `{}`               | Named (struct) or positional (array) params                         |
-| offset     | numeric | No       | 0                  | Pagination offset                                                   |
-| max        | numeric | No       | 0                  | Max records to return                                               |
-| timeout    | numeric | No       | 0                  | Query timeout                                                       |
-| ignoreCase | boolean | No       | false              |                                                                     |
-| datasource | string  | No       | Service datasource | The datasource to use                                               |
-| asStream   | boolean | No       | false              | Returns the result as a [cbStreams](https://forgebox.io/view/cbstreams) stream |
+| Key        | Type    | Required | Default            | Description                                 |
+| ---------- | ------- | -------- | ------------------ | ------------------------------------------- |
+| query      | string  | No       | ---                | The HQL Query to execute                    |
+| params     | any     | No       | `{}`               | Named (struct) or positional (array) params |
+| offset     | numeric | No       | 0                  | Pagination offset                           |
+| max        | numeric | No       | 0                  | Max records to return                       |
+| timeout    | numeric | No       | 0                  | Query timeout                               |
+| ignoreCase | boolean | No       | false              | Ignored, kept for compatibility             |
+| datasource | string  | No       | Service datasource | The datasource to use                       |
+| asStream   | boolean | No       | false              | Returns a Java `Stream` instead of an array |
+| options    | struct  | No       | `{}`               | More `bx-orm` `ormExecuteQuery()` options   |
 
 {% hint style="info" %}
 Positional parameters can be written as plain `?` or numbered `?1`, `?2` (JPA style). Named parameters use `:name`. Entity and property names in the HQL can be in any case: `bx-orm` resolves them.

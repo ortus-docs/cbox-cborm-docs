@@ -7,7 +7,11 @@ icon: memory
 
 # Mementifier
 
-The [Mementifier](https://forgebox.io/view/mementifier) module is a dependency of cborm and it is used to extract the state of ORM objects into a digestible format that can be used for auditing or conversion to JSON or other formats. You can find the latest documentation here: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)
+The [Mementifier](https://forgebox.io/view/mementifier) module is a dependency of cborm and the default way to extract the state of ORM objects into a digestible format that can be used for auditing or conversion to JSON or other formats. The [resource handler](automatic-rest-crud.md) uses it to marshal entities.
+
+{% hint style="info" %}
+`bx-orm` 2 also has a built-in `entityToStruct()` function (and `ActiveEntity.toStruct()`), which reads the same `this.memento` includes and excludes. cborm uses it only as a fallback for entities without `getMemento()`.
+{% endhint %} You can find the latest documentation here: [https://forgebox.io/view/mementifier](https://forgebox.io/view/mementifier)
 
 ## Mementifier : The State Maker!
 

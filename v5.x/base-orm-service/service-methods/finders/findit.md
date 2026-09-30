@@ -1,6 +1,6 @@
 # findIt
 
-Finds and returns the first result for the given query or `null` if no entity was found. The query is limited to one row, so it never fails when more than one row matches.
+Finds and returns the first result for the given query or `null` if no entity was found. It runs with `bx-orm`'s `uniqueFirst` option, so it never fails when more than one row matches.
 
 ## Returns
 
@@ -8,13 +8,14 @@ Finds and returns the first result for the given query or `null` if no entity wa
 
 ## Arguments
 
-| Key        | Type    | Required | Default | Description                |
-| ---------- | ------- | -------- | ------- | -------------------------- |
-| query      | string  | No       | ---     | The HQL Query to execute   |
-| params     | any     | No       | {}      | Positional or named params |
-| timeout    | numeric | No       | 0       |                            |
-| ignoreCase | boolean | No       | false   |                            |
-| datasource | string  | No       |         |                            |
+| Key        | Type    | Required | Default | Description                               |
+| ---------- | ------- | -------- | ------- | ----------------------------------------- |
+| query      | string  | No       | ---     | The HQL Query to execute                  |
+| params     | any     | No       | {}      | Positional or named params                |
+| timeout    | numeric | No       | 0       |                                           |
+| ignoreCase | boolean | No       | false   | Ignored, kept for compatibility           |
+| datasource | string  | No       |         |                                           |
+| options    | struct  | No       | `{}`    | More `bx-orm` `ormExecuteQuery()` options |
 
 ## Examples
 

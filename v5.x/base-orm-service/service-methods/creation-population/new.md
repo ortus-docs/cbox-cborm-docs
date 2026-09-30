@@ -5,7 +5,7 @@ Get a new entity object by entity name. You can also pass in a structure called 
 The entity is created, autowired by WireBox (if entity injection is enabled), populated and then the `ORMPostNew` interception is announced (when `eventHandling` is enabled).
 
 {% hint style="warning" %}
-**Changed in cborm 6**: `ORMPostNew` is announced **once** per `new()` call, after the entity is autowired and populated. A plain `entityNew()` also announces `ORMPostNew` now, but it does not autowire or populate the entity.
+**Changed in cborm 6**: `ORMPostNew` is announced **once** per `new()` call, after the entity is autowired and populated. A plain `entityNew()` also autowires the entity and announces `ORMPostNew` now, through the cborm event handler, but it does not populate it.
 {% endhint %}
 
 ## Returns

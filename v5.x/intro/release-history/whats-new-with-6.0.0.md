@@ -32,6 +32,38 @@ Hibernate 7 removed the legacy Criteria API that cborm 5 wrapped (`org.hibernate
 
 See [Criteria Builder](../../criteria-queries/criteria-builder/README.md).
 
+## Native Java Streams
+
+`asStream = true` on `list()`, `executeQuery()`, `findAll()`, `findAllWhere()`, `getAll()` and the dynamic finders, and criteria `asStream()`, return native Java streams read from the database as they are consumed. cbStreams is no longer a dependency. See [Java Streams](../../advanced/java-streams.md).
+
+## New Service Methods
+
+| Method                                                                               | What it does                                                         |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| [findWhereOrFail](../../base-orm-service/service-methods/finders/findwhereorfail.md) | `findWhere()`, or an `EntityNotFound` exception                      |
+| [firstOrNew](../../base-orm-service/service-methods/finders/firstornew.md)           | The first match, or a new unsaved entity populated with the criteria |
+| [firstOrCreate](../../base-orm-service/service-methods/finders/firstorcreate.md)     | The first match, or a new entity populated and saved                 |
+| [updateWhere](../../base-orm-service/service-methods/saving-entities/updatewhere.md) | One bulk update for the entities matching a criteria struct          |
+| [getReference](../../base-orm-service/service-methods/getters/getreference.md)       | A lazy reference to an entity, without a `SELECT`                    |
+| [lock](../../base-orm-service/service-methods/orm-session/lock.md)                   | Lock an entity's row until the transaction ends                      |
+| [readOnly](../../base-orm-service/service-methods/orm-session/readonly.md)           | Run a closure with every entity it loads read-only                   |
+
+`get()`, `getOrFail()`, `list()`, `executeQuery()`, `findAll()`, `findWhere()` and `findAllWhere()` also take an `options` struct passed to bx-orm: `readOnly`, `lock`, `uniqueFirst`, `fetchSize`, `comment`, `hints` and more.
+
+`ActiveEntity` adds `lock()` and `toStruct()`, and `getKeyValue()`, `getDirtyPropertyNames()` and `sessionContains()` default to the entity itself.
+
+## Safer, Sturdier Helpers
+
+* `exists()`, `countWhere()`, `deleteWhere()`, `deleteByID()`, `deleteAll()` and `getAll()` run on bx-orm criteria queries: property names are validated, bulk deletes flush pending changes first, and composite ids work (pass a struct of key values).
+* `getAll( sortOrder )` and the dynamic finder `sortBy` option only accept property names with `asc`/`desc`, so they can never inject HQL.
+* `save()`, `delete()` and `saveAll()` flush every datasource their entities belong to.
+* The `UniqueValidator` uses an `EXISTS` query and supports composite ids.
+* Dynamic finders read property names (id properties included) from bx-orm's metadata, keep bx-orm's typed errors with their "Did you mean" hints, and recompile themselves when an `ormReload()` changes an entity.
+
+## Mementifier and Pagination
+
+Mementifier stays a cborm dependency and the default way the resource handler marshals entities. Entities without `getMemento()` fall back to bx-orm's `entityToStruct()`. The resource handler builds its own `pagination` block, so cbPaginator is no longer a dependency.
+
 ## Case-Insensitive Names
 
 HQL entity and property names resolve in any case, as the rest of BoxLang does: `executeQuery( "from user where firstname = ?", [ "Luis" ] )` finds the `User` entity's `firstName` property. Criteria queries and dynamic finders (including their `sortBy` option) accept any case too.
@@ -39,7 +71,8 @@ HQL entity and property names resolve in any case, as the rest of BoxLang does: 
 ## Events
 
 * New `ORMPostCommit` interception point, announced once an insert, update or delete is committed. Data: `entity`, `entityName`, `action`.
-* `ORMPostNew` is announced once per `new()`, after the entity is autowired and populated. A plain `entityNew()` announces it too.
+* `ORMPostNew` is announced once per `new()`, after the entity is autowired and populated. `entityNew()`, `entityLoadOrNew()` and `entityLoadOrSave()` autowire the entity and announce it too.
+* `ORMPreFlush` is announced on every flush, from bx-orm's flush events.
 * One event handler: `cborm.models.EventHandler`. `BXEventHandler` remains as a deprecated alias.
 * The bx-orm criteria events (`onCriteriaBuilderAddition`, `beforeCriteriaBuilderList`, ...) are relayed to your ColdBox interceptors.
 
@@ -51,3 +84,11 @@ Service transactions and the `HibernateTransaction` aspect ride BoxLang `transac
 
 * Dynamic finders with `InList` / `NotInList` bound the raw list string when the compiled HQL came from the cache.
 * Dynamic finder HQL is compiled once per entity and method, and cached.
+* HQL injection through `getAll( sortOrder )` and the dynamic finder `sortBy`.
+* `deleteWhere()` missed entities saved earlier in the request but not flushed yet.
+* `delete()` flushed only the first entity's datasource, and `saveAll()` only the service's.
+* `VirtualEntityService.deleteAll()` dropped `transactional`, `evictCollection()` returned nothing, and `findAllWhere()` and `new()` were missing arguments of the base service.
+* The entity injection `include`/`exclude` lists matched parts of names (`UserRole` included `User`).
+* `executeQuery( asQuery = true )` returned an array when the HQL mentioned `update`, `insert` or `delete`.
+* `ActiveEntity.getValidationResult()` was always null, and `isValid( includeFields )` ignored `includeFields`.
+* A `new()` nested in an entity's `postNew()` announced `ORMPostNew` twice.

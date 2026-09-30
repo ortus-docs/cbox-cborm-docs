@@ -32,6 +32,7 @@ boolean function isValid(
 
 /**
  * Get the validation results object.  This will be an empty validation object if isValid() has not being called yet.
+ * The validationResult property accessor, getValidationResult(), returns the same object after isValid().
  */
 cbvalidation.models.result.IValidationResult function getValidationResults()
 

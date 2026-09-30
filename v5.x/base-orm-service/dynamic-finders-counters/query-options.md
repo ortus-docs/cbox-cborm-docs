@@ -12,15 +12,16 @@ users = getInstance( "User" )
 
 The valid query options are:
 
-* `ignoreCase` : Ignores the case of sort order when you set it to true.
+* `ignoreCase` : Accepted for backwards compatibility and ignored.
 * `maxResults` : Specifies the maximum number of objects to be retrieved.
 * `offset` : Specifies the start index of the resultset from where it has to start the retrieval.
 * `cacheable` : Whether the result of this query is to be cached in the secondary cache. Default is false.
 * `cacheName` : Name of the cache in secondary cache.
 * `timeout` : Specifies the timeout value (in seconds) for the query
 * `datasource` : The datasource to use, it defaults to the service's datasource
-* `sortBy` : The HQL to sort the query by. Property names can be in any case: they are rewritten to their declared case.
-* `asStream` : Want a [cbStreams](https://forgebox.io/view/cbStreams) stream back instead of the results, no problem!
+* `sortBy` : The properties to sort by, each with an optional `asc` or `desc`: `"lastName desc, firstName"`. Property names and paths only; anything else raises `InvalidSortOrder`, so it can never inject HQL. Names can be in any case.
+* `asStream` : Return a Java `Stream` read from the database as it is consumed. See [Java Streams](../../advanced/java-streams.md).
+* `readOnly`, `uniqueFirst`, `fetchSize` : Passed to `bx-orm`'s `ormExecuteQuery()`.
 * `autoCast` : Accepted for backwards compatibility and ignored: `bx-orm` converts values itself.
 
 Here is a more descriptive key set with the types and defaults
@@ -34,7 +35,10 @@ Here is a more descriptive key set with the types and defaults
     cacheName      : string (default)
     timeout        : numeric (0)
     datasource     : string (defaults)
-    sortBy         : hql to sort by,
-    asStream       : boolean (false)
+    sortBy         : properties to sort by ("lastName desc, firstName"),
+    asStream       : boolean (false),
+    readOnly       : boolean (false),
+    uniqueFirst    : boolean (false),
+    fetchSize      : numeric
 }
 ```
