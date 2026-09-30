@@ -1,40 +1,33 @@
 ---
-description: >-
-  Automatic Java Types - Handling Java type casting in ColdFusion ORM with
-  CBORM.
+description: "Automatic Java Types - Value conversion is automatic in cborm 6 through bx-orm."
 icon: code
 ---
 
 # Automatic Java Types
 
-Most of the Hibernate extensions like criteria builders and even some dynamic finders and counters will have to rely on the underlying Java types in order to work. You do this in ColdFusion by using the `javaCast()` function available to you. So if you are using a primary key that is an `Integer` you might have to do the following in order to match your variable to the underlying Java type:
+In cborm 6 you no longer need to cast values to Java types. The `bx-orm` module converts every value you pass (ids, HQL parameters, dynamic finder arguments, criteria values) to the type of the property it is compared with, so you can pass plain BoxLang values:
 
 ```javascript
-criteria.eq( "id", javaCast( "int", arguments.id ) );
+// No javaCast() needed: bx-orm converts "123" to the id type
+var user = ormService.get( "User", "123" );
+
+// Criteria values are converted too
+var users = ormService
+    .newCriteria( "User" )
+    .isEq( "id", rc.id )
+    .isGt( "lastLogin", "2024-01-01" )
+    .list();
 ```
 
-If you do not type it, then ColdFusion assumes it is a string and passes a string to Hibernate which will throw an exception as it is supposed to be an integer.
+{% hint style="warning" %}
+**Changed in cborm 6**: `idCast()` and `autoCast()` (and their `convertIdValueToJavaType()` / `convertValueToJavaType()` aliases) are deprecated and no longer cast anything. They are kept only for backwards compatibility:
 
-## Auto Types
+* [`idCast( entity, id )`](service-methods/utility-methods/idcast.md) normalizes an id, a list of ids or an array of ids into an array of ids.
+* [`autoCast( entity, propertyName, value )`](service-methods/utility-methods/autocast.md) returns the value as is.
 
-We have created two methods available to you in the base orm service, virtual service, criteria builders, active entity, etc to help you with these translations by automatically casting the values for you:
+You can safely remove these calls from your code. Because `idCast()` now returns an array, do not wrap a single id with it (for example `c.isEq( "id", ormService.idCast( "User", id ) )`): pass the id directly. The criteria builder returned by `newCriteria()` no longer has `idCast()` or `autoCast()` methods.
+{% endhint %}
 
-### `nullValue()`
+## `nullValue()`
 
-Produce a null value that can be used anywhere you like!
-
-### `autoCast( entity, propertyName, value )`
-
-This method allows you to cast any value to the appropriate type in Java for the property passed in. The `entity` argument can be the entity name or an entity object.
-
-### `idCast( entity, id )`
-
-This method allows you to cast the identifier value to the appropriate type in Java. The `entity` argument can be the entity name or an entity object.
-
-### Example
-
-So instead of casting it manually you can just let us do the work:
-
-```javascript
-criteria.eq( "id", criteria.idCast( arguments.id ) );
-```
+The services still give you a [`nullValue()`](service-methods/utility-methods/nullvalue.md) helper that produces a `null` you can use anywhere you like.

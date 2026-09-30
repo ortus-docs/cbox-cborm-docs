@@ -1,60 +1,73 @@
 ---
-description: Using Criteria Builder in CBORM for dynamic queries
+description: "Build ORM queries fluently with newCriteria(), the bx-orm criteria builder"
 icon: filters
 ---
 
 # Criteria Builder
 
-Hibernate provides several ways to retrieve data from the database. We have seen the normal entity loading operations in our basic CRUD and we have seen several HQL and SQL query methods as well. The last one is the [Hibernate Criteria Queries](https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/).
+The criteria builder lets you build a query one method at a time instead of writing an HQL string. You chain conditions, joins, projections and ordering, then run it with a terminal method such as `list()`, `count()` or `get()`. Property names are checked as you add them and every value is bound as a query parameter, so there is no string concatenation and no SQL injection risk.
 
-The ColdBox Hibernate Criteria Builder is a powerful object that will help you build and execute [hibernate criteria queries](http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html) in a fluent and dynamic manner. [HQL](http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/queryhql.html) is extremely powerful, but some developers prefer to build queries dynamically using an object-oriented API, rather than building query strings and concatenating them in strings or buffers. This is error prone, syntax crazy and sometimes untestable.
-
-![](../../.gitbook/assets/image.png)
-
-The **ColdBox Criteria Builders** offers a powerful programmatic DSL builder for Hibernate Criteria queries. It focuses on a criteria object that you will build up to represent the query to execute. The cool thing is that you can even retrieve the exact HQL or even SQL the criteria query will be executing. You can get the explain plans, provide query hints and much more. In our experience, criteria queries will make your life much easier when doing complicated queries.
-
-{% hint style="success" %}
-**Tip**: You don't have to use the ORM for everything. Please be pragmatic. If you can't figure it out in 10 minutes or less, move to direct SQL.
-{% endhint %}
-
-As you will soon discover, they are fantastic but doing it the Java way is not that fun, so we took our lovely ColdFusion dynamic language funkyness and added some ColdBox magic to it.
-
-{% hint style="info" %}
-The best place to see all of the functionality of the Criteria Builder is to check out the latest [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cborm/).
-{% endhint %}
+In cborm 6, `newCriteria()` returns the criteria builder of the [bx-orm](https://forgebox.io/view/bx-orm) module: the same object BoxLang's `entityCriteria()` function returns. It keeps the cborm method names you already know (`isEq`, `like`, `between`, `isIn`, `joinTo`, `withProjections`, `list`, `count`, `get`, `getOrFail`, ...) and adds many more (`paginate()`, `pluck()`, `each()`, `chunk()`, `updateAll()`, `deleteAll()`, `lock()`, function paths, ...).
 
 ```javascript
-
+// Active users named Luis
 userService
     .newCriteria()
-    .eq( "name", "luis" )
+    .isEq( "firstName", "Luis" )
     .isTrue( "isActive" )
     .getOrFail();
 
+// Active admins, as a Java stream
 userService
     .newCriteria()
     .isTrue( "isActive" )
-    .joinTo( "role" )
-        .eq( "name", "admin" )
+    .isEq( "role.name", "admin" )
     .asStream()
     .list();
 
+// Only a few columns, as an array of structs
 userService
     .newCriteria()
-    .withProjections( property="id,fname:firstName,lname:lastName,age" )
+    .withProjections( property = "id,firstName:fname,lastName:lname,age" )
     .isTrue( "isActive" )
-    .joinTo( "role" )
-        .eq( "name", "admin" )
+    .joinTo( "role", "r" )
+    .isEq( "r.name", "admin" )
     .asStruct()
     .list();
 ```
 
-## Resources
+## How it works
 
-You can see below some of the Hibernate documentation on criteria queries.
+* **Building methods** (conditions, joins, ordering, options) change the criteria and return it, so they chain.
+* **Terminal methods** (`list()`, `count()`, `get()`, `paginate()`, ...) run one query and return its result. They never change the criteria, so the same criteria can run `count()` and then `list()`, in any order.
+* `copy()` returns an independent copy to branch from.
+* Method names are case-insensitive, and arguments can be positional or named: `isEq( "lastName", "Majano" )` or `isEq( property = "lastName", value = "Majano" )`.
+* Property names are case-insensitive too: the builder resolves each path against the entity's mapping and fixes its casing. A misspelled property fails at once with a suggestion, for example `User has no property [fristName]. Did you mean [firstName]?`
 
-1. [http://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html](http://docs.jboss.org/hibernate/core/3.5/reference/en-US/html/querycriteria.html)
-2. [http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/Criteria.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/Criteria.html)
-3. [http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html](http://docs.jboss.org/hibernate/core/3.5/javadoc/org/hibernate/criterion/Restrictions.html)
-4. [https://www.baeldung.com/hibernate-criteria-queries](https://www.baeldung.com/hibernate-criteria-queries)
-5. [https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/](https://howtodoinjava.com/hibernate/hibernate-criteria-queries-tutorial/)
+{% hint style="success" %}
+**Tip**: You don't have to use the ORM for everything. Please be pragmatic. If you can't figure a query out in 10 minutes or less, move to HQL or direct SQL.
+{% endhint %}
+
+## Changes from cborm 5
+
+{% hint style="info" %}
+Hibernate 7 removed the legacy Criteria API (`org.hibernate.Criteria`, `Restrictions`, `DetachedCriteria`, `Projections`, `org.hibernate.criterion.*`), so cborm 5's `CriteriaBuilder` and `DetachedCriteriaBuilder` wrappers are gone. `newCriteria()` now returns the bx-orm builder, which compiles to HQL. Most cborm code keeps working unchanged. The main differences:
+
+* `get( properties )` becomes `withProjections( property = "..." ).asStruct().get()`.
+* `createSubcriteria()` and the Detached Criteria Builder become `c.subquery( "Entity", "alias" )`: see [Subqueries](../detached-criteria-builder/README.md).
+* `cacheRegion( name )` becomes `cache( true, name )`.
+* `asStream()` returns a Java stream instead of a cbStreams stream.
+* `idCast()`, `autoCast()` and typed SQL parameters are no longer needed: bx-orm converts values itself.
+* `getNativeCriteria()`, `resultTransformer()`, `setProjection()`, `c.projections`, SQL projections and `getPositionalSQLParameters()` no longer exist.
+
+Adobe ColdFusion and Lucee are not supported by cborm 6: stay on the cborm 5.x series for those engines.
+{% endhint %}
+
+## Where to go next
+
+* [Getting Started](getting-started.md): get a criteria and run your first queries.
+* [Restrictions](restrictions/README.md): every condition method, groups (`or`, `and`, `not`) and `c.restrictions`.
+* [Associations](associations.md): dotted paths, joins, aliases and fetching.
+* [Projections & Aggregates](projections.md): select columns, group, count and sum.
+* [Modifiers](modifiers.md) and [Results](results.md): ordering, paging, caching, locking, result shapes and terminal methods.
+* [SQL Log & Debugging](sql-log.md) and [Interception Events](interception-events.md).

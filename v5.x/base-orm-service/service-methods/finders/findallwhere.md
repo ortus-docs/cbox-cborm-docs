@@ -1,10 +1,11 @@
 # findAllWhere
 
-Find all entities according to criteria structure. Ex: findAllWhere(entityName="Category", {category="Training"}), findAllWhere(entityName="Users", {age=40,retired=true});
+Find all entities according to criteria structure. Ex: `findAllWhere( "Category", { category : "Training" } )`, `findAllWhere( "User", { age : 40, retired : true } )`
 
 ## Returns
 
 * This function returns _array_
+* This function returns a [cbStreams](https://forgebox.io/view/cbstreams) stream if **asStream = true**
 
 ## Arguments
 

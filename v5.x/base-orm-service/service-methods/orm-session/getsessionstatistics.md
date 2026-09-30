@@ -1,6 +1,6 @@
 # getSessionStatistics
 
-Information about the first-level (session) cache for the current session
+Information about the first-level (session) cache for the current session: `collectionCount`, `collectionKeys`, `entityCount` and `entityKeys`. It delegates to the `bx-orm` `ormGetSessionStatistics()` function.
 
 ## Returns
 
@@ -16,13 +16,10 @@ Information about the first-level (session) cache for the current session
 
 ```javascript
 // Let's get the session statistics
-stats = ormService.getSessionStatistics;
+stats = ormService.getSessionStatistics();
 
 // Lets output it
-<cfoutput>
-collection count: #stats.collectionCount# <br/>
-collection keys: #stats.collectionKeys# <br/>
-entity count: #stats.entityCount# <br/>
-entity keys: #stats.entityKeys#
-</cfoutput>
+println( "collection count: #stats.collectionCount#" );
+println( "entity count: #stats.entityCount#" );
+writeDump( stats.entityKeys );
 ```

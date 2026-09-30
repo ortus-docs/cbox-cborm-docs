@@ -1,233 +1,165 @@
+---
+description: "Get a criteria builder with newCriteria() and run your first criteria queries"
+---
+
 # Getting Started
 
-A criteria builder object can be requested from our Base ORM services or a virtual service or an ActiveEntity, which will bind itself automatically to the requested entity, by calling on the `newCriteria()` method. The corresponding class is: `cborm.models.CriteriaBuilder`
+You get a criteria builder from a Base ORM service, a Virtual Entity Service or an Active Entity by calling `newCriteria()`. The criteria is bound to one entity, the root of the query. It is a bx-orm criteria builder, the same object `entityCriteria( entityName )` returns.
 
-## Criteria Object - `newCriteria()`
+## `newCriteria()`
 
-The arguments for the `newCriteria()` method are:
-
-| Argument           | Type    | Required | Default                 | Description                                                                           |
-| ------------------ | ------- | -------- | ----------------------- | ------------------------------------------------------------------------------------- |
-| `entityName`       | string  | true     | ---                     | The name of the entity to bind this criteria builder with, the initial pivot.         |
-| `useQueryCaching`  | boolean | false    | false                   | To allow for query caching of _list()_ operations                                     |
-| `queryCacheRegion` | string  | false    | `criteria.{entityName}` | The name of the cache region to use                                                   |
-| `datasource`       | string  | false    | System Default          | The datasource to bind the criteria query on, defaults to the one in this ORM service |
+| Argument           | Type    | Required | Default                  | Description                                                                                  |
+| ------------------ | ------- | -------- | ------------------------ | -------------------------------------------------------------------------------------------- |
+| `entityName`       | string  | true     | ---                      | The entity to query, the root of the criteria. Not passed on virtual services or Active Entities. |
+| `useQueryCaching`  | boolean | false    | `false`                  | Cache the query results in the second-level query cache (same as calling `cache( true, region )`). |
+| `queryCacheRegion` | string  | false    | `criterias.{entityName}` | The query cache region used when `useQueryCaching` is true.                                  |
+| `datasource`       | string  | false    | The service datasource   | Ignored: the criteria always runs on the entity's own datasource.                            |
 
 {% hint style="warning" %}
-If you call `newCriteria()` from a virtual service layer or Active Entity, then you don't pass the `entityName` argument as it roots itself automatically.
+If you call `newCriteria()` from a virtual service or an Active Entity, don't pass the `entityName` argument: it roots itself automatically.
 {% endhint %}
 
 ```javascript
-// orm service
+// Base ORM service
 ormService.newCriteria( "User" );
 
-// virtual service
-productService.newCriteria();
+// Virtual entity service
+userService.newCriteria();
 
-// active entity
+// Active Entity
 getInstance( "User" ).newCriteria();
+
+// With query caching
+userService.newCriteria( useQueryCaching = true, queryCacheRegion = "users.active" );
 ```
 
 ## Restrictions
 
-This criteria object will then be used to add **restrictions** to build up the exact query you want. Restrictions are basically your _where_ statements in SQL and they build on each other via ANDs by default. For example, only retrieve products with a price over $30 or give me only active users.
-
-We provide you with tons of available [restrictions](restrictions/) and if none of those match what you need, you can even use a-la-carte SQL restrictions, in which you can just use SQL even with parameters. You can also do OR statements or embedded ANDs, etc.
+Restrictions are your `WHERE` conditions. Each one is added with `and`. The builder offers every cborm restriction (`isEq`, `like`, `between`, `isIn`, `isNull`, `sizeGt`, ...), groups with `or()`, `and()` and `not()`, a `not` prefix for any condition, and native SQL through `sql()`. See [Restrictions](restrictions/README.md).
 
 ```javascript
-productService
+// Posts that cost more than 30
+postService
     .newCriteria()
-    .ge( "price", 30 )
+    .isGe( "price", 30 )
     .count();
-    
+
+// The most recent active user who has logged in
 userService
     .newCriteria()
     .isTrue( "isActive" )
-    .notIsNull( "lastLogin" )
+    .isNotNull( "lastLogin" )
     .order( "lastLogin", "desc" )
-    .firstResult()
-    .get();
+    .first();
 
+// cborm style groups with c.restrictions
+var c = userService.newCriteria();
+var users = c
+    .like( "firstName", "Lui%" )
+    .and(
+        c.restrictions.between( "balance", 200, 300 ),
+        c.restrictions.isEq( "department", "development" )
+    )
+    .maxResults( 50 )
+    .order( "balance", "desc" )
+    .list();
 
-// A-la-carte SQL restrictions 
-var userStream = userService
+// Closure style groups
+var users = userService
     .newCriteria()
-    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
-    	{ value : "joe", type : "string" },
-    	{ value : "%joe%", type : "string" }
-        { value : incomingDate, type : "timestamp" }
-    ] )
-    .list( asStream = true );
-    
-
-var c = newCriteria();
-var results = c.like("firstName","Lui%") // restriction
-     .maxResults( 50 ) // modifier
-     .order("balance","desc") // modifier
-     // AND restrictions
-     .and( 
-          c.restrictions.between( "balance", 200, 300),
-          c.restrictions.eq("department", "development")
-     )
-     // Retrieve a list
-     .list();
+    .or( ( c ) => c.isEq( "role.name", "admin" ).isGt( "age", 30 ) )
+    .list();
 ```
 
 {% hint style="success" %}
-**Tip**: Every restriction can also be negated by using the `not` prefix before each method: `notEq(), notIn(), notIsNull()`
+**Tip**: Every condition can be negated with the `not` prefix: `notEq()`, `notIn()`, `notLike()`, `notBetween()`, `notIsNull()`, ...
 {% endhint %}
 
 ## Associations
 
-You can also use your restrictions on the associated entity data. This is achieved via the [association](associations.md) methods section.
+Use a dotted path (`role.name`) and the builder joins the association for you, or join it yourself with `joinTo()`, `leftJoin()` and `with{Association}()`. See [Associations](associations.md).
 
-## Query Modifiers
+## Modifiers
 
-You can also add [modifiers](modifiers.md) for the execution of the query. This can be sorting, timeouts, join types and so much more.
-
-* `cache()` - Enable caching of this query result, provided query caching is enabled for the underlying session factory.
-* `cacheRegion()` - Set the name of the cache region to use for query result caching.
-* `comment()` - Add a comment to the generated SQL.
-* `fetchSize()` - Set a fetch size for the underlying JDBC query.
-* `firstResult()` - Set the first result to be retrieved or the offset integer
-* `maxResults()` - Set a limit upon the number of objects to be retrieved.
-* `order()` - Add an ordering to the result set, you can add as many as you like
-* `queryHint()` - Add a DB query hint to the SQL. These differ from JPA's QueryHint, which is specific to the JPA implementation and ignores DB vendor-specific hints. Instead, these are intended solely for the vendor-specific hints, such as Oracle's optimizers. Multiple query hints are supported; the Dialect will determine concatenation and placement.
-* `readOnly()` - Set the read-only/modifiable mode for entities and proxies loaded by this Criteria, defaults to readOnly=true
-* `timeout()` - Set a timeout for the underlying JDBC query in milliseconds.
+Modifiers change how the query runs: ordering, paging, caching, timeouts, read-only entities, locking and more. See [Modifiers](modifiers.md).
 
 ```javascript
-var results = c.like("firstName","Lui%") // restriction
-     .firstResult( 25 ) // modifier
-     .maxResults( 50 ) // modifier
-     .order( "balance", "desc" ) // modifier
-     .timeout( 5000 )
-     // AND restrictions
-     .and( 
-          c.restrictions.between( "balance", 200, 300),
-          c.restrictions.eq("department", "development")
-     )
-     // Retrieve a list
-     .list();
+var users = userService
+    .newCriteria()
+    .like( "firstName", "Lui%" )
+    .order( "balance", "desc" )
+    .firstResult( 25 )
+    .maxResults( 50 )
+    .timeout( 5 )
+    .list();
 ```
 
-## Result Modifiers
+## Results
 
-You can also tell Hibernate to transform the results to other formats for you once you retrieve them.
+A criteria is only a description of a query: nothing runs until you call a terminal method. The most common ones are:
 
-* `asDistinct()` - Applies a result transformer of DISTINCT\_ROOT\_ENTITY
-* `asStruct()` - Applies a result transformer of ALIAS\_TO\_ENTITY\_MAP so you get an array of structs instead of array of objects
-* `asStream()` - Get the results as a CBstream
+* `list()`: the matching rows (entities by default).
+* `get()`: the single match, or `null`.
+* `getOrFail()`: the single match, or an `orm.notFound` error.
+* `count()`: the number of matching entities.
+* `paginate( page, maxRows )`: one page of results plus the pagination data.
 
-## Getting Results
-
-Now that the criteria builder object has all the restrictions and modifiers attached when can execute the SQL. Please note that you can store a criteria builder object if you wanted to. It is lazy evaluated, it just represents your SQL. It will only execute when you need it to execute via the following finalizer methods:
-
-* `list()` - Execute the criteria queries you have defined and return the results as an array of objects
-* `get( [properties] )` - Convenience method to return a single instance that matches the built up criterias query, or **null** if the query returns **no** results.
-* `getOrFail( [properties] )` - Convenience method to return a single instance that matches the built up criterias query, or throws an exception if the query returns no results
-* `count()` - Get the record count using hibernate projections for the given criterias
+The result shape can be changed with `asStruct()`, `asQuery()` or `asStream()`, and `withProjections()` selects columns instead of entities. See [Results](results.md) and [Projections & Aggregates](projections.md).
 
 ```javascript
-productService
-    .newCriteria()
-    .ge( "price", 30 )
-    .count();
-    
-userService
-    .newCriteria()
-    .isTrue( "isActive" )
-    .notIsNull( "lastLogin" )
-    .orderBy( "lastLogin desc" )
-    .firstResult()
-    .get();
+var c = postService.newCriteria().isTrue( "isPublished" );
+
+var total = c.count();
+var posts = c.list( max = 10, offset = 0, sortOrder = "publishedDate desc" );
 ```
 
 ## Logging
 
-There are several methods available to you in the criteria objects to give you the actual SQL or HQL to execute, even with bindings. These are a true life-saver.
-
-* `logSQL( label )` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
-* `getSQL( returnExecutableSql = false, formatSql )` - Returns the SQL string that will be prepared for the criteria object at the time of request. If you set returnExecutableSql to true , the SQL returned will include the parameters populated.
-* `getPositionalSQLParameters()` - Returns a formatted array of parameter value and types
-* `getSqlLog()` - Retrieves the SQL Log
-* `startSqlLog()` - Triggers CriteriaBuilder to start internally logging the state of SQL at each iterative build
-* `stopSqlLog()` - Stop the internal logging.
-* `logSql()` - Allows for one-off sql logging at any point in the process of building up CriteriaBuilder; will log the SQL state at the time of the call
-* `canLogSql()` - Returns whether or not CriteriaBuilder is currently configured to log SQL
-* `peek( function/closure )` - Used to peek into the criteria builder process. You pass in a closure/lambda that receives the criteria. You can then use it to peek into the sql or more.
+You can see the HQL and SQL a criteria produces without running it (`getSQL()`, `getHQL()`, `writeDump( c )`), and keep a log of SQL snapshots with `startSqlLog()`, `logSQL()` and `getSqlLog()`. See [SQL Log & Debugging](sql-log.md).
 
 ```javascript
 var sql = userService
     .newCriteria()
-    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
-    	{ value : "joe", type : "string" },
-    	{ value : "%joe%", type : "string" }
-        { value : incomingDate, type : "timestamp" }
-    ] )
-    .getSqlLog();
-    
-// You can also use peek()
-var results = userService
-    .newCriteria()
-    .sql( "userName = ? and firstName like ? and lastLogin >= ?", [
-    	{ value : "joe", type : "string" },
-    	{ value : "%joe%", type : "string" }
-        { value : incomingDate, type : "timestamp" }
-    ] )
-    .peek( function( c ){
-        log.debug( "sql log: #c.getSqlLog()#" );
-    });
-    .list();
+    .isEq( "userName", "joe" )
+    .like( "firstName", "%joe%" )
+    .getSQL( executable = true );
 ```
 
 ## Best Practices
 
-### Thread Safety in High-Concurrency Environments
+### One criteria per query
 
-{% hint style="success" %}
-**Concurrency Fix**: As of CBORM 4.10.0, a critical concurrency issue was resolved where restrictions could overlap under high-load scenarios. The criteria builder now ensures thread-safe operation in production environments.
-{% endhint %}
-
-When building criteria queries in high-concurrency applications:
-
-1. **Create new criteria instances per request**: Always call `newCriteria()` for each query operation rather than reusing criteria builder instances
-2. **Avoid shared state**: Don't store criteria builders in application or server scope
-3. **Use proper scoping**: Ensure criteria builders are properly scoped to the request or function execution
+A criteria builder is mutable: every building method changes it. Create a new one with `newCriteria()` for each query and never keep one in a shared scope (application, singleton service properties), where concurrent requests would add conditions to the same object. When you need several variations of the same base query, branch with `copy()`.
 
 ```javascript
-// ✅ GOOD: New criteria per request
-function getUsersByStatus( required string status ) {
+// Good: a new criteria per call
+function getUsersByStatus( required string status ){
     return newCriteria()
-        .eq( "status", arguments.status )
+        .isEq( "status", arguments.status )
         .list();
 }
 
-// ❌ BAD: Reusing criteria builder
+// Bad: a criteria shared between calls and requests
 variables.userCriteria = newCriteria(); // Don't do this!
 
-function getUsersByStatus( required string status ) {
-    return variables.userCriteria
-        .eq( "status", arguments.status )
-        .list();
-}
+// Branching a base query
+var base   = newCriteria().isTrue( "isActive" );
+var admins = base.copy().isEq( "role.name", "admin" ).list();
+var total  = base.count();
 ```
 
-### Performance Optimization
+### Performance
 
-* **Use query caching wisely**: Enable `useQueryCaching` for frequently-executed queries with stable results
-* **Leverage projections**: Use projections to retrieve only needed data instead of full entity hydration
-* **Batch operations**: Use `list()` with pagination rather than loading all results at once
-* **Monitor SQL**: Use `logSQL()` and `getSqlLog()` during development to optimize queries
+* **Cache stable queries**: `useQueryCaching` or `cache( true, region )` store results in the second-level query cache.
+* **Select only what you need**: projections and `asStruct()` avoid loading full entity graphs.
+* **Page large results**: use `paginate()`, `maxResults()` or `list( max, offset )`, and `each()` or `chunk()` to walk very large result sets in batches.
+* **Watch the SQL**: use `getSQL()` and `logSQL()` during development.
 
 ```javascript
-// Optimized query with projections and caching
-productService
-    .newCriteria(
-        useQueryCaching = true,
-        queryCacheRegion = "products.active"
-    )
-    .isTrue( "isActive" )
-    .withProjections( property = "id,name,price" )
+postService
+    .newCriteria( useQueryCaching = true, queryCacheRegion = "posts.published" )
+    .isTrue( "isPublished" )
+    .withProjections( property = "id,title,slug" )
+    .asStruct()
     .list();
 ```

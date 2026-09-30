@@ -16,9 +16,11 @@ Populate an entity with a structure of name-value pairs. Make sure the names of 
 | trustedSetter        | Boolean | No       | false   | Do not check if the setter exists, just call it, great for usage with onMissingMethod() and virtual properties   |
 | include              | string  | No       |         | A list of keys to ONLY include in the population                                                                 |
 | exclude              | string  | No       |         | A list of keys to exclude from the population                                                                    |
+| ignoreEmpty          | boolean | No       | false   | Ignore empty values on populations, great for ORM population                                                     |
 | nullEmptyInclude     | string  | No       |         | A list of keys to NULL when empty, specifically for ORM population. You can also specify "\*" for all fields     |
 | nullEmptyExclude     | string  | No       |         | A list of keys to NOT NULL when empty, specifically for ORM population. You can also specify "\*" for all fields |
 | composeRelationships | boolean | No       | true    | When true, will automatically attempt to compose relationships from memento                                      |
+| ignoreTargetLists    | boolean | No       | false   | Ignore target lists during population                                                                            |
 
 > **INFO** With composeRelationships=true, you can populate one-to-many, many-to-one, many-to-many, and one-to-one relationships from property values in the memento. For 'many-to-one' and 'one-to-one' relationships, the value of the property in the memento should be a single value of the primary key of the target entity to be loaded. For 'one-to-many' and 'many-to-many' relationships, the value of the property in the memento should a comma-delimited list or array of the primary keys of the target entities to be loaded.
 
@@ -28,7 +30,7 @@ Populate an entity with a structure of name-value pairs. Make sure the names of 
 var user = ormService.populate( ormService.new("User"), data );
 
 // populate with includes only
-var user = ormService.populate( ormService.new("User"), data, "fname,lname,email" );
+var user = ormService.populate( target=ormService.new("User"), memento=data, include="fname,lname,email" );
 
 //populate with excludes
 var user = ormService.populate(target=ormService.new("User"),memento=data,exclude="id,setup,total" );

@@ -1,140 +1,229 @@
+---
+description: "Terminal methods that run a criteria query, and the result shapes they return"
+---
+
 # Results
 
-Once you have concatenated criterias together, you can execute the query via the execution methods. Please remember that these methods return the results, so they must be executed last.
+A criteria only describes a query. It runs when you call a **terminal method**, which returns the results. Terminal methods never change the criteria, so you can call several of them on the same criteria (`count()` and then `list()`, in any order).
 
-So the idea is the you request a query, add all kinds of restrictions and modifiers and then you request the results from it.
+| Method                                              | Returns |
+| --------------------------------------------------- | ------- |
+| `list( [max], [offset], [timeout], [sortOrder], [ignoreCase], [asQuery] )` | The matching rows |
+| `count( [property] )`                               | The number of matching entities, or of distinct values of a property |
+| `get( [uniqueFirst=false] )`                        | The single match, or `null`. More than one match is an `orm.query.nonUnique` error unless `uniqueFirst` is true |
+| `getOrFail( [uniqueFirst=false] )`                  | Like `get()`, but no match is an `orm.notFound` error |
+| `first()`                                           | The first row in order, or `null` |
+| `firstOrFail()`                                     | Like `first()`, but no row is an `orm.notFound` error |
+| `exists()`                                          | Whether any row matches |
+| `paginate( [page=1], [maxRows=25] )`                | `{ results, pagination : { page, maxRows, totalRecords, totalPages } }` |
+| `simplePaginate( [page=1], [maxRows=25] )`          | `{ results, pagination : { page, maxRows, hasMore } }`, without a count query |
+| `pluck( property )`                                 | One property's values, in order |
+| `sum( property )`, `avg( property )`, `min( property )`, `max( property )` | An aggregate value |
+| `each( callback, [size=100] )`                      | Calls the closure once per row, reading in batches; returns the row count |
+| `chunk( size, callback )`                           | Calls the closure with each batch of rows; returns the row count |
+| `updateAll( values )`                               | Updates every matching row with one `UPDATE`; returns the row count |
+| `deleteAll()`                                       | Deletes every matching row with one `DELETE`; returns the row count |
 
-| **Method**                                                                                                                                                                                                                                                    | **Description**                                                                                                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `count( propertyName="" )`                                                                                                                                                                                                                                    | Note, count() can't be called on a criteria after list() has been executed.                                                                      |
-| `get( [properties=""] )`                                                                                                                                                                                                                                      | Get a single entity. If you pass in the `properties` then you will get a struct of those properties.                                             |
-| `getOrFail( [properties=""] )`                                                                                                                                                                                                                                | Convenience method to return a single instance that matches the built up criterias query, or throws an exception if the query returns no results |
-| <p><code>list(</code></p><p><code>max,</code></p><p><code>offset,</code></p><p><code>timeout,</code></p><p><code>sortOrder,</code></p><p><code>ignoreCase,</code></p><p><code>asQuery=false</code></p><p><code>asStream=false</code></p><p><code>)</code></p> | Execute the criterias and give you the results.                                                                                                  |
+## `list()`
 
-### count( propertyName = "' )
+`list()` returns the matching rows: an array of entities by default, or the shape chosen with the [result modifiers](#result-shapes). Its optional arguments are applied to a copy of the criteria, so they don't change it:
 
-Get the record count using hibernate projections for the given criterias. You can optionally pass in the name of the property to do the count on, else it doesn `*` by default.
+| Argument     | Description |
+| ------------ | ----------- |
+| `max`        | The maximum number of rows (0 means all) |
+| `offset`     | The number of rows to skip |
+| `timeout`    | The query timeout, in seconds |
+| `sortOrder`  | The ordering, for example `"lastName asc, firstName desc"` |
+| `ignoreCase` | Sort text properties case-insensitively |
+| `asQuery`    | Return a BoxLang query |
 
-```java
-service
+```javascript
+var c = commentService
     .newCriteria()
-    .joinTo( "categories", "categories" )
-    .isEq( "categories.categoryID", getCategoryID() )
+    .isTrue( "isApproved" )
+    .when( len( arguments.postId ), ( c ) => c.isEq( "post.id", postId ) )
+    .when( len( arguments.siteId ), ( c ) => c.isEq( "post.site.id", siteId ) );
+
+var results = {
+    count    : c.count(),
+    comments : c.list(
+        offset    = arguments.offset,
+        max       = arguments.max,
+        sortOrder = "createdDate #arguments.sortOrder#"
+    )
+};
+```
+
+{% hint style="info" %}
+Use named arguments with `list()`: its positional order is `max, offset, timeout, sortOrder, ignoreCase, asQuery`.
+{% endhint %}
+
+## `count( [property] )`
+
+Without an argument, `count()` returns the number of matching root entities (each entity is counted once, even when a condition goes through a to-many association). With a property, it counts the distinct values of that property.
+
+```javascript
+var total = postService
+    .newCriteria()
+    .isEq( "categories.slug", "boxlang" )
     .isTrue( "isPublished" )
-    .isLE( "publishedDate", now() )
-    .isEq( "passwordProtection", "" )
-    .$or(
-        service.getRestrictions().isNull( "expireDate" ),
-        service.getRestrictions().isGT( "expireDate", now() )
+    .isLe( "publishedDate", now() )
+    .or(
+        postService.getRestrictions().isNull( "expireDate" ),
+        postService.getRestrictions().isGt( "expireDate", now() )
     )
     .cache( true )
-    .count( "contentID" );
+    .count();
+
+var authors = postService.newCriteria().isTrue( "isPublished" ).count( "author.id" );
 ```
 
-### get( properties="" )
+## `get()` and `getOrFail()`
 
-Convenience method to return a single instance that matches the built up criterias, or `null` if the query returns no results. It can also throw the following exception: **NonUniqueResultException** - if there is more than one matching result. It can also take in a property list in the `properties` argument so instead of giving you a full ORM entity object, it will give you a struct of those properties.
+`get()` returns the single entity that matches, or `null` when none does. `getOrFail()` raises an `orm.notFound` error instead of returning `null`. Both raise an `orm.query.nonUnique` error when more than one row matches, unless you pass `uniqueFirst = true` to take the first one.
 
-```java
-// Get an entity
-var oTargetCategory = newCriteria()
-    .isEq( "slug", arguments.category.getSlug() )
-    .joinTo( "site", "site" )
-    .isEq( "site.slug", arguments.site.getSlug() )
+```javascript
+var category = categoryService
+    .newCriteria()
+    .isEq( "slug", arguments.slug )
+    .isEq( "site.slug", arguments.siteSlug )
     .get();
-    
-// Get a struct of only the properties we need
+
+var user = userService.newCriteria().isEq( "email", rc.email ).getOrFail();
+```
+
+### Getting a struct of properties
+
+In cborm 5, `get( properties )` and `getOrFail( properties )` returned a struct of the given properties. In cborm 6, select the properties with `withProjections()` and ask for a struct with `asStruct()`:
+
+```javascript
+// cborm 5
+var data = newCriteria().isEq( "slug", slug ).get( "id,slug" );
+
+// cborm 6
 var data = newCriteria()
-    .isEq( "slug", arguments.category.getSlug() )
-    .joinTo( "site", "site" )
-    .isEq( "site.slug", arguments.site.getSlug() )
-    .get( "id,slug" );	
+    .isEq( "slug", slug )
+    .withProjections( property = "id,slug" )
+    .asStruct()
+    .get();
 ```
 
-### getOrFail( properties="" )
-
-Convenience method to return a single instance that matches the built up criterias, or throw an exception (`EntityNotFound`) if the query returns no results. It can also throw the following exception: **NonUniqueResultException** - if there is more than one matching result. It can also take in a property list in the `properties` argument so instead of giving you a full ORM entity object, it will give you a struct of those properties.
+## `first()`, `exists()` and `pluck()`
 
 ```javascript
-// Get an entity
-var oTargetCategory = newCriteria()
-    .isEq( "slug", arguments.category.getSlug() )
-    .joinTo( "site", "site" )
-    .isEq( "site.slug", arguments.site.getSlug() )
-    .getOrFail();
-    
-// Get a struct of only the properties we need
-var data = newCriteria()
-    .isEq( "slug", arguments.category.getSlug() )
-    .joinTo( "site", "site" )
-    .isEq( "site.slug", arguments.site.getSlug() )
-    .getOrFail( "id,slug" );
+// The latest post, or null
+var latest = postService.newCriteria().order( "publishedDate", "desc" ).first();
+
+// Is the email taken?
+var taken = userService.newCriteria().isEq( "email", rc.email ).exists();
+
+// The emails of all active users, in order
+var emails = userService.newCriteria().isTrue( "isActive" ).order( "email" ).pluck( "email" );
 ```
 
-### list( ... )
+## Pagination
 
-Execute the criteria queries you have defined and return the results, you can pass optional parameters to manipulate the way the results are sent back to you. Let's look at the method signature for this awesome method:
+`paginate()` runs a count and a page query. `simplePaginate()` skips the count and only tells you whether there is a next page.
 
 ```javascript
-/**
- * Execute the criteria queries you have defined and return the results, you can pass optional parameters or define them via our methods
- *
- * @offset     The pagination offset, defaults to 0
- * @max        The max number of records to get, defaults to all
- * @timeout    The query timeout
- * @sortOrder  The sorting order
- * @ignoreCase For the sorting and SQL
- * @asQuery    Return a query or array of data (objects/struct), defaults to arrays
- * @asStream   Return a cbStream of array data, defaults to the `asStream` property
- */
-any function list(
-	numeric offset     = 0,
-	numeric max        = 0,
-	numeric timeout    = 0,
-	string  sortOrder  = "",
-	boolean ignoreCase = false,
-	boolean asQuery    = false,
-	boolean asStream   = getAsStream()
-)
+var page = userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .order( "lastName" )
+    .paginate( page = rc.page ?: 1, maxRows = 25 );
+
+// page.results, page.pagination.totalRecords, page.pagination.totalPages
 ```
 
-As you can see from the signature above, the first two arguments (`offset, max`) are used for pagination. So you can easily paginate the result set. The `timeout` argument can be used if the query is expected to be heavy duty, we want to make sure we timeout the execution (throws exception). The `ignorecase` is only used for sorting orders.
-
-Then we get to the last two arguments: `asQuery, asStream`. By default the `list()` method will return an array of objects. However, if you want different results you can use this two modifiers to give you a ColdFusion query or a [Java stream](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html).
+## Aggregates
 
 ```javascript
-// Listing
-var results = c
-     .like("name", "lui%")
-     .list();
+var c = orderService.newCriteria().isEq( "status", "paid" );
 
-var c = newCriteria()
-// only approved comments
-.isTrue( "isApproved" )
-// By Content?
-.when( !isNull( arguments.contentID ) AND len( arguments.contentID ), function( c ){
-	c.isEq( "relatedContent.contentID", contentID );
-} )
-// By Content Type Discriminator: class is a special hibernate deal
-.when( !isNull( arguments.contentType ) AND len( arguments.contentType ), function( c ){
-	c.createCriteria( "relatedContent" ).isEq( "class", contentType );
-} )
-// Site Filter
-.when( len( arguments.siteID ), function( c ){
-	c.joinTo( "relatedContent", "relatedContent" )
-		.isEq( "relatedContent.site.siteID", siteID );
-} );
-
-// run criteria query and projections count
-results.count    = c.count();
-results.comments = c.list(
-	offset   : arguments.offset,
-	max      : arguments.max,
-	sortOrder: "createdDate #arguments.sortOrder#",
-	asQuery  : false
-);
+var revenue = c.sum( "total" );
+var average = c.avg( "total" );
+var largest = c.max( "total" );
+var oldest  = c.min( "createdDate" );
 ```
 
-{% hint style="success" %}
-**Tip:** You can call `count()` and `list()` on the same criteria, but due to the internal workings of Hibernate, you must call `count()` first, then `list()`.
+For grouped aggregates, see [Projections & Aggregates](projections.md).
+
+## Batches: `each()` and `chunk()`
+
+`each()` and `chunk()` read the rows in batches (100 by default for `each()`). After each batch the session is flushed, so changes made in the callback are saved, and cleared, so memory stays flat.
+
+```javascript
+userService
+    .newCriteria()
+    .isFalse( "isVerified" )
+    .chunk( 500, ( users ) => {
+        users.each( ( u ) => u.setReminderSent( true ) );
+    } );
+```
+
+## Bulk updates and deletes
+
+`updateAll( values )` and `deleteAll()` change every matching row with a single statement, without loading any entity. Both return the number of rows changed.
+
+```javascript
+// One UPDATE
+var expired = orderService
+    .newCriteria()
+    .isEq( "status", "pending" )
+    .isLt( "createdDate", dateAdd( "d", -30, now() ) )
+    .updateAll( { status : "expired" } );
+
+// One DELETE
+var removed = sessionService.newCriteria().isLt( "expires", now() ).deleteAll();
+```
+
+{% hint style="warning" %}
+Bulk statements run in the database only: no entity events fire, nothing cascades, versions and timestamps are not updated, and entities already loaded in the session keep their old values. They cannot be combined with `maxResults()` or `firstResult()`.
+{% endhint %}
+
+## Result shapes
+
+| Modifier                              | What `list()` returns |
+| ------------------------------------- | --------------------- |
+| (default)                             | An array of entities |
+| `asStruct()`                          | An array of structs. Without projections: the id and plain properties of each entity (dates as ISO 8601 strings). With projections: one key per projection alias |
+| `asStruct( includes, [options] )`     | Structs built like bx-orm's `entityToStruct()`, read with projection queries instead of loading entities |
+| `asQuery()`                           | A BoxLang query |
+| `asStream()`                          | A Java stream |
+| `asDistinct()`                        | Distinct rows |
+
+With [projections](projections.md) and no `asStruct()`/`asQuery()`, one projection returns plain values and several return one array per row.
+
+```javascript
+// Array of structs
+var users = userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .withProjections( property = "id,firstName,lastName" )
+    .asStruct()
+    .list();
+
+// Query
+var users = userService.newCriteria().isTrue( "isActive" ).asQuery().list();
+var users = userService.newCriteria().isTrue( "isActive" ).list( asQuery = true );
+
+// Structs with associations, without loading entities
+var users = userService
+    .newCriteria()
+    .isTrue( "isActive" )
+    .order( "lastName" )
+    .asStruct( "id,lastName,role.name,posts" )
+    .paginate( page = 1, maxRows = 25 );
+```
+
+`asStruct( includes )` works with `list()`, `get()`, `first()` and `paginate()`, not with `each()` or `chunk()`.
+
+{% hint style="info" %}
+**Changes from cborm 5**
+
+* `get( properties )` and `getOrFail( properties )` became `withProjections( property = "..." ).asStruct().get()`: the argument of `get()` and `getOrFail()` is now `uniqueFirst`.
+* `list( asStream = true )` is replaced by `asStream().list()`, which returns a Java stream. To keep using cbStreams, wrap the array from `list()` with `StreamBuilder@cbStreams`.
+* `count()` and `list()` can be called on the same criteria in any order.
+* `getOrFail()` raises `orm.notFound` (cborm 5: `EntityNotFound`), and more than one match raises `orm.query.nonUnique`.
+* `first()`, `firstOrFail()`, `exists()`, `paginate()`, `simplePaginate()`, `pluck()`, the aggregate terminals, `each()`, `chunk()`, `updateAll()` and `deleteAll()` are new.
 {% endhint %}

@@ -1,30 +1,53 @@
+---
+description: Extend the cborm event handler to add your own global ORM event logic
+---
+
 # Custom Event Handler
 
 ![](https://raw.githubusercontent.com/wiki/coldbox-modules/cbox-cborm/ORMEventHandler.jpg)
 
-The ColdFusion documentation says that in order to create a global event handler that it must implement the _CFIDE.orm.IEventHandler_ interface. So all you need to do is create the CFC and make it extend the core class that will provide you with all these capabilities: _cborm.models.EventHandler_
+bx-orm calls one global event handler, the class named in `this.ormSettings.eventHandler`. To add your own global logic while keeping the ColdBox interception points, create a class that extends `cborm.models.EventHandler` and point the setting at it:
 
+{% code title="models/MyEventHandler.bx" %}
 ```javascript
-component extends="cborm.models.EventHandler"{
+class extends="cborm.models.EventHandler" {
+
+    public void function preInsert( any entity ){
+        // your logic
+        arguments.entity.setCreatedBy( getAuthUser() );
+        // keep the ColdBox interception points working
+        super.preInsert( argumentCollection = arguments );
+    }
+
 }
 ```
+{% endcode %}
 
-That's it! Just by doing this the CF ORM will call your CFC's event methods in this CFC and satisfy the interface. Of course you can override the methods, but always remember to fire off the parent class methods in order for the ColdBox interceptions to still work. You can then override each event method as needed. Below is a chart of methods you can override:
+{% code title="Application.bx" %}
+```javascript
+this.ormSettings = {
+    eventHandling : true,
+    eventHandler  : "models.MyEventHandler"
+};
+```
+{% endcode %}
 
-| Listener Method                    | Description                                                                                                                                                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `postNew(entity)`                  | This method is called by the ColdBox Base ORM Service Layers after a new entity has been created via its new() method.                                         |
-| `preLoad(entity)`                  | This method is called before the load operation or before the data is loaded from the database.                                                                |
-| `postLoad(entity)`                 | This method is called after the load operation is complete.                                                                                                    |
-| `preInsert(entity)`                | This method is called just before the object is inserted.                                                                                                      |
-| `postInsert(entity)`               | This method is called after the insert operation is complete.                                                                                                  |
-| `preUpdate(struct oldData,entity)` | This method is called just before the object is updated. A struct of old data is passed to this method to know the original state of the entity being updated. |
-| `postUpdate(entity)`               | This method is called after the update operation is complete.                                                                                                  |
-| `preDelete(entity)`                | This method is called before the object is deleted.                                                                                                            |
-| `postDelete(entity)`               | This method is called after the delete operation is complete.                                                                                                  |
-| `preSave(entity)`                  | This method is called before the save operation.                                                                                                               |
-| `postSave(entity)`                 | This method is called after the save operation is complete.                                                                                                    |
-| `preFlush(entity)`                 | This method is called before the Hibernate session is flushed.                                                                                                 |
-| `postFlush(entity)`                | This method is called after the Hibernate session is flushed.                                                                                                  |
+Always call the parent method when you override one, or the matching ColdBox interception point is not announced. Below are the methods you can override:
 
-The base event handler CFC you inherit from has all the ColdBox interaction capabilities you will ever need. You can find out all its methods by referring to the API and looking at that class or by inspecting the ColdBox Proxy class, which is used for enabling ColdBox interactions: _coldbox.system.remote.ColdboxProxy_
+| Listener Method                          | Description                                                                                                                                  |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `postNew( entity, entityName )`          | Called after a new entity is created by `entityNew()` or a cborm service's `new()` (announced once per `new()`).                              |
+| `preLoad( entity )`                      | Called before the data is loaded from the database.                                                                                          |
+| `postLoad( entity )`                     | Called after the load operation is complete. The entity is autowired here.                                                                   |
+| `preInsert( entity )`                    | Called just before the entity is inserted.                                                                                                   |
+| `postInsert( entity )`                   | Called after the insert operation is complete.                                                                                               |
+| `preUpdate( entity, oldData )`           | Called just before the entity is updated. `oldData` is a struct of the original state of the entity.                                         |
+| `postUpdate( entity )`                   | Called after the update operation is complete.                                                                                               |
+| `preDelete( entity )`                    | Called before the entity is deleted.                                                                                                         |
+| `postDelete( entity )`                   | Called after the delete operation is complete.                                                                                               |
+| `preSave( entity )`                      | Called by the cborm services before a save.                                                                                                  |
+| `postSave( entity )`                     | Called by the cborm services after a save.                                                                                                   |
+| `postCommit( entity, entityName, action )` | **New in cborm 6**: called once an insert, update or delete is committed.                                                                  |
+| `preFlush( entities )`                   | Kept for compatibility: bx-orm does not fire flush events.                                                                                   |
+| `postFlush( entities )`                  | Kept for compatibility: bx-orm does not fire flush events.                                                                                   |
+

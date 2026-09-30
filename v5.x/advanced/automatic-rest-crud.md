@@ -1,5 +1,5 @@
 ---
-description: Creating Automatic RESTful CRUD services with CBORM
+description: "Creating Automatic RESTful CRUD services with CBORM"
 icon: spider-web
 ---
 
@@ -34,7 +34,7 @@ cborm = {
 ```
 
 * `eventLoader` : If enabled, upon application startup it will register all the following events for EVERY entity managed by Hibernate
-* `eventPrefix` : By default if you enable the `eventLoader` then we will register interception points for all crud events for every entity using the pattern `pre|post{Entity}{Action}`. You can use this setting to prefix the events like so: `{eventPrefix}pre|post{Entity}{Action}`
+* `eventPrefix` : By default if you enable the `eventLoader` then we will register interception points for all crud events for every entity using the pattern `pre|post{Entity}{Action}`.  You can use this setting to prefix the events like so: `{eventPrefix}pre|post{Entity}{Action}`
 * `maxRows` : By default the cborm resource handler will paginate results, you can choose your pagination window here.
 * `maxRowsLimit` : By default it will not allow more than 500 records to be returned from the listing method. However, you can make this 0 or anything you like.
 
@@ -171,7 +171,7 @@ property name="ormservice" inject="entityService:Setting";
 You have several private properties you can set and override behavior:
 
 * `sortOrder` : The default sorting order string: `permission, name, data desc, etc`
-* `entity` : The name of the entity this resource handler controls. Singular name please. Used for announcing events.
+* `entity` :  The name of the entity this resource handler controls. Singular name please. Used for announcing events.
 * `saveMethod` : The name of the method to use for save persistence on the ORM service. Defaults to `save()`
 * `deleteMethod` : The name of the method to use for deleting entites on the ORM service. Defaults to `delete()`
 
@@ -227,7 +227,7 @@ private function getPageOffset( page = 1 )
 private function getMaxRows( event = getRequestContext() )
 
 /**
- * Coverts a value to the correct javaType for the property passed in.
+ * Kept for compatibility: returns the value as is, since bx-orm converts values itself (cborm 6).
  *
  * @propertyName The property name
  * @value The property value
@@ -239,9 +239,9 @@ private function autoCast( required propertyName, required value )
  *
  * @useQueryCaching Activate query caching for the list operations
  * @queryCacheRegion The query cache region to use, which defaults to criterias.{entityName}
- * @defaultAsQuery To return results as queries or array of objects or reports, default is array as results might not match entities precisely
+ * @datasource The datasource to use (optional)
  *
- * @return cborm.models.criterion.CriteriaBuilder
+ * @return A bx-orm entityCriteria() builder
  */
 private function newCriteria(
     boolean useQueryCaching = false,
@@ -256,13 +256,13 @@ Each action can take in not only the incoming parameters that your entities requ
 
 ### Index()
 
-| Parameter        | Type      | Default               | Description                                                                                                                                                                                                                 |
-| ---------------- | --------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `includes`       | `string`  | `empty`               | One or a list of properties you want to include in the output packet apart from the default Includes defined in your entity. Adheres to the [mementifier](mementifier.md)                                                   |
-| `excludes`       | `string`  | `empty`               | One or a list of properties you want to exclude in the output packet apart from the default excludes defined in your entity. Adheres to the [mementifier](mementifier.md)                                                   |
-| `ignoreDefaults` | `boolean` | `false`               | If true, it will ignore all default includes and excludes and ONLY use the includes and excludes you pass. Adheres to the [mementifier](mementifier.md)                                                                     |
-| `sortOrder`      | `string`  | `variables.sortOrder` | The sort ordering you want to apply to the result set. Adheres to the criteria query [sort() method](https://github.com/ortus-docs/cbox-cborm-docs/blob/v4.x/base-orm-service-1/service-methods/criteria-queries/README.md) |
-| `page`           | `numeric` | `1`                   | Pagination is included, so you can pass in the page of records you would like to visualize.                                                                                                                                 |
+| Parameter        | Type      | Default               | Description                                                                                                                                                               |
+| ---------------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `includes`       | `string`  | `empty`               | One or a list of properties you want to include in the output packet apart from the default Includes defined in your entity. Adheres to the [mementifier](mementifier.md) |
+| `excludes`       | `string`  | `empty`               | One or a list of properties you want to exclude in the output packet apart from the default excludes defined in your entity. Adheres to the [mementifier](mementifier.md) |
+| `ignoreDefaults` | `boolean` | `false`               | If true, it will ignore all default includes and excludes and ONLY use the includes and excludes you pass. Adheres to the [mementifier](mementifier.md)                   |
+| `sortOrder`      | `string`  | `variables.sortOrder` | The sort ordering you want to apply to the result set. Adheres to the criteria query [sort() method](../criteria-queries/criteria-builder/README.md)             |
+| `page`           | `numeric` | `1`                   | Pagination is included, so you can pass in the page of records you would like to visualize.                                                                               |
 
 ### Create()
 

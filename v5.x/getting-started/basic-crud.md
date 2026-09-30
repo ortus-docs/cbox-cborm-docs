@@ -1,13 +1,11 @@
 ---
-description: >-
-  A basic example of CRUD (Create-Read-Update-Delete) using ColdBox ORM and
-  ActiveEntity
+description: A basic example of CRUD (Create-Read-Update-Delete) using ColdBox ORM and ActiveEntity
 icon: gear
 ---
 
 # Basic Crud - ActiveEntity
 
-Let's do a basic example of CRUD (Create-Read-Update-Delete). We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.
+Let's do a basic example of CRUD (Create-Read-Update-Delete).  We will generate a ColdBox App, connect it to a database and leverage **ActiveEntity** for a nice quick CRUD App.
 
 The source code for this full example can be found in Github: [https://github.com/coldbox-samples/cborm-crud-demo](https://github.com/coldbox-samples/cborm-crud-demo) or in ForgeBox: [https://forgebox.io/view/cborm-crud-demo](https://forgebox.io/view/cborm-crud-demo)
 
@@ -20,8 +18,8 @@ Let's start by creating a ColdBox app and preparing it for usage with ORM:
 mkdir myapp --cd
 # Scaffold App
 coldbox create app
-# Install cborm, dotenv, and cfconfig so we can get the CFML engine talking to the DB fast.
-install cborm,commandbox-dotenv,commandbox-cfconfig
+# Install cborm, the bx-orm module, the MySQL driver, dotenv, and cfconfig so we can get BoxLang talking to the DB fast.
+install cborm,bx-orm,bx-mysql,commandbox-dotenv,commandbox-cfconfig
 # Update the .env file
 cp .env.example .env
 ```
@@ -54,9 +52,9 @@ S3_DOMAIN=amazonaws.com
 
 ### Setup ORM
 
-Now open the `Application.cfc` and let's configure the ORM by adding the following in the pseudo constructor and adding two lines of code to the request start so when we reinit the APP we can also reinit the ORM.
+Now open the `Application.bx` and let's configure the ORM by adding the following in the pseudo constructor and adding two lines of code to the request start so when we reinit the APP we can also reinit the ORM.
 
-{% code title="Application.cfc" %}
+{% code title="Application.bx" %}
 ```javascript
 // Locate the cborm module for events
 this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
@@ -64,16 +62,15 @@ this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
 // The default dsn name in the ColdBox scaffold
 this.datasource = "coldbox";
 // ORM Settings + Datasource
-this.ormEnabled = "true";
+this.ormEnabled = true;
 this.ormSettings = {
-	cfclocation = [ "models" ], // Where our entities exist
+	entityPaths = [ "models" ], // Where our entities exist
 	logSQL = true, // Remove after development to false.
 	dbcreate = "update", // Generate our DB
 	automanageSession = false, // Let cborm manage it
 	flushAtRequestEnd = false, // Never do this! Let cborm manage it
-	eventhandling = true, // Enable events
-	eventHandler = "cborm.models.EventHandler", // Who handles the events
-	skipcfcWithError = true // Yes, because we must work in all CFML engines
+	eventHandling = true, // Enable events: bx-orm only fires them when true
+	eventHandler = "cborm.models.EventHandler" // Who handles the events
 };
 
 // request start
@@ -91,7 +88,7 @@ public boolean function onRequestStart( string targetPage ){
 {% endcode %}
 
 {% hint style="warning" %}
-To change the datasource name to something you like then update it here and in the `.cfconfig.json` file. Once done, issue a `server restart` and enjoy your new datasource name.
+To change the datasource name to something you like then update it here and in the `.cfconfig.json` file.  Once done, issue a `server restart` and enjoy your new datasource name.
 {% endhint %}
 
 ### Start Server
@@ -99,15 +96,15 @@ To change the datasource name to something you like then update it here and in t
 Let's start a server and start enjoying the fruits of our labor:
 
 ```bash
-# Start a default Lucee Server
-server start
+# Start a BoxLang server
+server start cfengine=boxlang
 ```
 
-{% hint style="danger" %}
-If you get a `Could not instantiate connection provider: org.lucee.extension.orm.hibernate.jdbc.ConnectionProviderImpl` error on startup here. It means that you hit the stupid Lucee bug where on first server start the ORM is not fully deployed. Just issue a `server restart` to resolve this.
+{% hint style="info" %}
+cborm 6 runs on BoxLang with the `bx-orm` module. If your app is written in CFML, also install the `bx-compat-cfml` module. Adobe ColdFusion and Lucee are not supported by cborm 6: use the cborm 5.x series for those engines.
 {% endhint %}
 
-## Create Entity - Person.cfc
+## Create Entity - Person.bx
 
 Let's start by creating a **Person** object with a few properties, let's use CommandBox for this and our super duper `coldbox create orm-entity` command:
 
@@ -118,14 +115,14 @@ coldbox create orm-entity
     properties=name,age:integer,lastVisit:timestamp
 ```
 
-This will generate the `models/Person.cfc` as an `ActiveEntity` object and even create the unit test for it.
+This will generate the `models/Person.bx` (a `.cfc` in a CFML app) as an `ActiveEntity` object and even create the unit test for it.
 
-{% code title="Person.cfc" %}
+{% code title="models/Person.bx" %}
 ```javascript
 /**
  * A cool Person entity
  */
-component persistent="true" table="Person" extends="cborm.models.ActiveEntity"{
+class persistent="true" table="Person" extends="cborm.models.ActiveEntity" {
 
 	// Primary Key
 	property name="id" fieldtype="id" column="id" generator="native" setter="false";
@@ -151,25 +148,24 @@ component persistent="true" table="Person" extends="cborm.models.ActiveEntity"{
 
 ## Setup for BDD
 
-Since we love to promote tests at Ortus, let's configure our test harness for ORM testing. Open the `/tests/Application.cfc` and add the following code to setup the ORM and some functions for helping us test.
+Since we love to promote tests at Ortus, let's configure our test harness for ORM testing. Open the `/tests/Application.bx` and add the following code to setup the ORM and some functions for helping us test.
 
-{% code title="/tests/Application.cfc" %}
+{% code title="/tests/Application.bx" %}
 ```javascript
 	// Locate the cborm module for events
 	this.mappings[ "/cborm" ] = rootPath & "modules/cborm";
 
 	// ORM Settings + Datasource
 	this.datasource = "coldbox"; // The default dsn name in the ColdBox scaffold
-	this.ormEnabled = "true";
+	this.ormEnabled = true;
 	this.ormSettings = {
-		cfclocation = [ "models" ], // Where our entities exist
+		entityPaths = [ "models" ], // Where our entities exist
 		logSQL = true, // Remove after development to false.
 		dbcreate = "update", // Generate our DB
 		automanageSession = false, // Let cborm manage it
 		flushAtRequestEnd = false, // Never do this! Let cborm manage it
-		eventhandling = true, // Enable events
-		eventHandler = "cborm.models.EventHandler", // Who handles the events
-		skipcfcWithError = true // Yes, because we must work in all CFML engines
+		eventHandling = true, // Enable events: bx-orm only fires them when true
+		eventHandler = "cborm.models.EventHandler" // Who handles the events
 	};
 
 	public boolean function onRequestStart( string targetPage ){
@@ -181,9 +177,9 @@ Since we love to promote tests at Ortus, let's configure our test harness for OR
 
 Now that we have prepared the test harness for ORM testing, let's test out our Person with a simple unit test. We don't over test here because our integration test will be more pragmatic and cover our use cases:
 
-{% code title="/tests/specs/unit/PersonTest.cfc" %}
+{% code title="/tests/specs/unit/PersonTest.bx" %}
 ```javascript
-component extends="coldbox.system.testing.BaseTestCase"{
+class extends="coldbox.system.testing.BaseTestCase" {
 
 	function run(){
 		describe( "Person", function(){
@@ -208,15 +204,15 @@ coldbox create handler
     views=false
 ```
 
-This creates the `handlers/persons.cfc` with the CRUD actions and a nice `index` action we will use to present all persons just for fun!
+This creates the `handlers/persons.bx` with the CRUD actions and a nice `index` action we will use to present all persons just for fun! &#x20;
 
 {% hint style="success" %}
-Please note that this also generates the integrations tests as well under `/tests/specs/integration/personsTest.cfc`
+Please note that this also generates the integrations tests as well under `/tests/specs/integration/personsTest.bx`
 {% endhint %}
 
 ### Create
 
-We will get an instance of a Person, populate it with data and save it. We will then return it as a JSON memento. The `new()` method will allow you to pass a struct of properties and/or relationships to populate the new Person instance with. Then just call the `save()` operation on the returned object.
+We will get an instance of a Person, populate it with data and save it. We will then return it as a JSON memento. The `new()` method will allow you to pass a struct of properties and/or relationships to populate the new Person instance with.  Then just call the `save()` operation on the returned object.
 
 ```javascript
 /**
@@ -238,7 +234,7 @@ You might be asking yourself: Where does this magic `getMemento()` method come f
 
 ### Read
 
-We will get an instance according to ID and show it's memento in json. There are many ways in the ORM service and Active Entity to get objects by criteria,
+We will get an instance according to ID and show it's memento in json. There are many ways in the ORM service and Active Entity to get objects by criteria,&#x20;
 
 ```javascript
 /**
@@ -251,7 +247,7 @@ function show( event, rc, prc ){
 }
 ```
 
-In this example, we use the `get()` method which retrieves a single entity by identifier. Also note the default value of `0` used as well. This means that if the incoming id is null then pass a `0`. The ORM services will detect the `0` and by default give you a **new** Person object, the call will not fail. If you want your call to fail so you can show a nice exception for invalid identifiers you can use `getOrFail()` instead.
+In this example, we use the `get()` method which retrieves a single entity by identifier.  Also note the default value of `0` used as well. This means that if the incoming id is null then pass a `0`.  The ORM services will detect the `0` and by default give you a **new** Person object, the call will not fail.  If you want your call to fail so you can show a nice exception for invalid identifiers you can use `getOrFail()` instead.
 
 ```javascript
 /**
@@ -295,7 +291,7 @@ function delete( event, rc, prc ){
 			.getOrFail( rc.id ?: '' )
 			.delete();
 		// Or use the shorthnd notation which is faster
-		// getIntance( "Person" ).deleteById( rc.id ?: '' )
+		// getInstance( "Person" ).deleteById( rc.id ?: '' )
 	} catch( any e ){
 		return "Error deleting entity: #e.message# #e.detail#";
 	}
@@ -309,7 +305,7 @@ Note that you have two choices when deleting by identifier:
 1. Get the entity by the ID and then send it to be deleted
 2. Use the `deleteById()` and pass in the identifier
 
-The latter allows you to bypass any entity loading, and do a pure HQL delete of the entity via it's identifier. The first option is more resource intensive as it has to do a 1+ SQL calls to load the entity and then a final SQL call to delete it.
+The latter allows you to bypass any entity loading, and do a pure HQL delete of the entity via it's identifier.  The first option is more resource intensive as it has to do a 1+ SQL calls to load the entity and then a final SQL call to delete it.
 
 ### List All
 
@@ -336,9 +332,9 @@ That's it! We are now rolling with basic CRUD `cborm` style!
 
 Here are the full completed BDD tests as well
 
-{% code title="/tests/specs/integration/personsTest.cfc" %}
+{% code title="/tests/specs/integration/personsTest.bx" %}
 ```javascript
-component extends="coldbox.system.testing.BaseTestCase" appMapping="/"{
+class extends="coldbox.system.testing.BaseTestCase" appMapping="/" {
 
 	function run(){
 

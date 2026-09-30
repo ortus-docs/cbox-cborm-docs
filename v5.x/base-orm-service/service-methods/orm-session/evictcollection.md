@@ -6,7 +6,7 @@ Evict an entity name with or without an ID from the secondary cache ONLY, not th
 
 ## Returns
 
-* This function returns _void_
+* This function returns the service (`this`)
 
 ## Arguments
 
@@ -19,4 +19,12 @@ Evict an entity name with or without an ID from the secondary cache ONLY, not th
 ## Examples
 
 ```javascript
+// Evict all the User entities from the secondary cache
+ormService.evictCollection( "User" );
+// Evict one User entity from the secondary cache
+ormService.evictCollection( entityName = "User", id = 1 );
+// Evict the roles collection of all users
+ormService.evictCollection( "User", "roles" );
+// Evict the roles collection of one user
+ormService.evictCollection( "User", "roles", 1 );
 ```

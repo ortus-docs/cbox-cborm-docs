@@ -17,33 +17,60 @@ install cborm@be
 
 ## System Requirements
 
-* BoxLang 1.0+
-* Adobe ColdFusion 2023+
-* Lucee 5.x+
-* Hibernate 5.x+ (Hibernate 3 is no longer supported as of CBORM 4.9.0)
+* BoxLang 1.17.5+
+* The [bx-orm](https://forgebox.io/view/bx-orm) module 2.x (Hibernate 7.4)
+* ColdBox 8+
+* CFML applications: the `bx-compat-cfml` module, so your `.cfc` code runs on BoxLang
 
 {% hint style="warning" %}
-**Breaking Change**: CBORM 4.9.0 dropped support for Hibernate 3. All supported CFML engines must use Hibernate 5.x or later. If you're using an older CFML engine with Hibernate 3, you must upgrade before using CBORM 4.9.0+.
+cborm 6 is a pure BoxLang module. Adobe ColdFusion and Lucee are **not** supported: stay on the cborm 5.x series for those engines. See [Upgrading to 6](../intro/release-history/upgrading-to-6.md).
 {% endhint %}
+
+Install the ORM module into your BoxLang runtime or server:
+
+```bash
+install bx-orm
+```
 
 ## Application Setup
 
-If you are using the ORM EventHandler or `ActiveEntity` or any ColdBox Proxies that require ORM, you must create an Application Mapping to the module in the `Application.bx|cfc` like this:
+Enable the ORM in your `Application.bx` (or `Application.cfc`) and point it at the cborm event handler. If you are using the ORM event handler, `ActiveEntity` or any ColdBox proxies that require ORM, you must also create an application mapping to the module, because the ORM starts before ColdBox registers its module paths.
 
-{% code title="Application.bx|cfc" %}
+{% code title="Application.bx" %}
 ```javascript
-# In the pseudo constructor
-this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
+class {
+
+    this.name = "MyApp";
+
+    // cborm mapping: the ORM boots before ColdBox registers module paths
+    this.mappings[ "/cborm" ] = COLDBOX_APP_ROOT_PATH & "modules/cborm";
+
+    this.datasource  = "myDatasource";
+    this.ormEnabled  = true;
+    this.ormSettings = {
+        // Where your entities live
+        entityPaths    : [ "models" ],
+        dbcreate       : "update",
+        // Let cborm announce ORM events to ColdBox interceptors and autowire entities
+        eventHandling  : true,
+        eventHandler   : "cborm.models.EventHandler",
+        // Let ColdBox or your services manage flushing
+        flushAtRequestEnd : false
+    };
+
+}
 ```
 {% endcode %}
 
-This is required because the ORM engine is bootstraped before ColdBox fully initializes and thus the module paths are not yet registered.
+{% hint style="info" %}
+`cborm.models.BXEventHandler` still works as a deprecated alias of `cborm.models.EventHandler`. Every other ORM setting is documented in the bx-orm module's documentation.
+{% endhint %}
 
 ## WireBox DSL
 
 The module registers a new WireBox DSL called `entityservice` which can produce virtual or base ORM entity services. Below are the injections you can use:
 
-* `entityservice` - Inject a global ORM service
+* `entityservice` -  Inject a global ORM service
 * `entityservice:{entityName}` - Inject a Virtual entity service according to `entityName`
 
 ## Module Settings
@@ -80,8 +107,10 @@ moduleSettings = {
 ColdBox 7+ Config:
 
 {% tabs %}
+
 {% tab title="BoxLang" %}
 {% code title="config/modules/cborm.bx" lineNumbers="true" %}
+
 ```javascript
 class{
   function configure(){
@@ -108,11 +137,13 @@ class{
     }
 }
 ```
+
 {% endcode %}
 {% endtab %}
 
 {% tab title="CFML" %}
 {% code title="config/modules/cborm.cfc" lineNumbers="true" %}
+
 ```javascript
 component{
   function configure(){
@@ -139,8 +170,10 @@ component{
     }
 }
 ```
+
 {% endcode %}
 {% endtab %}
+
 {% endtabs %}
 
 ## Validation
@@ -151,50 +184,10 @@ We have also integrated a `UniqueValidator` from the **validation** module into 
 { fieldName : { validator: "UniqueValidator@cborm" } }
 ```
 
-## Supported Hibernate Versions
+## Hibernate Version
 
-### BoxLang 1.0+
-
-Hibernate is bundled with the `bx-orm` module. Just install it via CommandBox:
-
-```bash
-install bx-orm
-```
-
-The version of Hibernate bundled is:
-
-* Hibernate 5.6+ - [https://hibernate.org/orm/documentation/5.6/](https://hibernate.org/orm/documentation/5.6/)
+Hibernate is bundled with the `bx-orm` module. cborm 6 runs on `bx-orm` 2, which bundles Hibernate ORM 7.4: [https://hibernate.org/orm/documentation/7.4/](https://hibernate.org/orm/documentation/7.4/)
 
 {% hint style="info" %}
-**BoxLang Autocasting**: As of CBORM 4.8.0, CBORM leverages BoxLang's intelligent autocasting capabilities. When running on BoxLang, CBORM passes values through directly to take advantage of BoxLang's smarter type handling, improving performance and type safety.
+**Automatic value conversion**: bx-orm converts values to the Java types Hibernate expects, so cborm no longer casts values itself. `idCast()` and `autoCast()` remain for compatibility and do not cast.
 {% endhint %}
-
-### Lucee 5+
-
-Hibernate is bundled with the Ortus ORM Extension for Lucee: https://forgebox.io/view/D062D72F-F8A2-46F0-8CBC91325B2F067B. You can find our source code here: https://github.com/ortus-solutions/extension-hibernate
-
-You can install it via the Lucee Administrator, by using th extension ID: `D062D72F-F8A2-46F0-8CBC91325B2F067B` or via CommandBox:
-
-```bash
-box install D062D72F-F8A2-46F0-8CBC91325B2F067B
-```
-
-BY JVM argument
-
-```bash
--Dlucee-extensions=D062D72F-F8A2-46F0-8CBC91325B2F067B
-```
-
-The version of Hibernate bundled is:
-
-```bash
--Dhibernate.version=5.6.0.Final
-```
-
-* Hibernate 5.6+ - [https://hibernate.org/orm/documentation/5.6/](https://hibernate.org/orm/documentation/5.6/)
-
-> Please note that our Lucee Hibernate Extension is on LTS and will only receive critical bug fixes and security patches. New features and enhancements will be focused on the BoxLang BX-ORM module.
-
-### Adobe 2023+
-
-* Hibernate 5.2+ - [https://hibernate.org/orm/documentation/5.2/](https://hibernate.org/orm/documentation/5.2/)

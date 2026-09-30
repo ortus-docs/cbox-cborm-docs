@@ -1,6 +1,6 @@
 # getKeyValue
 
-Get the unique identifier value for the passed in entity, or `null` if the instance is not in session
+Get the unique identifier value for the passed in entity, or `null` if the entity has no identifier yet (for example a new, unsaved entity)
 
 ## Returns
 
@@ -10,10 +10,10 @@ Get the unique identifier value for the passed in entity, or `null` if the insta
 
 | Key    | Type   | Required | Default | Description                       |
 | ------ | ------ | -------- | ------- | --------------------------------- |
-| entity | string | Yes      | ---     | The entity to inspect for it's id |
+| entity | any    | Yes      | ---     | The entity to inspect for its id  |
 
 ## Examples
 
 ```javascript
-var pkValue = ormService.getKeyValue( "User" );
+var pkValue = ormService.getKeyValue( user );
 ```

@@ -10,7 +10,7 @@ Checks if the current hibernate session contains the passed in entity.
 
 | Key    | Type | Required | Default | Description |
 | ------ | ---- | -------- | ------- | ----------- |
-| entity | any  | Yes      | ---     |             |
+| entity | any  | Yes      | ---     | The entity object |
 
 ## Examples
 
