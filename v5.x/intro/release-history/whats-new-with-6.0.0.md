@@ -14,7 +14,7 @@ Adobe ColdFusion and Lucee are no longer supported. The cborm 5.x series keeps s
 
 * Every module source is a BoxLang class (`.bx`), including `ModuleConfig.bx`.
 * The module is tested on BoxLang and on BoxLang with `bx-compat-cfml`, so CFML (`.cfc`) applications keep working.
-* Requirements: BoxLang 1.17.5+, `bx-orm` 2, ColdBox 8+.
+* Requirements: BoxLang 1.18.0+, `bx-orm` 2, ColdBox 8+.
 
 ## Hibernate 7 Through bx-orm 2
 
