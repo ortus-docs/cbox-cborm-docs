@@ -15,9 +15,20 @@ install cborm
 install cborm@be
 ```
 
+### Trying the cborm 6 Pre-Release
+
+Before 6.0.0 is final, pre-releases are published for testing: `6.0.0-beta.1`, `6.0.0-beta.2`, and so on (later `6.0.0-rc.1`). A plain `install cborm` keeps installing the latest stable release, so ask for the pre-release by version, together with a bx-orm 2 pre-release:
+
+```bash
+install cborm@6.0.0-beta.1
+install bx-orm@2.0.0-beta.1
+```
+
+The pre-releases and their notes are on the [cborm releases page](https://github.com/coldbox-modules/cborm/releases) and the [bx-orm releases page](https://github.com/ortus-boxlang/bx-orm/releases). They are for testing, not production: please report what you find on the [issue tracker](https://ortussolutions.atlassian.net/browse/CBORM).
+
 ## System Requirements
 
-* BoxLang 1.17.5+
+* BoxLang 1.18.0+
 * The [bx-orm](https://forgebox.io/view/bx-orm) module 2.x (Hibernate 7.4)
 * ColdBox 8+
 * CFML applications: the `bx-compat-cfml` module, so your `.cfc` code runs on BoxLang

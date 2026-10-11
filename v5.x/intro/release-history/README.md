@@ -20,7 +20,7 @@ Version 6.x makes cborm a **pure BoxLang module** built on the `bx-orm` 2 module
 Start with [What's New With 6.0.0](whats-new-with-6.0.0.md) and [Upgrading to 6](upgrading-to-6.md).
 
 {% hint style="danger" %}
-**Breaking Change**: cborm 6 requires BoxLang 1.17.5+ and `bx-orm` 2. Adobe ColdFusion and Lucee are NOT supported: use the cborm 5.x series for those engines.
+**Breaking Change**: cborm 6 requires BoxLang 1.18.0+ and `bx-orm` 2. Adobe ColdFusion and Lucee are NOT supported: use the cborm 5.x series for those engines.
 {% endhint %}
 
 ## Version 4.0

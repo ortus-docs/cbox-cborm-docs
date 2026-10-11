@@ -7,7 +7,7 @@ Positional parameters can be written as plain `?` or numbered `?1`, `?2` (JPA st
 {% endhint %}
 
 {% hint style="warning" %}
-**Changed in cborm 6**: with `unique = true`, more than one matching row raises an `orm.query.nonUnique` error instead of returning the first row. Use [`findIt()`](../finders/findit.md), which limits the query to one row, if you just want the first result.
+**Changed in cborm 6**: with `unique = true`, more than one matching row raises an `orm.query.nonUnique` error instead of returning the first row. Use [`findIt()`](../finders/findit.md), or pass `options = { uniqueFirst : true }`, if you just want the first result.
 {% endhint %}
 
 ## Returns
@@ -18,23 +18,24 @@ This function returns multiple formats:
 * array of structs (when you `select new map(...)`)
 * a single value or entity (when `unique = true`)
 * query (when `asQuery = true`)
-* a [cbStreams](https://forgebox.io/view/cbstreams) stream (when `asStream = true`)
+* a Java `Stream` read from the database as it is consumed (when `asStream = true`, see [Java Streams](../../../advanced/java-streams.md))
 * the number of affected records for DML statements (`update`, `insert`, `delete`)
 
 ## Arguments
 
-| Key        | Type            | Required | Default            | Description                                                                          |
-| ---------- | --------------- | -------- | ------------------ | ------------------------------------------------------------------------------------ |
-| query      | string          | Yes      | ---                | The valid HQL to process                                                             |
-| params     | array or struct | No       | `{}`               | Positional or named parameters                                                       |
-| offset     | numeric         | No       | 0                  | Pagination offset                                                                    |
-| max        | numeric         | No       | 0                  | Max records to return                                                                |
-| timeout    | numeric         | No       | 0                  | Query timeout                                                                        |
-| ignoreCase | boolean         | No       | false              | Case insensitive or case sensitive searches                                          |
-| asQuery    | boolean         | No       | `defaultAsQuery`   | Return query or array of objects                                                     |
-| unique     | boolean         | No       | false              | Return a unique result                                                               |
-| datasource | string          | No       | Service datasource | Use a specific or default datasource                                                 |
-| asStream   | boolean         | No       | false              | Returns the result as a [cbStreams](https://forgebox.io/view/cbstreams) stream       |
+| Key        | Type            | Required | Default            | Description                                                                                                        |
+| ---------- | --------------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| query      | string          | Yes      | ---                | The valid HQL to process                                                                                           |
+| params     | array or struct | No       | `{}`               | Positional or named parameters                                                                                     |
+| offset     | numeric         | No       | 0                  | Pagination offset                                                                                                  |
+| max        | numeric         | No       | 0                  | Max records to return                                                                                              |
+| timeout    | numeric         | No       | 0                  | Query timeout                                                                                                      |
+| ignoreCase | boolean         | No       | false              | Ignored, kept for compatibility: use `lower()` in the HQL                                                          |
+| asQuery    | boolean         | No       | `defaultAsQuery`   | Return query or array of objects                                                                                   |
+| unique     | boolean         | No       | false              | Return a unique result                                                                                             |
+| datasource | string          | No       | Service datasource | Use a specific or default datasource                                                                               |
+| asStream   | boolean         | No       | false              | Returns a Java `Stream` instead of an array. Not allowed with `unique` or DML                                      |
+| options    | struct          | No       | `{}`               | More `bx-orm` `ormExecuteQuery()` options: `readOnly`, `lock`, `uniqueFirst`, `fetchSize`, `comment`, `hints`, ... |
 
 The service announces the `beforeOrmExecuteQuery` and `afterOrmExecuteQuery` interception points around the query when `eventHandling` is enabled.
 
@@ -73,5 +74,15 @@ var total = ormService.executeQuery(
     unique = true
 );
 
-// GET FUNKY!!
+// the first row, even when several match
+var newest = ormService.executeQuery(
+    query   = "from Employee e order by e.created desc",
+    unique  = true,
+    options = { uniqueFirst : true }
+);
+
+// a stream
+var ids = ormService.executeQuery( query = "from Employee", asStream = true )
+    .map( ( e ) => e.getEmployeeID() )
+    .toList();
 ```

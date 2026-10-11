@@ -29,7 +29,7 @@ The `cborm` module **enhances** your experience with the BoxLang ORM, powered by
 * Entity population from json, structs, xml, and queries including building up their relationships
 * Entity validation via [cbValidation](https://forgebox.io/view/cbvalidation)
 * Includes the [Mementifier project](https://www.forgebox.io/view/mementifier) to produce memento states from any entity, great for producing JSON
-* Ability for finders and queries to be returned as streams using our [cbStreams](https://www.forgebox.io/view/cbstreams) project.
+* Finders and queries can return native Java streams that read from the database as they are consumed
 
 ```javascript
 // A quick preview of some functionality

@@ -128,7 +128,7 @@ What is this `asStream()` call? What are Streams?
 
 A stream is an abstraction, it’s not a data structure. It’s not a collection where you can store elements. The most important difference between a stream and a structure is that a stream doesn’t hold the data. For example, you cannot point to a location in the stream where a certain element exists. You can only specify the functions that operate on that data. A stream is an abstraction of a non-mutable collection of functions applied in some order to the data.
 
-More information can be found here: [https://forgebox.io/view/cbstreams](https://forgebox.io/view/cbstreams)
+cborm 6 returns native Java streams that read the rows from the database as they are consumed. See [Java Streams](../advanced/java-streams.md).
 {% endhint %}
 
 ## Virtual Services
