@@ -31,6 +31,5 @@ site:
       key: space-5
       title: v5.x
       path: v5.x
-      draft: true
       content:
         directory: ./v5.x
