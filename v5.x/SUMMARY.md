@@ -5,21 +5,8 @@
 ## Intro
 
 * [Release History](intro/release-history/README.md)
-  * [What's New With 6.0.0](intro/release-history/whats-new-with-6.0.0.md)
-  * [Upgrading to 6](intro/release-history/upgrading-to-6.md)
-  * [What's New With 4.12.0](intro/release-history/whats-new-with-4.12.0.md)
-  * [What's New With 4.11.0](intro/release-history/whats-new-with-4.11.0.md)
-  * [What's New With 4.10.0](intro/release-history/whats-new-with-4.10.0.md)
-  * [What's New With 4.9.0](intro/release-history/whats-new-with-4.9.0.md)
-  * [What's New With 4.8.0](intro/release-history/whats-new-with-4.8.0.md)
-  * [What's New With 4.7.0](intro/release-history/whats-new-with-4.7.0.md)
-  * [What's New With 4.6.0](intro/release-history/whats-new-with-4.6.0.md)
-  * [What's New With 4.5.0](intro/release-history/whats-new-with-4.5.0.md)
-  * [What's New With 4.4.0](intro/release-history/whats-new-with-4.4.0.md)
-  * [What's new With 4.3.x](intro/release-history/whats-new-with-4.3.x.md)
-  * [What's New With 4.2.0](intro/release-history/whats-new-with-4.2.0.md)
-  * [What's New With 4.1.0](intro/release-history/whats-new-with-4.1.0.md)
-  * [What's New With 4.0.0](intro/release-history/whats-new-with-4.0.0.md)
+  * [What's New With 5.0.0](intro/release-history/whats-new-with-5.0.0.md)
+  * [Upgrading to 5](intro/release-history/upgrading-to-5.md)
 * [About This Book](intro/about-this-book/README.md)
   * [Author](intro/about-this-book/author.md)
 

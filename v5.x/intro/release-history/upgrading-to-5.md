@@ -1,113 +1,27 @@
 ---
-description: How to upgrade an application from cborm 5 to cborm 6
+description: How to upgrade an application from cborm 4 to cborm 5
 ---
 
-# Upgrading to 6
+# Upgrading to 5
 
-cborm 6 is a pure BoxLang module built on the `bx-orm` 2 module (Hibernate 7). The cborm 5.x series keeps supporting
-Adobe ColdFusion, Lucee and `bx-orm` 1 (Hibernate 5). See [What's New With 6.0.0](whats-new-with-6.0.0.md) for the new features.
+cborm 5 certifies the module for BoxLang Prime and removes Lucee support. The API is unchanged from the cborm 4.x series, so upgrading is mostly a matter of checking the engine you run on. See [What's New With 5.0.0](whats-new-with-5.0.0.md) for the details.
 
 ## Requirements
 
-- BoxLang 1.18.0+ with the `bx-orm` 2 module. CFML applications run through `bx-compat-cfml`.
-- ColdBox 8+.
-- Adobe ColdFusion and Lucee are no longer supported: stay on cborm 5.x.
-- cborm no longer depends on `cbstreams` or `cbpaginator`. Install them yourself if your app uses them directly.
-  Mementifier stays a dependency.
-
-## ORM settings
-
-Use the one cborm event handler and turn event handling on:
-
-```js
-this.ormSettings = {
-    eventHandling : true,
-    eventHandler  : "cborm.models.EventHandler"
-};
-```
-
-`cborm.models.BXEventHandler` still works as a deprecated alias.
+- Adobe ColdFusion 2023+ or BoxLang 1.0+ (open source, BE or Prime).
+- ColdBox 7+.
+- Lucee is no longer supported: stay on the cborm 4.x series if you run Lucee.
 
 ## What stays the same
 
 - `BaseORMService`, `VirtualEntityService` and `ActiveEntity`: same methods and arguments.
 - Dynamic finders and counters (`findBy...`, `findAllBy...`, `countBy...`).
-- The `entityService` WireBox DSL, the `HibernateTransaction` aspect, the resource handler, the `UniqueValidator`,
-  population and validation.
-- The ColdBox interception points (`ORMPreLoad`, `ORMPostLoad`, ..., `onCriteriaBuilderAddition`,
-  `beforeCriteriaBuilderList`, ...).
+- The criteria builders (`newCriteria()`, the detached criteria builder), restrictions, projections and subqueries.
+- The `entityService` WireBox DSL, the `HibernateTransaction` aspect, the resource handler, the `UniqueValidator`, population and validation.
+- The ColdBox interception points (`ORMPreLoad`, `ORMPostLoad`, ...).
+- The module dependencies: cbvalidation 4, mementifier 3, cbstreams 2 and cbpaginator 2.
 
 ## What changed
 
-{% hint style="info" %}
-HQL entity and property names stay case-insensitive (bx-orm 2 resolves them), and both `?` and `?1` positional parameters work, so most HQL runs unchanged.
-{% endhint %}
-
-### Criteria
-
-`newCriteria()` returns a bx-orm `entityCriteria()` builder. It keeps cborm's method names (`isEq`, `like`,
-`between`, `isIn`, `createAlias`, `withProjections`, `list`, `count`, `get`, `getOrFail`, ...), `c.restrictions`,
-the quantified subqueries (`subGeAll`, `propertyLtSome`, ...) and the SQL log (`startSqlLog()`, `logSQL()`,
-`getSqlLog()`).
-
-| cborm 5                                                             | cborm 6                                                                                                       |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `getRestrictions()` returned a Hibernate `Restrictions` proxy       | Returns the same condition builder as `c.restrictions`; pass its results to `add()`, `or()`, `and()`, `not()` |
-| `createSubcriteria()` / `DetachedCriteriaBuilder`                   | `c.subquery( "Entity", "alias" )`                                                                             |
-| `get( properties = "a,b" )`                                         | `withProjections( property = "a,b" ).asStruct().get()`                                                        |
-| `list( asStream = true )`, `asStream()` returned a cbStreams stream | `asStream()` returns a Java stream read from the database as it is consumed                                   |
-| `cacheRegion( name )`                                               | `cache( true, name )`                                                                                         |
-| `getNativeCriteria()`, `resultTransformer()`, `setProjection()`     | Removed: the Hibernate criteria API no longer exists in Hibernate 7                                           |
-| `getPositionalSQLParameters()` and other `SQLHelper` methods        | Use `getSQL()`, `peekSQL()` and `logSQL()`                                                                    |
-
-### Services
-
-| cborm 5                                                                                                                      | cborm 6                                                                                                                                                                                                            |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `getOrm()` (the engine ORM utility)                                                                                          | Removed: call the bx-orm functions (`entityGetDatasource()`, `ormGetSession()`, ...)                                                                                                                               |
-| `getEntityMetadata()` returned Hibernate `ClassMetadata`                                                                     | Returns the Hibernate 7 entity persister, which keeps the `ClassMetadata` methods (`getPropertyNames()`, `getPropertyTypes()`, `getIdentifierPropertyName()`, ...). For a BoxLang struct use `entityGetMetadata()` |
-| `idCast()` / `convertIdValueToJavaType()` converted ids to Java types                                                        | Only normalize an id, list or array to an array: bx-orm converts values itself                                                                                                                                     |
-| `autoCast()` / `convertValueToJavaType()`                                                                                    | Return the value as is                                                                                                                                                                                             |
-| `buildJavaProxy()`                                                                                                           | Removed                                                                                                                                                                                                            |
-| `unique = true` queries                                                                                                      | More than one matching row raises an error instead of returning the first; `findIt()` returns the first row                                                                                                        |
-| `findWhere()` returned the first match when query caching was on                                                             | Always strict: more than one match raises `orm.query.nonUnique`. Pass `{ uniqueFirst : true }` as options for the first match                                                                                      |
-| `asStream = true` returned a cbStreams stream (`list`, `executeQuery`, `getAll`, `findAll`, `findAllWhere`, dynamic finders) | Returns a Java `Stream` read from the database as it is consumed. Use `.filter()`, `.map()`, `.toList()`, `.count()`; consume it in the same request. See [Java Streams](../../advanced/java-streams.md)           |
-| `getAll( sortOrder )` and dynamic finder `sortBy` took any HQL                                                               | Only property names or paths, each with `asc` or `desc`: anything else raises an error                                                                                                                             |
-| `countWhere()` and `deleteWhere()` put any argument name in the HQL                                                          | An unknown property raises `orm.property.unknown`                                                                                                                                                                  |
-| `exists()`, `getAll( id )` and `deleteByID()` assumed a single id property                                                   | Composite ids work: pass a struct of key values, or an array of them                                                                                                                                               |
-| `deleteWhere()`, `deleteByID()` and `deleteAll()` could miss unflushed changes                                               | They flush pending changes first, like every bulk delete in bx-orm                                                                                                                                                 |
-| Dynamic finder errors were rethrown as `HQLQueryException`                                                                   | bx-orm's typed errors (`orm.*`, with "Did you mean") are rethrown as they are                                                                                                                                      |
-| `executeQuery( ignoreCase )`                                                                                                 | Ignored: use `lower()` in the HQL                                                                                                                                                                                  |
-| `ActiveEntity.getValidationResult()` returned null                                                                           | Returns the last validation result, like `getValidationResults()`                                                                                                                                                  |
-
-### Events
-
-- New `ORMPostCommit` interception point: fired once an insert, update or delete is committed. Data: `entity`,
-  `entityName`, `action`.
-- `ORMPostNew` is announced once per `new()`, after the entity is autowired and populated. A plain `entityNew()`
-  now announces it too.
-- `ORMPreFlush` is announced on every flush, from bx-orm's `onFlush` and `onAutoFlush` events. Its data is
-  `{ event }` (the Hibernate flush event) instead of cborm 5's entity list.
-- `ORMPostFlush` is declared but never announced: bx-orm has no after-flush event.
-- Entities created with `entityNew()`, `entityLoadOrNew()` and `entityLoadOrSave()` are now autowired, like loaded
-  entities.
-
-### Resources
-
-- The resource handler builds its `pagination` block itself (`totalRecords`, `totalPages`, `maxRows`, `offset`,
-  `page`, the same keys as cbPaginator).
-- Mementifier's `getMemento()` stays the default marshaller. Entities without it are marshalled with bx-orm's
-  `entityToStruct()`; an unknown include is a 400 error in that case.
-
-### New service methods
-
-`findWhereOrFail()`, `firstOrNew()`, `firstOrCreate()`, `updateWhere()`, `getReference()`, `lock()` and `readOnly()`.
-`get()`, `getOrFail()`, `list()`, `executeQuery()`, `findAll()`, `findWhere()` and `findAllWhere()` take an `options`
-struct passed to bx-orm (`readOnly`, `lock`, `uniqueFirst`, `fetchSize`, `comment`, ...). `ActiveEntity` adds
-`lock()` and `toStruct()`, and `getKeyValue()`, `getDirtyPropertyNames()` and `sessionContains()` default to the entity
-itself.
-
-### Removed files
-
-`models/criterion/*`, `models/sql/SQLHelper`, `models/util/ORMUtilFactory`, `models/util/support/*` and
-`models/util/JavaProxyBuilder`.
+- **Lucee removed**: Lucee ORM support, in maintenance mode since cborm 4, is gone. Applications running on Lucee must stay on the cborm 4.x series.
+- **BoxLang Prime**: cborm is certified and continuously tested against BoxLang Prime and BoxLang BE, in addition to the open-source BoxLang runtime.

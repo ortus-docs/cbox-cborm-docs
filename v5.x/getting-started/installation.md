@@ -34,7 +34,7 @@ The pre-releases and their notes are on the [cborm releases page](https://github
 * CFML applications: the `bx-compat-cfml` module, so your `.cfc` code runs on BoxLang
 
 {% hint style="warning" %}
-cborm 6 is a pure BoxLang module. Adobe ColdFusion and Lucee are **not** supported: stay on the cborm 5.x series for those engines. See [Upgrading to 6](../intro/release-history/upgrading-to-6.md).
+cborm 6 is a pure BoxLang module. Adobe ColdFusion and Lucee are **not** supported: stay on the cborm 5.x series for those engines. See [Upgrading to 5](../intro/release-history/upgrading-to-5.md).
 {% endhint %}
 
 Install the ORM module into your BoxLang runtime or server:

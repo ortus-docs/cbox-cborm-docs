@@ -8,7 +8,7 @@ icon: sunglasses
 The `cborm` module **enhances** your experience with the BoxLang ORM, powered by the [bx-orm](https://forgebox.io/view/bx-orm) module and [Hibernate](https://hibernate.org/). It adds service layers, active record, dynamic finders and a fluent criteria builder on top of the ORM, and gives you a human approach to working with Hibernate. Basically making working with Hibernate not SUCK!
 
 {% hint style="success" %}
-**cborm 6** is a pure BoxLang module built on `bx-orm` 2 (Hibernate 7). CFML applications run on BoxLang through the `bx-compat-cfml` module. If you run Adobe ColdFusion or Lucee, stay on the cborm 5.x series. See [What's New With 6.0.0](intro/release-history/whats-new-with-6.0.0.md) and [Upgrading to 6](intro/release-history/upgrading-to-6.md).
+**cborm 5** is certified for BoxLang Prime, BoxLang BE and Adobe ColdFusion 2023+. Lucee is no longer supported: stay on the cborm 4.x series if you run Lucee. See [What's New With 5.0.0](intro/release-history/whats-new-with-5.0.0.md) and [Upgrading to 5](intro/release-history/upgrading-to-5.md).
 {% endhint %}
 
 ![](.gitbook/assets/CBORM300.png)

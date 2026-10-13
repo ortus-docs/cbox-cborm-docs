@@ -7,20 +7,18 @@ icon: list-timeline
 
 In this section you will find the release notes for each version we release under this major version.  If you are looking for the release notes of previous major versions use the version switcher at the top left of this documentation book.  Here is a breakdown of our major version releases.
 
-## Version 6.0
+## Version 5.0
 
-Version 6.x makes cborm a **pure BoxLang module** built on the `bx-orm` 2 module and Hibernate ORM 7.4:
+Version 5.x certifies cborm for **BoxLang Prime** and removes the Lucee support that was in maintenance mode:
 
-- **Pure BoxLang**: every module source is a BoxLang class; CFML applications run through `bx-compat-cfml`
-- **Hibernate 7**: services, virtual services and active entities delegate to the bx-orm functions
-- **Modern Criteria**: `newCriteria()` returns the bx-orm `entityCriteria()` builder with cborm's method names, restrictions, subqueries and an SQL log
-- **Case-Insensitive Names**: HQL, criteria and dynamic finders accept entity and property names in any case
-- **Events**: a new `ORMPostCommit` point, `ORMPostNew` announced once, criteria events relayed to ColdBox
+- **BoxLang Prime**: certified and continuously tested against BoxLang, BoxLang BE and BoxLang Prime
+- **Adobe ColdFusion**: keeps supporting Adobe ColdFusion 2023+
+- **Lucee removed**: the Lucee ORM support, in maintenance mode since cborm 4, is gone
 
-Start with [What's New With 6.0.0](whats-new-with-6.0.0.md) and [Upgrading to 6](upgrading-to-6.md).
+Start with [What's New With 5.0.0](whats-new-with-5.0.0.md) and [Upgrading to 5](upgrading-to-5.md).
 
 {% hint style="danger" %}
-**Breaking Change**: cborm 6 requires BoxLang 1.18.0+ and `bx-orm` 2. Adobe ColdFusion and Lucee are NOT supported: use the cborm 5.x series for those engines.
+**Breaking Change**: cborm 5 does not support Lucee: use the cborm 4.x series for Lucee applications.
 {% endhint %}
 
 ## Version 4.0
